@@ -1,0 +1,36 @@
+.substep-title {
+    margin-bottom: 15px;
+}
+
+.piority-list {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.choice-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.step-two-form {
+    margin-bottom: 10px;
+}
+
+.finish-group {
+    margin-top: 10px;
+}
+
+/* style if invalid - checkValidarity */
+.validated input:invalid,
+.validated select:invalid {
+    border-color: red;
+}
+
+/* + sign is to do style for neighbors */
+.leaflet-control-layers-selector:checked + span {
+    background-color: rgb(219, 219, 219);
+}

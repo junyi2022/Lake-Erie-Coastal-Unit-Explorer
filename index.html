@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <!-- add code to fit phone access -->
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>Lake Erie Coastal Units Toolbox</title>
+        <!-- add leaflet map css component -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+        <!-- link css file -->
+        <link rel="stylesheet" href="css/main-style.css">
+        <link rel="stylesheet" href="css/cover-style.css">
+        <link rel="stylesheet" href="css/map-style.css">
+        <link rel="stylesheet" href="css/toolbar-style.css">
+       
+    </head>
+
+    <body>
+          
+        <header>
+            <div class="slider" id="slider">
+                <button class="show" onclick="slider.classList.remove('collapsed')">
+                    <p class="back-text"><strong>Back</strong></p>
+                    <svg class="show-svg" width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="matrix(1, 0, 0, -1, 0, 0)">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier"> 
+                            <path d="M19 13L12 7L5 13" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+                            <path d="M19 17L12 11L5 17" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+                        </g>
+                    </svg>
+                </button>
+                
+                <section class="cover">
+                    <h1 class="cover-title">Lake Erie Coastal Units Explorer</h1>
+                    <h3 class="cover-lab">University of Pennsylvania EMLab</h3>
+                    <p class="cover-description">This site is a working site for the process of the final web explorer. At its current state, it remains incomplete as the team is still working on the type of priority models that users can use to create their coastal units. However, the overall framework is complete, and feel free to play with it! If you find any bugs or errors when using this tool and are willing to share them with the team for future improvements, please email <em>junyiy@upenn.edu</em>. We really appreciate that!</p>
+                    <button class="hide" onclick="slider.classList.add('collapsed')">
+                        <!-- https://www.svgrepo.com/svg/524509/double-alt-arrow-up?edit=true -->
+                        <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier"> 
+                                <path d="M19 13L12 7L5 13" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+                                <path d="M19 17L12 11L5 17" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+                            </g>
+                        </svg>
+                        <p class="go-text"><strong>Let's GO!</strong></p>
+                    </button>
+                </section>
+            </div>
+            <div class="menu">
+                <div class="unit-generator menu-cat"><strong>Unit Generator</strong></div>
+                <div class="data-explorer menu-cat"><strong>Data Explorer</strong></div>
+                <div class="strategy-library menu-cat"><strong>Strategy Library</strong></div>
+            </div>
+
+        </header>
+
+        <main>
+            <dialog open class="start-box" id="start-box">
+                <!-- because of the settings of dialog tag, need to have a div within it to do the flex style -->
+                <div class="dialog-content">
+                    <h4>Purpose and Goal</h4>
+                    <p>Operational coastal units are seen as a relatively untested and novel approach to coastal analysis that could hold particular potential in decision-making processes that require considering both local conditions and regional transferability. At its most simplistic, the operational coastal unit method assumes that there is value in defining new boundaries for where particular strategies are or are not applicable based on the contextual conditions found in specific places. And perhaps most importantly, that these new boundaries need not respond to existing jurisdiction. Underpinning this idea are two overarching goals, balanced with one another. </p>
+                    <ol>
+                        <li><p>That local conditions and context are important culturally and ecologically. Decision-making regarding the shoreline should take into consideration the cultural values and knowledge that exist and have evolved in those specific areas. Additionally, the ecological context of any given location should be considered as important and special as opposed to generalized into a larger and more abstract idea of ‘ecology’. In these ways, local conditions can be both acknowledged and formative in the decision-making processes to encourage the development of more sensitive and contextual outcomes. Put simply, the more local, the better. </p></li>
+                        <li><p>That transferability is to some degree essential to the practicality of any formal coastal management decision. This does not mean that transferability is what is desired, but only that it is what is necessary to get projects funded and completed. In this way, projects should aim to be as contextually specific as possible while only being as transferable as necessary. However, in the correct circumstances, transferability could provide the opportunity for ideas to spread within areas of similar contextual conditions which does offer both cost savings and project innovation. </p></li>
+                    </ol>
+                    <p>With these two balanced goals in mind, this project aims to establish a method for creating coastal units that are particular and appropriate for a given task. This specific project asks to look at the application of the operational coastal units in coastal management decisions that involve strategic sediment management and adaptability as a defining feature, although many other objectives could also be met with the coastal unit methods and efforts will be made to develop a more robust unit structure to accommodate some of these alternative objectives.    </p>
+                    <form method="dialog">
+                      <button class="start-box-OK">OK</button>
+                    </form>
+                </div>
+            </dialog>
+
+            <div class="toolbar">
+                <section class="step">
+                    <h4 class="unit-generator">Step 1: Choose your area</h4>
+                    <button class="select-point">Start / Reset</button>
+                    <button class="finish-point">Next</button>
+                </section>
+
+                <section class="step">
+                    <h4 class="unit-generator">Step 2: Set size</h4>
+                    <form class="step-two-form">
+                        <div class="substep">
+                            <h5 class="substep-title">Resolution</h5>
+                            <input type="text" name="resolution-entry" class="resolution" placeholder="Type a number: e.g. 1000" disabled="true" required>
+                            <select class="unit" disabled="true">
+                                <option value="ft">Feet</option>
+                                <option value="m">Meters</option>
+                            </select>
+                        </div>
+
+                        <div class="substep">
+                            <h5 class="substep-title">Priority</h5>
+                            <div class="piority-list">
+                                <div class="choice-options">
+                                    <p>First: </p>
+                                    <p>Second: </p>
+                                </div>
+                                <div class="choice-options">
+                                    <select class="piority" id="first-piority" disabled="true" required>
+                                        <option value="">--Please choose an option--</option>
+                                        <option value="sl">Sediment Loss</option>
+                                        <option value="sg">Sediment Gain</option>
+                                        <!-- <option value="cp">Coastline Protection</option> -->
+                                    </select>
+                                    <select class="piority" id="second-piority" disabled="true" required>
+                                        <option value="">--Please choose an option--</option>
+                                        <option value="sl">Sediment Loss</option>
+                                        <option value="sg">Sediment Gain</option>
+                                        <!-- <option value="cp">Coastline Protection</option> -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <button class="generate-resolution">Generate / Reset</button>
+                    <button class="finish-resolution">Next</button>
+                </section>
+
+                <section class="step">
+                    <h4 class="unit-generator">Step 3: Group into Final Units</h4>
+                    <div class="substep">
+                        <h5 class="substep-title">Number of categories</h5>
+                        <input type="number" name="category-number-entry" class="category" placeholder="Type a number: e.g. 5" disabled="true" required>
+                    </div>
+                    <button class="generate-group">Generate / Regenerate</button>
+                    <button class="finish-group">Next</button>
+                </section>
+
+                <section class="step">
+                    <h4 class="unit-generator">Step 4: Download</h4>
+                    <div class="substep">
+                        <h5 class="substep-title">Download Units</h5>
+                        <select class="file-type" disabled="true">
+                            <option value="geojson">geojson</option>
+                            <option value="shapefile">shapefile</option>
+                        </select>
+                        <button class="download-unit" disabled="true">Download</button>
+                    </div>
+                </section>
+                      
+            </div>
+            <div id="map"></div>
+
+        </main>
+
+        <footer>
+            <p id="footnote">
+                <strong>University of Pennsylvania</strong> <a href="https://emlabupenn.com/">EMLab</a> Last update: November 2023.
+            </p>
+
+        </footer>
+
+        <!-- add leaflet library -->
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+        <!-- add TURF library -->
+        <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+        <!-- add shapefile write-->
+        <script src="lib/shpwrite.js"></script>
+        <!-- link js file -->
+        <script type="module" src="js/main.js"></script>
+    </body>
+</html>

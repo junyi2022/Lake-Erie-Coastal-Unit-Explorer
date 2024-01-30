@@ -1,0 +1,11 @@
+/* insert title before the layer control layers */
+section.leaflet-control-layers-list:before {
+    content: 'Base Layer Explorer';
+    font-weight: bold;
+}
+
+/* inject new titles in the middle of the layer control menu */
+.leaflet-control-layers-overlays label:nth-child(3):before {
+    display:block;
+    content: 'Hydrology';
+}

@@ -1,0 +1,70 @@
+{
+  "name": "emlab-lake-erie",
+  "version": "1.0.0",
+  "description": "__IPUMS 2020 data by census tract__  \r Population, race, and housing by cesus tract for the three counties in the scope. (Erie County, Chautauqua County, and Cattaraugus County).  \r __ACS 2021__  \r ACSDT5Y2021.B19001 Household Income  \r ACSDT5Y2021.B01001 Sex by Age  \r ACSDT5Y2021.B25002 Occupancy Status  \r ACSDT5Y2021.B25003 Tenure  \r ACSDT5Y2021.B02001 Race  \r ACSDT5Y2021.B01001I Add Hispanic data to the race table",
+  "main": "index.js",
+  "scripts": {
+    "css-lint": "stylelint --color  \"**/*.css\"",
+    "js-lint": "eslint --color **/*.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-config-google": "^0.14.0",
+    "stylelint": "^16.2.0",
+    "stylelint-config-standard": "^36.0.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "google"
+    ],
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "env": {
+      "browser": true,
+      "es6": true
+    },
+    "globals": {
+      "L": "readonly"
+    },
+    "rules": {
+      "indent": [
+        "error",
+        2,
+        {
+          "VariableDeclarator": 1
+        }
+      ],
+      "max-len": "off",
+      "object-curly-spacing": "off",
+      "operator-linebreak": [
+        "error",
+        "after",
+        {
+          "overrides": {
+            "?": "ignore",
+            ":": "ignore"
+          }
+        }
+      ],
+      "require-jsdoc": "off"
+    }
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "declaration-empty-line-before": null,
+      "declaration-block-no-redundant-longhand-properties": null,
+      "no-duplicate-selectors": null
+    }
+  },
+  "dependencies": {
+    "@mapbox/shp-write": "^0.4.3",
+    "http-server": "^14.1.1",
+    "npm-check-updates": "^16.14.12"
+  }
+}

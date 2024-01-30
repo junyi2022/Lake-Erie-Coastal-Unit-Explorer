@@ -1,0 +1,153 @@
+/* at the start of CSS, make sure design go to the edge of the browser */
+html,
+body {
+    padding: 0;
+    /* border-box doesn't include margin, only padding */
+    margin: 0;
+}
+
+p {
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.5;
+}
+
+h3 {
+    font-size: 18px;
+}
+
+h4 {
+    font-size: 16px;
+}
+
+h5 {
+    font-size: 14px;
+}
+
+/* overall layout style */
+
+html {
+    font-family: sans-serif;
+    box-sizing: border-box;
+    height: 100%;
+    /* overflow: hidden; */
+}
+
+/* header part style*/
+
+header {
+    height: 9vh;
+    font-size: 12px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.slider {
+    height: 100vh;
+    width: 100vw;
+    transition: top 0.5s;
+    top: 0;
+    background-image: url("../img/cover.PNG");
+    background-size: cover;
+    position: fixed;
+    z-index: 10000;
+}
+
+.collapsed {
+    top: calc(-100vh + 1.5rem);
+    /* background-color: rgb(204, 224, 245);
+    background-image: none; */
+    background: rgb(233,246,237);
+    background: linear-gradient(90deg, rgba(233,246,237,1) 6%, rgba(194,219,242,1) 100%);
+}
+
+.show {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.collapsed .show {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 1.5rem;
+}
+
+.menu {
+    height: 6vh;
+    display: flex;
+    margin-top: 1.5rem;
+    flex-direction: row;
+    background-color: rgb(242, 249, 255)
+    
+}
+
+.menu-cat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-left: 1rem;
+    color: rgb(66, 80, 73);
+    font-size: 15px;
+}
+
+/* main part style*/
+
+main {
+    display:flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    height: 88vh;
+    padding: 1vh;
+}
+
+.toolbar {
+    width: 350px;
+}
+
+#map {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* footer part style */
+
+footer {
+    height: 2vh;
+    font-size: 12px;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+#footnote {
+    margin: 0;
+    margin-left: 1%;
+    box-sizing: border-box;
+}
+
+/* specify link color  */
+a {
+    color: black;
+  }
+  
+  a:visited {
+    color: black;
+  }
+  
+  a:hover {
+    color: brown;
+  }
+  
+  a:active {
+    color: brown;
+  }
+
+/* define "remove" status */
+.hidden {
+    display: none;
+  }

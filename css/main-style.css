@@ -100,12 +100,12 @@ header {
 }
 
 .menu {
-    height: 6vh;
+    height: 45px;
     display: flex;
     margin-top: 1.5rem;
     flex-direction: row;
-    background-color: rgb(242, 249, 255)
-    
+    background-color: rgb(242, 249, 255);
+    align-items: center;
 }
 
 .menu-cat {

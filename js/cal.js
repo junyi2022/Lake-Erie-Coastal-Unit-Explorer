@@ -4,6 +4,8 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 import { average } from './model.js';
 import { sedimentLossModel } from './model.js';
 import { sedimentGainModel } from './model.js';
+import { legend1Style } from './map.js';
+import { legend2Style } from './map.js';
 
 // list all the dropdown's avaliable models and associated properties
 const modelFuncs = {
@@ -231,6 +233,12 @@ function handlePointSelection(start, end, map, shorelineBase) {
         },
       }).addTo(map);
 
+      // add legend for the resolution box
+      map.legend.onAdd = (map) => {
+        return legend1Style(map, colorScale);
+      };
+      map.legend.addTo(map);
+
       console.log(resolutionCollection);
 
       // process to the following step if user click next
@@ -253,6 +261,8 @@ function handlePointSelection(start, end, map, shorelineBase) {
         // handle inputs from form
         generateGroupButton.addEventListener('click', () => {
           handleGroupRes();
+          // add unit legend
+          legend2Style(map, unitColorScale);
         });
 
         function handleGroupRes() {

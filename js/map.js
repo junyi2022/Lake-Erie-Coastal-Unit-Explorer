@@ -84,6 +84,9 @@ function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, 
   map.colorLayer = null;
   map.finalUnitLayer = null;
 
+  // initialize legend
+  map.legend = L.control({position: 'bottomright'});
+
   // layer control
   map.countyLayer.addTo(map); // need to add it to map in order to have this layer show up when initialize
 
@@ -128,6 +131,43 @@ function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, 
   return map;
 }
 
+function legend1Style(map, colorScale) {
+  const legendDiv = document.createElement('div'); // abstract html div tag
+  legendDiv.classList.add('legend'); // div class
+  legendDiv.innerHTML = '<h5 class="legendTitle">Legend</h5>'; // add html content
+
+  const legendContent = document.createElement('div'); // abstract html div tag
+  legendContent.classList.add('legend-content'); // div class
+
+  const resColorLegendDiv = document.createElement('div');
+  resColorLegendDiv.classList.add('res-legend');
+  resColorLegendDiv.innerHTML = `
+    <p>Resolution Score from Low to High</p>
+    <div class="resColorBox" style="background: linear-gradient(90deg, ${colorScale(0)}, ${colorScale(0.25)}, ${colorScale(0.5)}, ${colorScale(0.75)}, ${colorScale(1)})"></div>
+    `;
+
+  // const gradientBox = document.querySelector('.resColorBox');
+  // gradientBox.style.background = `linear-gradient(90deg, ${colorScale(0)}, ${colorScale(0.25)}, ${colorScale(0.5)}, ${colorScale(0.75)}, ${colorScale(1)})`;
+
+  legendContent.appendChild(resColorLegendDiv);
+  legendDiv.appendChild(legendContent);
+  return legendDiv;
+}
+
+function legend2Style(map, unitColorScale) {
+  const unitColorLegendDiv = document.createElement('div');
+  unitColorLegendDiv.classList.add('unit-legend');
+  unitColorLegendDiv.innerHTML = `
+    <p>Unit Number from Low to High</p>
+    <div class="unitColorBox" style="background: linear-gradient(90deg, ${unitColorScale(0)}, ${unitColorScale(0.25)}, ${unitColorScale(0.5)}, ${unitColorScale(0.75)}, ${unitColorScale(1)})"></div>
+    `;
+
+  const legendContent = document.querySelector('.legend-content');
+  legendContent.appendChild(unitColorLegendDiv);
+}
+
 export {
   initializeMap,
+  legend1Style,
+  legend2Style,
 };

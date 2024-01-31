@@ -14,6 +14,7 @@
     color: rgb(66, 80, 73);
     font-size: 35px;
 }
+
 .cover-lab,
 .cover-description {
     color: rgb(74, 73, 75);
@@ -21,7 +22,7 @@
 }
 
 .cover-description {
-    width: 550px;
+    width: 700px;
 }
 
 /* button styles */
@@ -30,11 +31,13 @@
     background-color: transparent;
     margin-top: 20px;
     border: 0;
+    color: rgb(74, 73, 75);
 }
 
 .show {
     background-color: transparent;
     border: 0;
+    color: rgb(74, 73, 75);
 }
 
 .go-text {

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <!-- add code to fit phone access -->
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>Lake Erie Coastal Units Strategy Library</title>
+        <!-- add leaflet map css component -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+        <!-- link css file -->
+        <link rel="stylesheet" href="../css/main-style.css">
+        <link rel="stylesheet" href="../css/cover-style.css">
+        <link rel="stylesheet" href="../css/documentation-style.css">
+       
+    </head>
+
+    <body>
+          
+        <header>
+            <div class="slider collapsed" id="slider">
+                <button class="show" onclick="slider.classList.remove('collapsed')">
+                    <p class="back-text"><strong>Back</strong></p>
+                    <svg class="show-svg" width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="matrix(1, 0, 0, -1, 0, 0)">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier"> 
+                            <path d="M19 13L12 7L5 13" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+                            <path d="M19 17L12 11L5 17" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+                        </g>
+                    </svg>
+                </button>
+                
+                <section class="cover">
+                    <h1 class="cover-title">Lake Erie Coastal Units Explorer</h1>
+                    <h3 class="cover-lab">University of Pennsylvania EMLab</h3>
+                    <p class="cover-description">This site is a working site for the process of the final web explorer. At its current state, it remains incomplete as the team is still working on the type of priority models that users can use to create their coastal units. However, the overall framework is complete, and feel free to play with it! If you find any bugs or errors when using this tool and are willing to share them with the team for future improvements, please email <em>junyiy@upenn.edu</em>. We really appreciate that!</p>
+                    <button class="hide" onclick="slider.classList.add('collapsed')">
+                        <!-- https://www.svgrepo.com/svg/524509/double-alt-arrow-up?edit=true -->
+                        <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier"> 
+                                <path d="M19 13L12 7L5 13" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+                                <path d="M19 17L12 11L5 17" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+                            </g>
+                        </svg>
+                        <p class="go-text"><strong>Let's GO!</strong></p>
+                    </button>
+                </section>
+            </div>
+            <div class="menu">
+                <div class="unit-generator menu-cat"><a href="../index.html"><strong>Unit Generator</strong></a></div>
+                <div class="strategy-filter menu-cat"><a href="strategy-filter.html"><strong>Strategy Filter</strong></a></div>
+                <div class="data-explorer menu-cat"><a href="data-explorer.html"><strong>Data Explorer</strong></a></div>
+                <div class="strategy-library menu-cat"><a href="strategy-library.html"><strong>Strategy Library</strong></a></div>
+                <div class="documentation menu-cat"><a href="documentation.html"><strong>Documentation</strong></a></div>
+            </div>
+
+        </header>
+
+        <main class="container">
+            
+            <h1>Stay tuned!</h1>
+
+        </main>
+
+        <footer>
+            <p id="footnote">
+                <strong>University of Pennsylvania</strong> <a href="https://emlabupenn.com/">EMLab</a> Last update: February 2024.
+            </p>
+
+        </footer>
+
+        
+        <!-- link js file -->
+        <!-- <script type="module" src="js/main.js"></script> -->
+    </body>
+</html>

@@ -1,0 +1,21 @@
+.container {
+    height: 88vh;
+    display: block;
+    overflow: auto;
+}
+
+.doc {
+    height: 100%;
+    display:flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    margin-left: 12.5%;
+    margin-right: 12.5%;
+}
+
+code {
+    background-color: rgb(235, 235, 235);
+    box-sizing: border-box;
+    padding: 2px;
+    border-radius: 5px;
+}

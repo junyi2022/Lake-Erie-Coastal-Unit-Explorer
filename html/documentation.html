@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <!-- add code to fit phone access -->
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>Lake Erie Coastal Units Documentation</title>
+        
+        <!-- link css file -->
+        <link rel="stylesheet" href="../css/main-style.css">
+        <link rel="stylesheet" href="../css/cover-style.css">
+        <link rel="stylesheet" href="../css/documentation-style.css">
+       
+    </head>
+
+    <body>
+          
+        <header>
+            <div class="slider collapsed" id="slider">
+                <button class="show" onclick="slider.classList.remove('collapsed')">
+                    <p class="back-text"><strong>Back</strong></p>
+                    <svg class="show-svg" width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="matrix(1, 0, 0, -1, 0, 0)">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier"> 
+                            <path d="M19 13L12 7L5 13" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+                            <path d="M19 17L12 11L5 17" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+                        </g>
+                    </svg>
+                </button>
+                
+                <section class="cover">
+                    <h1 class="cover-title">Lake Erie Coastal Units Explorer</h1>
+                    <h3 class="cover-lab">University of Pennsylvania EMLab</h3>
+                    <p class="cover-description">This site is a working site for the process of the final web explorer. At its current state, it remains incomplete as the team is still working on the type of priority models that users can use to create their coastal units. However, the overall framework is complete, and feel free to play with it! If you find any bugs or errors when using this tool and are willing to share them with the team for future improvements, please email <em>junyiy@upenn.edu</em>. We really appreciate that!</p>
+                    <button class="hide" onclick="slider.classList.add('collapsed')">
+                        <!-- https://www.svgrepo.com/svg/524509/double-alt-arrow-up?edit=true -->
+                        <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier"> 
+                                <path d="M19 13L12 7L5 13" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+                                <path d="M19 17L12 11L5 17" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+                            </g>
+                        </svg>
+                        <p class="go-text"><strong>Let's GO!</strong></p>
+                    </button>
+                </section>
+            </div>
+            <div class="menu">
+                <div class="unit-generator menu-cat"><a href="../index.html"><strong>Unit Generator</strong></a></div>
+                <div class="strategy-filter menu-cat"><a href="strategy-filter.html"><strong>Strategy Filter</strong></a></div>
+                <div class="data-explorer menu-cat"><a href="data-explorer.html"><strong>Data Explorer</strong></a></div>
+                <div class="strategy-library menu-cat"><a href="strategy-library.html"><strong>Strategy Library</strong></a></div>
+                <div class="documentation menu-cat"><a href="documentation.html"><strong>Documentation</strong></a></div>
+            </div>
+
+        </header>
+
+        <main class="container" data-smooth-scroll>
+            <div class="doc">
+                <h1>Documentation</h1>
+                <h2>Unit Generator Explanation</h2>
+                <h3>Steps Explanation</h3>
+
+                <h4>General</h4>
+                <ul>
+                    <li><h5>How to use the buttons in each step:</h5> At the initial state, all the input boxes and buttons are locked except the <code>Start/Reset</code> button in step one. To start generating the units, click the <code>Start/Reset</code> button. For all the other buttons, they should be clicked in sequence. That is to say, after finishing choosing or typing the inputs, click the <code>Generate/Reset</code> button to preview the result, and if the result looks good, click the <code>Next</code> button in each step to unlock the input boxes and buttons in the following step.</li>
+                    <li>
+                        <h5>Vocabulary:</h5>
+                        <ul>
+                            <li>
+                                <em><p>Resolution:</p></em>
+                                <P>Continuous small pieces with the same length. It is the product of dividing a longer line.</P>
+                            </li>
+                            <li>
+                                <em><p>Priority:</p></em>
+                                <P>List of criteria that will be used to weight the calculations.</P>
+                            </li>
+                            <li>
+                                <em><p>Category:</p></em>
+                                <P>The number of group types. A group means a group of resolution that has similar score from calculations. Multiple units may be in the same category.</P>
+                            </li>
+                            <li>
+                                <em><p>Unit:</p></em>
+                                <P>Final product of this tool with a unique ID.</P>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h4>Step 1: Choose your area</h4>
+                <ul>
+                    <li><h5>Purpose:</h5> This step will help choose your area of interest along the Lake Erie shoreline of New York State, which will be the base of the calculations in the following steps and the area that will be divided into units.</li>
+                    <li>
+                        <h5>Method:</h5> 
+                        <ol>
+                            <li>Click the <code>Start/Reset</code> button to start. After clicking it, you will see two pins appear at the two ends of the coastal line.</li>
+                            <li>Drag the two pins to the two ends of the area of interest along the coastline. The pins will automatically snap to the location of the coastline. You can drag and redrag for multiple times until you are satisfied with the result.</li> 
+                            <li>After you drag the pins to the desired location, click the <code>Next</code> button to move to step 2, which will zoom the map to your selected location and unloack the input boxes in step 2.</li>
+                        </ol>
+                    </li>
+                    <li><h5>Input Description:</h5> There is no input boxes in this step: interacting with the map to choose your area.</li>
+                    <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 2.</li>
+                </ul>
+
+                <h4>Step 2: Set size</h4>
+                <ul>
+                    <li><h5>Purpose:</h5> This step will fist divide the coastline you choose in step 1 to multiple small pieces with the same length, which is called <code>Resolution</code>. It will also do the socring for each resolution based on the criteria you choose in the <code>Priority</code> dropdown box and color each resolution by its final score.</li>
+                    <li>
+                        <h5>Method:</h5> 
+                        <ol>
+                            <li>In the input box below the <code>Resolution</code>, type the length (as numbers) you want to have for each resolution. You can choose the unit (e.g. feet, meter) in the dropdown box next to the input box.</li>
+                            <li>Next, in the <code>Priority</code> section, pick the scoring criteria that you are interested in. In the dropdown box next to <code>First</code>, select the criterion that you care the most. The score for each resolution will be weighted based on the priority list you choose.</li>
+                            <li>After you fill in all the input boxes, click the <code>Generate/Reset</code> button to preview the result, which will display the score for each resolution in a color gradient. You can click the <code>Generate/Reset</code> for multiple times.</li>
+                            <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 3, which will unloack the input boxes in step 3.</li>
+                        </ol>
+                    </li>
+                    <li>
+                        <h5>Input Description:</h5>
+                        <ul>
+                            <li><code>Resolutipn</code>: The lenghth that will be used to divide the coastline. For example, if you type "30" and choose "feet" as unit type, the coastline chunk you select in the previous step will be separated into small line segements that are 30 feet each. </li>
+                            <li><code>Priority</code>: In this part, you will specify the criteria you want to use to determine the final units of your selected coastline. The score calculation for each criterion behind the scenes is linked to a certain calculation of GIS layers related to that criteria, called "criteria model". See the "Criteria Models Explanation" below for details about each calculation.</li>
+                        </ul>
+                    </li>
+                    <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 2.</li>
+                    <li><h5>Warning:</h5> Because of the limitation of the origiinal GIS layers, some GIS layers may not cover the whole coastline of Lake Erie. In that case, the final result of this tool may not be precise. See the "Criteria Models Explanation" below for details.</li>
+                </ul>
+
+                <h4>Step 3: Group into Final Units</h4>
+                <ul>
+                    <li><h5>Purpose:</h5> This step will group the resolution with similar scores from step 2 to different <code>Categories</code> and display the final units through a box around each unit.</li>
+                    <li>
+                        <h5>Method:</h5> 
+                        <ol>
+                            <li>In the input box below the <code>Number of categories</code>, type the number of categories (as numbers) you want to have for the final result. Multiple final units may be in the same category. The category stands for the number of group types that you want to have for the final result. </li>
+                            <li>Next, click the <code>Generate/Reset</code> button to preview the result, which will display the final units generated from the number of categories you specified above by circling them in boxes. When hover over each box, a pop-up will show the category type of that unit, and when you click each box, a panel will display more detailed information about each box. You can click the <code>Generate/Reset</code> for multiple times.</li>
+                            <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 4, which will unloack the input boxes in step 4.</li>
+                        </ol>
+                    </li>
+                    <li><h5>Input Description:</h5><code>Number of categories</code>: The number of unit types you want to have for the final units based on the score of the resolution. Resolution with similar final score will be grouped together to form the final unit. Each category may belongs to multiple units. It is also possible that one or multiple category types are not connected to any units.</li>
+                    <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 2.</li>
+                </ul>
+                <h4>Step 4: Download</h4>
+                <h3>Criteria Models Explanation</h3>
+                <h4>Sediment Loss Model</h4>
+                <h4>Sediment Gain Model</h4>
+                <!-- <h2>Strategy Filter Steps Explanation</h2>
+                <h3>Steps Explanation</h3>
+                <h4>Step 1</h4>
+                <h4>Step 2</h4>
+                <h4>Step 3</h4>
+                <h4>Step 4</h4> -->
+            </div>
+            
+
+        </main>
+
+        <footer class="doc-footer">
+            <p id="footnote">
+                <strong>University of Pennsylvania</strong> <a href="https://emlabupenn.com/">EMLab</a> Last update: February 2024.
+            </p>
+
+        </footer>
+
+
+        <!-- link js file -->
+        <!-- <script type="module" src="js/main.js"></script> -->
+    </body>
+</html>

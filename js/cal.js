@@ -262,8 +262,6 @@ function handlePointSelection(start, end, map, shorelineBase) {
         // handle inputs from form
         generateGroupButton.addEventListener('click', () => {
           handleGroupRes();
-          // // add unit legend
-          // legend2Style(map, unitColorScale, catNum);
         });
 
         function handleGroupRes() {
@@ -285,7 +283,13 @@ function handlePointSelection(start, end, map, shorelineBase) {
           const units = turf.featureCollection(featureCollectionArray);
           // display box
           const unitsBox = getResolutionBoxes(units, 0.5);
+
+          // need to add ID as unit numbering
+          for (let i = 0; i < unitsBox.features.length; i++) {
+            unitsBox.features[i].properties.ID = i;
+          }
           console.log(unitsBox);
+
           // style the boxes
           const firstPropName = modelName[firstDrop.value];
           const secondPropName = modelName[secondDrop.value];
@@ -301,9 +305,10 @@ function handlePointSelection(start, end, map, shorelineBase) {
               };
             },
           }).bindTooltip((l) => { // final unit box tooltip options
-            return `<p class="unit-tooltip"><strong>Unit:</strong> ${l.feature.properties.unit}</p>`;
+            return `<p class="unit-tooltip"><strong>Category:</strong> ${l.feature.properties.unit}</p>`;
           }).bindPopup((l) => { // final unit box popup options
-            return `<h3 class="unit-pop-title">Unit: ${l.feature.properties.unit}</h3>
+            return `<h3 class="unit-pop-title">Unit: ${l.feature.properties.ID + 1}</h3>
+                    <p class="unit-finalscore"><strong>Category:</strong> ${l.feature.properties.unit}</p>
                     <p class="unit-finalscore"><strong>Final Score:</strong> ${l.feature.properties.finalScore.toFixed(2)}</p>
                     <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
                     <p class="unit-second-priority"><strong>${secondPropName}:</strong> ${l.feature.properties[secondProp].toFixed(2)}</p>

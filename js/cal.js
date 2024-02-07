@@ -191,6 +191,7 @@ function handlePointSelection(start, end, map, shorelineBase) {
       if (map.colorLayer !== null) {
         map.colorLayer.clearLayers();
       }
+
       // check all the boxes are filled
       // process to the calculations when we have everything
       if (step2Form.reportValidity() == false) {
@@ -261,8 +262,8 @@ function handlePointSelection(start, end, map, shorelineBase) {
         // handle inputs from form
         generateGroupButton.addEventListener('click', () => {
           handleGroupRes();
-          // add unit legend
-          legend2Style(map, unitColorScale);
+          // // add unit legend
+          // legend2Style(map, unitColorScale, catNum);
         });
 
         function handleGroupRes() {
@@ -271,6 +272,9 @@ function handlePointSelection(start, end, map, shorelineBase) {
           }
           const catNum = parseInt(categoryBox.value);
           console.log(catNum);
+
+          // add unit legend
+          legend2Style(map, unitColorScale, catNum);
           // get arrays of resolution that supposed to be grouped
           const resGroupArray = resToGroupArray(resolutionCollection, catNum);
           console.log(resGroupArray);
@@ -290,7 +294,8 @@ function handlePointSelection(start, end, map, shorelineBase) {
               const colorValue = unitColorScale(sample.properties.unit / catNum);
               return {
                 stroke: true,
-                fill: false,
+                fill: true,
+                fillOpacity: 0, // in order to make the tooltip more smooth, this should be a polygon with transparent fill
                 color: colorValue,
                 weight: 3,
               };

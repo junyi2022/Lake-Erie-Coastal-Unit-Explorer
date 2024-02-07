@@ -134,7 +134,7 @@ function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, 
 function legend1Style(map, colorScale) {
   const legendDiv = document.createElement('div'); // abstract html div tag
   legendDiv.classList.add('legend'); // div class
-  legendDiv.innerHTML = '<h5 class="legendTitle">Legend</h5>'; // add html content
+  legendDiv.innerHTML = '<h4 class="legendTitle">Legend</h4>'; // add html content
 
   const legendContent = document.createElement('div'); // abstract html div tag
   legendContent.classList.add('legend-content'); // div class
@@ -142,27 +142,73 @@ function legend1Style(map, colorScale) {
   const resColorLegendDiv = document.createElement('div');
   resColorLegendDiv.classList.add('res-legend');
   resColorLegendDiv.innerHTML = `
-    <p>Resolution Score from Low to High</p>
+    <strong><p>Resolution Score from Low to High</p></strong>
     <div class="resColorBox" style="background: linear-gradient(90deg, ${colorScale(0)}, ${colorScale(0.25)}, ${colorScale(0.5)}, ${colorScale(0.75)}, ${colorScale(1)})"></div>
-    `;
+  `;
 
-  // const gradientBox = document.querySelector('.resColorBox');
-  // gradientBox.style.background = `linear-gradient(90deg, ${colorScale(0)}, ${colorScale(0.25)}, ${colorScale(0.5)}, ${colorScale(0.75)}, ${colorScale(1)})`;
+  // if want to use querySelector here, cannot use document because it is not yet in the document
+  // resColorLegendDiv.querySelector('.resColorBox');
 
   legendContent.appendChild(resColorLegendDiv);
   legendDiv.appendChild(legendContent);
   return legendDiv;
 }
 
-function legend2Style(map, unitColorScale) {
+// function legend2Style(map, unitColorScale, numvalues) {
+//   const unitColorLegendDiv = document.createElement('div');
+//   unitColorLegendDiv.classList.add('unit-legend');
+//   unitColorLegendDiv.innerHTML = `
+//     <strong><p>Category Number</p></strong>
+
+//   `;
+//   // <div class="catWrapper">
+
+//   const dynamicUnitDiv = document.createElement('div');
+//   dynamicUnitDiv.classList.add('dynamic-legend');
+//   for (let i = 0; i < numvalues; i++) {
+//     dynamicUnitDiv.innerHTML += `
+//     <div class="catColorBox" style="background-color: ${unitColorScale(i / numvalues)}"></div>
+//     <p class="catText">Category ${i+1}</p>
+//     `;
+//     console.log(dynamicUnitDiv);
+//   }
+//   unitColorLegendDiv.appendChild(dynamicUnitDiv);
+//   // unitColorLegendDiv.innerHTML += '</div>'; // Close the wrapper
+//   console.log(unitColorLegendDiv);
+
+//   const legendContent = document.querySelector('.legend-content');
+//   legendContent.appendChild(unitColorLegendDiv);
+// }
+
+function legend2Style(map, unitColorScale, numvalues) {
+  const legendContent = document.querySelector('.legend-content');
+
+  // when reset, need to remove the previous unit legend first
+  if (legendContent.querySelector('.unit-legend') !== null) {
+    const oldLegend = legendContent.querySelector('.unit-legend');
+    legendContent.removeChild(oldLegend);
+  }
+
+  // create a new div to hold unit legend
   const unitColorLegendDiv = document.createElement('div');
   unitColorLegendDiv.classList.add('unit-legend');
   unitColorLegendDiv.innerHTML = `
-    <p>Unit Number from Low to High</p>
-    <div class="unitColorBox" style="background: linear-gradient(90deg, ${unitColorScale(0)}, ${unitColorScale(0.25)}, ${unitColorScale(0.5)}, ${unitColorScale(0.75)}, ${unitColorScale(1)})"></div>
-    `;
+    <strong><p>Category Number</p></strong>
+    <div class="catWrapper">
+  `;
 
-  const legendContent = document.querySelector('.legend-content');
+  for (let i = 0; i < numvalues; i++) {
+    unitColorLegendDiv.innerHTML += `
+    <div class="colorTextPair">
+    <div class="catColorBox" style="background-color: ${unitColorScale(i / numvalues)}"></div>
+    <p class="catText">Category ${i+1}</p>
+    </div>
+    `;
+  }
+
+  unitColorLegendDiv.innerHTML += '</div>'; // Close the wrapper
+  console.log(unitColorLegendDiv);
+
   legendContent.appendChild(unitColorLegendDiv);
 }
 

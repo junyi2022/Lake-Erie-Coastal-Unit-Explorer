@@ -175,20 +175,21 @@ footer {
 
 /* specify link color  */
 a {
-    color: black;
+    color: rgb(94, 121, 112);
     text-decoration: none;
   }
   
   a:visited {
-    color: black;
+    color: rgb(94, 121, 112);
   }
   
   a:hover {
-    color: brown;
+    color: rgb(202, 92, 92);
+    font-weight: bold;
   }
   
   a:active {
-    color: brown;
+    color: rgb(202, 92, 92);
   }
 
 /* define "remove" status */

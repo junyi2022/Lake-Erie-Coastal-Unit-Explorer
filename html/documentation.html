@@ -12,6 +12,8 @@
         <link rel="stylesheet" href="../css/main-style.css">
         <link rel="stylesheet" href="../css/cover-style.css">
         <link rel="stylesheet" href="../css/documentation-style.css">
+
+        <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"> -->
        
     </head>
 
@@ -59,13 +61,29 @@
 
         </header>
 
-        <main class="container" data-smooth-scroll>
+        <main class="container">
+            <div class="toc">
+                <ul class="section table-of-contents">
+                    <li><a href="#documentation"><em>Go to top</em></a></li>
+                    <li><a href="#unit-generator-explanation">Unit Generator Explanation</a></li>
+                        <li><a href="#steps-explanation">Steps Explanation</a></li>
+                        <li>
+                            <a href="#model-explain">Criteria Models Explanation</a>
+                            <ul class="table-of-contents">
+                                <li><a href="#sediment-loss">Sediment Loss Model</a></li>
+                                <li><a href="#sediment-gain">Sediment Gain Model</a></li>
+                            </ul>
+                        </li>
+                            
+                </ul>
+            </div>
             <div class="doc">
-                <h1>Documentation</h1>
-                <h2>Unit Generator Explanation</h2>
-                <h3>Steps Explanation</h3>
+                
+                <h1 id="documentation" class="section scrollspy">Documentation</h1>
+                <h2 id="unit-generator-explanation" class="section scrollspy">Unit Generator Explanation</h2>
+                <h3 id="steps-explanation" class="section scrollspy">Steps Explanation</h3>
 
-                <h4>General</h4>
+                <h4 d="general" class="section scrollspy">General</h4>
                 <ul>
                     <li><h5>How to use the buttons in each step:</h5> At the initial state, all the input boxes and buttons are locked except the <code>Start/Reset</code> button in step one. To start generating the units, click the <code>Start/Reset</code> button. For all the other buttons, they should be clicked in sequence. That is to say, after finishing choosing or typing the inputs, click the <code>Generate/Reset</code> button to preview the result, and if the result looks good, click the <code>Next</code> button in each step to unlock the input boxes and buttons in the following step.</li>
                     <li>
@@ -91,7 +109,7 @@
                     </li>
                 </ul>
 
-                <h4>Step 1: Choose your area</h4>
+                <h4 id="divide-step1" class="section scrollspy">Step 1: Choose your area</h4>
                 <ul>
                     <li><h5>Purpose:</h5> This step will help choose your area of interest along the Lake Erie shoreline of New York State, which will be the base of the calculations in the following steps and the area that will be divided into units.</li>
                     <li>
@@ -106,7 +124,7 @@
                     <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 2.</li>
                 </ul>
 
-                <h4>Step 2: Set size</h4>
+                <h4 id="divide-step2" class="section scrollspy">Step 2: Set size</h4>
                 <ul>
                     <li><h5>Purpose:</h5> This step will fist divide the coastline you choose in step 1 to multiple small pieces with the same length, which is called <code>Resolution</code>. It will also do the socring for each resolution based on the criteria you choose in the <code>Priority</code> dropdown box and color each resolution by its final score.</li>
                     <li>
@@ -129,31 +147,83 @@
                     <li><h5>Warning:</h5> Because of the limitation of the origiinal GIS layers, some GIS layers may not cover the whole coastline of Lake Erie. In that case, the final result of this tool may not be precise. See the "Criteria Models Explanation" below for details.</li>
                 </ul>
 
-                <h4>Step 3: Group into Final Units</h4>
+                <h4 id="divide-step3" class="section scrollspy">Step 3: Group into Final Units</h4>
                 <ul>
                     <li><h5>Purpose:</h5> This step will group the resolution with similar scores from step 2 to different <code>Categories</code> and display the final units through a box around each unit.</li>
                     <li>
                         <h5>Method:</h5> 
                         <ol>
                             <li>In the input box below the <code>Number of categories</code>, type the number of categories (as numbers) you want to have for the final result. Multiple final units may be in the same category. The category stands for the number of group types that you want to have for the final result. </li>
-                            <li>Next, click the <code>Generate/Reset</code> button to preview the result, which will display the final units generated from the number of categories you specified above by circling them in boxes. When hover over each box, a pop-up will show the category type of that unit, and when you click each box, a panel will display more detailed information about each box. You can click the <code>Generate/Reset</code> for multiple times.</li>
+                            <li>Next, click the <code>Generate/Reset</code> button to preview the result, which will display the final units generated from the number of categories you specified above by circling them in boxes. When hover over each box, a pop-up will show the category type of that unit, and when you click each box, a panel will display more detailed information about each unit. You can click the <code>Generate/Reset</code> for multiple times.</li>
                             <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 4, which will unloack the input boxes in step 4.</li>
                         </ol>
                     </li>
                     <li><h5>Input Description:</h5><code>Number of categories</code>: The number of unit types you want to have for the final units based on the score of the resolution. Resolution with similar final score will be grouped together to form the final unit. Each category may belongs to multiple units. It is also possible that one or multiple category types are not connected to any units.</li>
                     <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 2.</li>
                 </ul>
-                <h4>Step 4: Download</h4>
-                <h3>Criteria Models Explanation</h3>
-                <h4>Sediment Loss Model</h4>
-                <h4>Sediment Gain Model</h4>
+                <h4 id="divide-step4" class="section scrollspy">Step 4: Download</h4>
+                <ul>
+                    <li><h5>Purpose:</h5> This step will let you download your result generated from the previous steps and use it elsewhere.</li>
+                    <li>
+                        <h5>Method:</h5> 
+                        <ol>
+                            <li>In the input box below the <code>Download Units</code>, choose the type of file that you want to generate. Currently, this step accepts geoJSON and shapefile.</li>
+                            <li>Next, click the <code>Download</code> button and a pop up window will allow you the select the saving location.</li>
+                        </ol>
+                    </li>
+                </ul>
+
+                <h3 id="model-explain" class="section scrollspy">Criteria Models Explanation</h3>
+                <h4 id="model-resolution" class="section scrollspy">General</h4>
+                <ul>
+                    <li><h5>What's the weight for each priority:</h5> First priority 50%, second priority 30%, third priority 20%.</li>
+                    <li><h5>How to assign value from GIS layer to each resolution:</h5> The resolution line will be offset for a certain distance (default is 200 meters) in both directions to create a bounding box. The values in each GIS layer will be assigned to the resolution if they overlap with the bounding box of the resolution line. If more than one value overlaps with the bounding box, the values will be averaged. If no value overlaps with the bounding box, the value for the resolution will be the value of the nearest GIS object.</li>
+                </ul>
+                <h4 id="sediment-loss" class="section scrollspy">Sediment Loss Model</h4>
+                <ul>
+                    <li><h5>Description:</h5> This model focuses on the actual sediment loss amount along the shoreline. Higher score means higher amount of sediment loss.</li>
+                    <li>
+                        <h5>GIS Data:</h5> 
+                        <ol>
+                            <li>Sediment budget</li>
+                        </ol>
+                    </li>
+                    <li>
+                        <h5>Calculating Algorithm:</h5>
+                        <ol>
+                            <li>For each sediment budget cell, sediment loss = Coarse out + Bypass + Downdrift (to) + Fines out + Littoral coarse out</li>
+                            <li>Rescale: the actual sediment loss value of all the resolution will be projected to a scale of 0 to 1, where closer to 0 means less loss and closer to 1 means more loss.</li>
+                        </ol>
+                    </li>
+                    <li><h5>Warning:</h5>The sediment budget layer does not have values for the area near Buffalo City. If the selected coastline includes those areas, the result may not be precise.</li>
+                </ul>
+                <h4 id="sediment-gain" class="section scrollspy">Sediment Gain Model</h4>
+                <ul>
+                    <li><h5>Description:</h5> This model focuses on the actual sediment gain amount along the shoreline. Higher score means higher amount of sediment gain.</li>
+                    <li>
+                        <h5>GIS Data:</h5> 
+                        <ol>
+                            <li>Sediment budget</li>
+                        </ol>
+                    </li>
+                    <li>
+                        <h5>Calculating Algorithm:</h5>
+                        <ol>
+                            <li>For each sediment budget cell, sediment gain = Bluff in + Bedload + Downdrift (from) + Littoral coarse in</li>
+                            <li>Rescale: the actual sediment gain value of all the resolution will be projected to a scale of 0 to 1, where closer to 0 means less gain and closer to 1 means more loss.</li>
+                        </ol>
+                    </li>
+                    <li><h5>Warning:</h5>The sediment budget layer does not have values for the area near Buffalo City. If the selected coastline includes those areas, the result may not be precise.</li>
+                </ul>
                 <!-- <h2>Strategy Filter Steps Explanation</h2>
                 <h3>Steps Explanation</h3>
                 <h4>Step 1</h4>
                 <h4>Step 2</h4>
                 <h4>Step 3</h4>
                 <h4>Step 4</h4> -->
+                
             </div>
+            
             
 
         </main>
@@ -167,6 +237,11 @@
 
 
         <!-- link js file -->
-        <!-- <script type="module" src="js/main.js"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js"></script>
+
+        <script type="module" src="../js/doc.js"></script>
+
     </body>
 </html>

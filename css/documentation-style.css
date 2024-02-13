@@ -2,15 +2,28 @@
     height: 88vh;
     display: block;
     overflow: auto;
+    width: 100%;
+}
+
+.toc {
+    position: absolute;
+    top: 12vh;
+    width: 300px;
+}
+
+.table-of-contents {
+    list-style-type: none;
+    
 }
 
 .doc {
     height: 100%;
     display:flex;
+
     box-sizing: border-box;
     flex-direction: column;
-    margin-left: 12.5%;
-    margin-right: 12.5%;
+    margin-left: 300px;
+    margin-right: 8%;
 }
 
 code {

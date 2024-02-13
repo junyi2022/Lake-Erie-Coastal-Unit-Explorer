@@ -154,7 +154,7 @@
                         <h5>Method:</h5> 
                         <ol>
                             <li>In the input box below the <code>Number of categories</code>, type the number of categories (as numbers) you want to have for the final result. Multiple final units may be in the same category. The category stands for the number of group types that you want to have for the final result. </li>
-                            <li>Next, click the <code>Generate/Reset</code> button to preview the result, which will display the final units generated from the number of categories you specified above by circling them in boxes. When hover over each box, a pop-up will show the category type of that unit, and when you click each box, a panel will display more detailed information about each box. You can click the <code>Generate/Reset</code> for multiple times.</li>
+                            <li>Next, click the <code>Generate/Reset</code> button to preview the result, which will display the final units generated from the number of categories you specified above by circling them in boxes. When hover over each box, a pop-up will show the category type of that unit, and when you click each box, a panel will display more detailed information about each unit. You can click the <code>Generate/Reset</code> for multiple times.</li>
                             <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 4, which will unloack the input boxes in step 4.</li>
                         </ol>
                     </li>
@@ -162,10 +162,59 @@
                     <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 2.</li>
                 </ul>
                 <h4 id="divide-step4" class="section scrollspy">Step 4: Download</h4>
+                <ul>
+                    <li><h5>Purpose:</h5> This step will let you download your result generated from the previous steps and use it elsewhere.</li>
+                    <li>
+                        <h5>Method:</h5> 
+                        <ol>
+                            <li>In the input box below the <code>Download Units</code>, choose the type of file that you want to generate. Currently, this step accepts geoJSON and shapefile.</li>
+                            <li>Next, click the <code>Download</code> button and a pop up window will allow you the select the saving location.</li>
+                        </ol>
+                    </li>
+                </ul>
 
                 <h3 id="model-explain" class="section scrollspy">Criteria Models Explanation</h3>
+                <h4 id="model-resolution" class="section scrollspy">General</h4>
+                <ul>
+                    <li><h5>What's the weight for each priority:</h5> First priority 50%, second priority 30%, third priority 20%.</li>
+                    <li><h5>How to assign value from GIS layer to each resolution:</h5> The resolution line will be offset for a certain distance (default is 200 meters) in both directions to create a bounding box. The values in each GIS layer will be assigned to the resolution if they overlap with the bounding box of the resolution line. If more than one value overlaps with the bounding box, the values will be averaged. If no value overlaps with the bounding box, the value for the resolution will be the value of the nearest GIS object.</li>
+                </ul>
                 <h4 id="sediment-loss" class="section scrollspy">Sediment Loss Model</h4>
+                <ul>
+                    <li><h5>Description:</h5> This model focuses on the actual sediment loss amount along the shoreline. Higher score means higher amount of sediment loss.</li>
+                    <li>
+                        <h5>GIS Data:</h5> 
+                        <ol>
+                            <li>Sediment budget</li>
+                        </ol>
+                    </li>
+                    <li>
+                        <h5>Calculating Algorithm:</h5>
+                        <ol>
+                            <li>For each sediment budget cell, sediment loss = Coarse out + Bypass + Downdrift (to) + Fines out + Littoral coarse out</li>
+                            <li>Rescale: the actual sediment loss value of all the resolution will be projected to a scale of 0 to 1, where closer to 0 means less loss and closer to 1 means more loss.</li>
+                        </ol>
+                    </li>
+                    <li><h5>Warning:</h5>The sediment budget layer does not have values for the area near Buffalo City. If the selected coastline includes those areas, the result may not be precise.</li>
+                </ul>
                 <h4 id="sediment-gain" class="section scrollspy">Sediment Gain Model</h4>
+                <ul>
+                    <li><h5>Description:</h5> This model focuses on the actual sediment gain amount along the shoreline. Higher score means higher amount of sediment gain.</li>
+                    <li>
+                        <h5>GIS Data:</h5> 
+                        <ol>
+                            <li>Sediment budget</li>
+                        </ol>
+                    </li>
+                    <li>
+                        <h5>Calculating Algorithm:</h5>
+                        <ol>
+                            <li>For each sediment budget cell, sediment gain = Bluff in + Bedload + Downdrift (from) + Littoral coarse in</li>
+                            <li>Rescale: the actual sediment gain value of all the resolution will be projected to a scale of 0 to 1, where closer to 0 means less gain and closer to 1 means more loss.</li>
+                        </ol>
+                    </li>
+                    <li><h5>Warning:</h5>The sediment budget layer does not have values for the area near Buffalo City. If the selected coastline includes those areas, the result may not be precise.</li>
+                </ul>
                 <!-- <h2>Strategy Filter Steps Explanation</h2>
                 <h3>Steps Explanation</h3>
                 <h4>Step 1</h4>

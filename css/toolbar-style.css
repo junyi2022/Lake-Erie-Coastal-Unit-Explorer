@@ -12,7 +12,7 @@
 .choice-options {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
     justify-content: center;
 }
 
@@ -51,7 +51,7 @@
 .info-tag:hover + span {
     display: block;
     position: absolute;
-	width: 150px;
+	width: 200px;
 	margin: 0px;
     padding: 0.5rem;
     border-radius: 5px;
@@ -62,13 +62,19 @@
 }
 
 #step-1-pop {
-    bottom: 85vh;
-	left: 300px;
+    bottom: 80vh;
+	left: 280px;
     z-index: 10000;
 }
 
 #step-2-pop {
-    bottom: 70vh;
+    bottom: 60vh;
+	left: 200px;
+    z-index: 10000;
+}
+
+#step-3-pop {
+    bottom: 22vh;
 	left: 300px;
     z-index: 10000;
 }

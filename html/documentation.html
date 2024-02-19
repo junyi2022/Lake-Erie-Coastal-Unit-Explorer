@@ -85,7 +85,9 @@
 
                 <h4 d="general" class="section scrollspy">General</h4>
                 <ul>
-                    <li><h5>How to use the buttons in each step:</h5> At the initial state, all the input boxes and buttons are locked except the <code>Start/Reset</code> button in step one. To start generating the units, click the <code>Start/Reset</code> button. For all the other buttons, they should be clicked in sequence. That is to say, after finishing choosing or typing the inputs, click the <code>Generate/Reset</code> button to preview the result, and if the result looks good, click the <code>Next</code> button in each step to unlock the input boxes and buttons in the following step.</li>
+                    <li>
+                        <h5>How to use the buttons in each step:</h5> At the initial state, all the input boxes and buttons are locked except the <code>Start/Reset</code> button in step one. To start generating the units, click the <code>Start/Reset</code> button. For all the other buttons, they should be clicked in sequence. That is to say, after finishing choosing or typing the inputs, click the <code>Generate/Reset</code> button to preview the result, and if the result looks good, click the <code>Next</code> button in each step to unlock the input boxes and buttons in the following step.
+                    </li>
                     <li>
                         <h5>Vocabulary:</h5>
                         <ul>
@@ -107,6 +109,31 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <h5>Summary of the working method for operational coastal unit delineation</h5>
+                        <section class="insert-table">
+                            <div class="insert-table-group-sum">
+                                <p class="insert-table-text-sum"><strong>1. Divide:</strong> Coast divided into "cells" of set size, e.g. 10 meters.</p>
+                                <img src="../img/documentation/sum-1.jpg" class="insert-table-img-sum">
+                            </div>
+                            <div class="insert-table-group-sum">
+                                <p class="insert-table-text-sum"><strong>2. Match:</strong> Datasets are also divided and matched to cells.</p>
+                                <img src="../img/documentation/sum-2.jpg" class="insert-table-img-sum">
+                            </div>
+                            <div class="insert-table-group-sum">
+                                <p class="insert-table-text-sum"><strong>3. Class:</strong> Data in each cell is classed based on user priority.</p>
+                                <img src="../img/documentation/sum-3.jpg" class="insert-table-img-sum">
+                            </div>
+                            <div class="insert-table-group-sum">
+                                <p class="insert-table-text-sum"><strong>4. Score:</strong> Scores are assigned to each cell based on classification.</p>
+                                <img src="../img/documentation/sum-4.jpg" class="insert-table-img-sum">
+                            </div>
+                            <div class="insert-table-group-sum">
+                                <p class="insert-table-text-sum"><strong>5. Group:</strong> Cells are grouped into coastal units based on scores and desired unit fidelity (size and number of units).</p>
+                                <img src="../img/documentation/sum-5.jpg" class="insert-table-img-sum">
+                            </div>
+                        </section>
+                    </li>
                 </ul>
 
                 <h4 id="divide-step1" class="section scrollspy">Step 1: Choose your area</h4>
@@ -126,7 +153,7 @@
 
                 <h4 id="divide-step2" class="section scrollspy">Step 2: Set size</h4>
                 <ul>
-                    <li><h5>Purpose:</h5> This step will fist divide the coastline you choose in step 1 to multiple small pieces with the same length, which is called <code>Resolution</code>. It will also do the socring for each resolution based on the criteria you choose in the <code>Priority</code> dropdown box and color each resolution by its final score.</li>
+                    <li><h5>Purpose:</h5> This step will first divide the coastline you choose in step 1 to multiple small pieces with the same length, which is called <code>Resolution</code>. It will also do the socring for each resolution based on the criteria you choose in the <code>Priority</code> dropdown box and color each resolution by its final score.</li>
                     <li>
                         <h5>Method:</h5> 
                         <ol>
@@ -179,37 +206,83 @@
                     <li><h5>What's the weight for each priority:</h5> First priority 50%, second priority 30%, third priority 20%.</li>
                     <li><h5>How to assign value from GIS layer to each resolution:</h5> The resolution line will be offset for a certain distance (default is 200 meters) in both directions to create a bounding box. The values in each GIS layer will be assigned to the resolution if they overlap with the bounding box of the resolution line. If more than one value overlaps with the bounding box, the values will be averaged. If no value overlaps with the bounding box, the value for the resolution will be the value of the nearest GIS object.</li>
                 </ul>
+
                 <h4 id="sediment-loss" class="section scrollspy">Sediment Loss Model</h4>
                 <ul>
                     <li><h5>Description:</h5> This model focuses on the actual sediment loss amount along the shoreline. Higher score means higher amount of sediment loss.</li>
                     <li>
-                        <h5>GIS Data:</h5> 
-                        <ol>
-                            <li>Sediment budget</li>
-                        </ol>
+                        <h5>GIS Data Used:</h5> 
+                        <ul>
+                            <li>
+                                Sediment budget: The Sediment Budget, produced by the United States Army Corps of Engineers for both Lake Erie and Lake Ontario covers the large extent of our study area.  The sediment budget estimates the gain, loss, and movement of sediment across the lake shoreline, through a series of cells, each measuring approximately a half mile in length.
+                                <section class="insert-table">
+                                    <div class="insert-table-group-sb">
+                                        <p class="insert-table-text-sb"><strong>Coarse out:</strong> Coarse Material leaving the cell for open water.</p>
+                                        <img src="../img/documentation/sb-coarseout.jpg" class="insert-table-img-sb">
+                                    </div>
+                                    <div class="insert-table-group-sb">
+                                        <p class="insert-table-text-sb"><strong>Bypass:</strong> Material leaving the cell to adjacent cell through mechanical bypassing.</p>
+                                        <img src="../img/documentation/sb-bypass.jpg" class="insert-table-img-sb">
+                                    </div>
+                                    <div class="insert-table-group-sb">
+                                        <p class="insert-table-text-sb"><strong>Downdrift Loss:</strong> Material leaving cell to adjacent cell by downdrift.</p>
+                                        <img src="../img/documentation/sb-downdrift.jpg" class="insert-table-img-sb">
+                                    </div>
+                                    <div class="insert-table-group-sb">
+                                        <p class="insert-table-text-sb"><strong>Fines out:</strong> Fine Material leaving cell for open water.</p>
+                                        <img src="../img/documentation/sb-finesout.jpg" class="insert-table-img-sb">
+                                    </div>
+                                    <div class="insert-table-group-sb">
+                                        <p class="insert-table-text-sb"><strong>Littoral coarse out:</strong> Coarse Material leaving cell to open water via littoral transport.</p>
+                                        <img src="../img/documentation/sb-littoralcoarseout.jpg" class="insert-table-img-sb">
+                                    </div>
+                                </section>
+                            </li>
+                        </ul>
                     </li>
                     <li>
                         <h5>Calculating Algorithm:</h5>
                         <ol>
-                            <li>For each sediment budget cell, sediment loss = Coarse out + Bypass + Downdrift (to) + Fines out + Littoral coarse out</li>
+                            <li>For each sediment budget cell, sediment loss = Coarse out + Bypass + Downdrift loss + Fines out + Littoral coarse out</li>
                             <li>Rescale: the actual sediment loss value of all the resolution will be projected to a scale of 0 to 1, where closer to 0 means less loss and closer to 1 means more loss.</li>
                         </ol>
                     </li>
                     <li><h5>Warning:</h5>The sediment budget layer does not have values for the area near Buffalo City. If the selected coastline includes those areas, the result may not be precise.</li>
                 </ul>
+
                 <h4 id="sediment-gain" class="section scrollspy">Sediment Gain Model</h4>
                 <ul>
                     <li><h5>Description:</h5> This model focuses on the actual sediment gain amount along the shoreline. Higher score means higher amount of sediment gain.</li>
                     <li>
                         <h5>GIS Data:</h5> 
                         <ol>
-                            <li>Sediment budget</li>
+                            <li>
+                                Sediment budget: The Sediment Budget, produced by the United States Army Corps of Engineers for both Lake Erie and Lake Ontario covers the large extent of our study area.  The sediment budget estimates the gain, loss, and movement of sediment across the lake shoreline, through a series of cells, each measuring approximately a half mile in length.
+                                <section class="insert-table">
+                                    <div class="insert-table-group-sb">
+                                        <p class="insert-table-text-sb"><strong>Bluff in:</strong> Erosion from Bluff added to cell.</p>
+                                        <img src="../img/documentation/sb-bluffin.jpg" class="insert-table-img-sb">
+                                    </div>
+                                    <div class="insert-table-group-sb">
+                                        <p class="insert-table-text-sb"><strong>Tributary bedload:</strong> Material added to cell via river input.</p>
+                                        <img src="../img/documentation/sb-bedload.jpg" class="insert-table-img-sb">
+                                    </div>
+                                    <div class="insert-table-group-sb">
+                                        <p class="insert-table-text-sb"><strong>Downdrift gain:</strong> Material added to cell from adjacent cell by downdrift.</p>
+                                        <img src="../img/documentation/sb-downdrift.jpg" class="insert-table-img-sb">
+                                    </div>
+                                    <div class="insert-table-group-sb">
+                                        <p class="insert-table-text-sb"><strong>Littoral coarse in:</strong> Coarse Material added to cell from open water via littoral transport.</p>
+                                        <img src="../img/documentation/sb-littoralcoarsein.jpg" class="insert-table-img-sb">
+                                    </div>
+                                </section>
+                            </li>
                         </ol>
                     </li>
                     <li>
                         <h5>Calculating Algorithm:</h5>
                         <ol>
-                            <li>For each sediment budget cell, sediment gain = Bluff in + Bedload + Downdrift (from) + Littoral coarse in</li>
+                            <li>For each sediment budget cell, sediment gain = Bluff in + Tributary bedload + Downdrift gain + Littoral coarse in</li>
                             <li>Rescale: the actual sediment gain value of all the resolution will be projected to a scale of 0 to 1, where closer to 0 means less gain and closer to 1 means more loss.</li>
                         </ol>
                     </li>

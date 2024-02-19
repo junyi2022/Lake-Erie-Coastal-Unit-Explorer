@@ -19,7 +19,6 @@
 .doc {
     height: 100%;
     display:flex;
-
     box-sizing: border-box;
     flex-direction: column;
     margin-left: 300px;
@@ -32,3 +31,52 @@ code {
     padding: 2px;
     border-radius: 5px;
 }
+
+/* table in documentation */
+
+.insert-table {
+    margin-top: 20px;
+    display:flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+/* summary part */
+
+.insert-table-group-sum {
+    width: 400px;
+    display:flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    margin-right: 20px;
+
+}
+
+.insert-table-text-sum {
+    width: 200px;
+}
+
+.insert-table-img-sum {
+    width: 200px;
+}
+
+/* sediment budget table */
+
+.insert-table-img-sb {
+    width: 200px;
+    display:flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.insert-table-text-sb {
+    height: 75px;
+}
+
+.insert-table-img-sb {
+    width: 200px;
+}
+

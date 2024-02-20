@@ -5,9 +5,7 @@ import { initializeMap } from './map.js';
 // dialog.showModal();
 
 // read files
-
-const shore = await fetch('data/shoreline-base.geojson');
-const shorelineBase = await shore.json();
+// reference layers
 
 const db = await fetch('data/data-boundary.json');
 const dataBoundary = await db.json();
@@ -24,14 +22,23 @@ const huc10 = await HUC10.json();
 const HUC12 = await fetch('data/HUC12.json');
 const huc12 = await HUC12.json();
 
+const fl = await fetch('data/flowline.json');
+const flowline = await fl.json();
+
+const shore = await fetch('data/shoreline-base-to-bridge.geojson');
+const shorelineBase = await shore.json();
+
+// working layers
+
 const sb = await fetch('data/sediment-budget-new.json');
 const sendimentBudget = await sb.json();
 
 const shoretype = await fetch('data/shoreline-type.json');
 const shorelineType = await shoretype.json();
 
-const fl = await fetch('data/flowline.json');
-const flowline = await fl.json();
+const soil = await fetch('data/soil-erosion-k.geojson');
+const soilErosion = await soil.json();
+
 
 window.censusTracts = censusTracts;
 window.dataBoundary = dataBoundary;
@@ -39,7 +46,9 @@ window.county = county;
 window.huc10 = huc10;
 window.huc12 = huc12;
 window.flowline = flowline;
+
 window.sendimentBudget = sendimentBudget;
 window.shorelineBase = shorelineBase;
 window.shorelineType = shorelineType;
+window.soilErosion = soilErosion;
 window.map = initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, flowline, sendimentBudget); // remember to add new layer her as well

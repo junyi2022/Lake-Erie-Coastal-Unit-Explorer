@@ -33,7 +33,7 @@ const shorelineBase = await shore.json();
 const sb = await fetch('data/sediment-budget-new.json');
 const sendimentBudget = await sb.json();
 
-const shoretype = await fetch('data/shoreline-type.json');
+const shoretype = await fetch('data/edge-clean.geojson');
 const shorelineType = await shoretype.json();
 
 const soil = await fetch('data/soil-erosion-k.geojson');

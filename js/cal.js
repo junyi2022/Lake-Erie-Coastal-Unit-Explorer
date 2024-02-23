@@ -169,8 +169,9 @@ function handlePointSelection(start, end, map, shorelineBase) {
     });
 
     secondDrop.addEventListener('change', () => {
+      const firstDropChoice = firstDrop.value;
       const secondDropChoice = secondDrop.value;
-      handleDropdownDisplay(thirdDrop, [secondDropChoice]);
+      handleDropdownDisplay(thirdDrop, [firstDropChoice, secondDropChoice]);
       thirdDrop.disabled = false;
     });
 

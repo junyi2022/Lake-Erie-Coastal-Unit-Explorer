@@ -6,6 +6,7 @@ import { sedimentLossModel } from './model.js';
 import { sedimentGainModel } from './model.js';
 import { legend1Style } from './map.js';
 import { legend2Style } from './map.js';
+import { handleDropdownDisplay } from './logistics.js';
 
 // list all the dropdown's avaliable models and associated properties
 const modelFuncs = {
@@ -59,10 +60,11 @@ const finishButton = document.querySelector('.finish-point');
 // get step 2 input boxes
 const step2Form = document.querySelector('.step-two-form');
 const resolutionBox = document.querySelector('.resolution');
-const firstDrop = document.querySelector('#first-piority');
-const secondDrop = document.querySelector('#second-piority');
+const firstDrop = document.querySelector('#first-priority');
+const secondDrop = document.querySelector('#second-priority');
+const thirdDrop = document.querySelector('#third-priority');
 const unitDrop = document.querySelector('.unit');
-const dropdownAll = document.getElementsByClassName('piority'); // all dropdown boxes
+const dropdownAll = document.getElementsByClassName('priority'); // all dropdown boxes
 const generateResButton = document.querySelector('.generate-resolution');
 const finishResButton = document.querySelector('.finish-resolution');
 // get step 3 stuff
@@ -152,9 +154,26 @@ function handlePointSelection(start, end, map, shorelineBase) {
     // enable step 2 input boxes
     resolutionBox.disabled = false;
     unitDrop.disabled = false;
-    for (const i of dropdownAll) {
-      i.disabled = false;
-    }
+
+    // if do not want dynamic dropdown
+    // for (const i of dropdownAll) {
+    //   i.disabled = false;
+    // }
+
+    // handle setp 2 dropdown options
+    firstDrop.disabled = false;
+    firstDrop.addEventListener('change', () => {
+      const firstDropChoice = firstDrop.value;
+      handleDropdownDisplay(secondDrop, [firstDropChoice]);
+      secondDrop.disabled = false;
+    });
+
+    secondDrop.addEventListener('change', () => {
+      const secondDropChoice = secondDrop.value;
+      handleDropdownDisplay(thirdDrop, [secondDropChoice]);
+      thirdDrop.disabled = false;
+    });
+
     // disable step 1 buttons
     startButton.disabled = true;
     finishButton.disabled = true;
@@ -477,7 +496,7 @@ function arrayOfGroupsToArrayOfLines(resGroupArray, firstProp, secondProp) {
       newUnit.properties = {};
       newUnit.properties.unit = eachGroup[0].properties.unit;
       newUnit.properties.finalScore = eachGroup[0].properties.finalValue;
-      // use the piority selection to add properties name
+      // use the priority selection to add properties name
       newUnit.properties[firstPriorityValName] = eachGroup[0].properties[firstProp];
       newUnit.properties[secondPriorityValName] = eachGroup[0].properties[secondProp];
       featureCollectionArray.push(newUnit);
@@ -499,16 +518,16 @@ function arrayOfGroupsToArrayOfLines(resGroupArray, firstProp, secondProp) {
     // final value to add to properties
     const finalValueArray = eachGroup.map((f) => f.properties.finalValue);
     const finalValueAverage = average(finalValueArray);
-    // first piority value to add to properties
+    // first priority value to add to properties
     const firstDropArray = eachGroup.map((f) => f.properties[firstProp]);
     const firstDropAverage = average(firstDropArray);
-    // second piority value to add to properties
+    // second priority value to add to properties
     const secondDropArray = eachGroup.map((f) => f.properties[secondProp]);
     const secondDropAverage = average(secondDropArray);
 
     // create the geojson structure
     const combineLine = {'type': 'Feature', 'properties': {'unit': eachGroup[0].properties.unit, 'finalScore': finalValueAverage}, 'geometry': {'type': 'LineString', 'coordinates': coorArray}};
-    // need to add the properties name based on piority selection
+    // need to add the properties name based on priority selection
     combineLine.properties[firstPriorityValName] = firstDropAverage;
     combineLine.properties[secondPriorityValName] = secondDropAverage;
     featureCollectionArray.push(combineLine);

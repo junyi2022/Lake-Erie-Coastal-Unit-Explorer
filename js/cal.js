@@ -6,6 +6,7 @@ import { sedimentLossModel } from './model.js';
 import { sedimentGainModel } from './model.js';
 import { legend1Style } from './map.js';
 import { legend2Style } from './map.js';
+import { handleDropdownDisplay } from './logistics.js';
 
 // list all the dropdown's avaliable models and associated properties
 const modelFuncs = {
@@ -59,10 +60,11 @@ const finishButton = document.querySelector('.finish-point');
 // get step 2 input boxes
 const step2Form = document.querySelector('.step-two-form');
 const resolutionBox = document.querySelector('.resolution');
-const firstDrop = document.querySelector('#first-piority');
-const secondDrop = document.querySelector('#second-piority');
+const firstDrop = document.querySelector('#first-priority');
+const secondDrop = document.querySelector('#second-priority');
+const thirdDrop = document.querySelector('#third-priority');
 const unitDrop = document.querySelector('.unit');
-const dropdownAll = document.getElementsByClassName('piority'); // all dropdown boxes
+const dropdownAll = document.getElementsByClassName('priority'); // all dropdown boxes
 const generateResButton = document.querySelector('.generate-resolution');
 const finishResButton = document.querySelector('.finish-resolution');
 // get step 3 stuff
@@ -152,9 +154,27 @@ function handlePointSelection(start, end, map, shorelineBase) {
     // enable step 2 input boxes
     resolutionBox.disabled = false;
     unitDrop.disabled = false;
-    for (const i of dropdownAll) {
-      i.disabled = false;
-    }
+
+    // if do not want dynamic dropdown
+    // for (const i of dropdownAll) {
+    //   i.disabled = false;
+    // }
+
+    // handle setp 2 dropdown options
+    firstDrop.disabled = false;
+    firstDrop.addEventListener('change', () => {
+      const firstDropChoice = firstDrop.value;
+      handleDropdownDisplay(secondDrop, [firstDropChoice]);
+      secondDrop.disabled = false;
+    });
+
+    secondDrop.addEventListener('change', () => {
+      const firstDropChoice = firstDrop.value;
+      const secondDropChoice = secondDrop.value;
+      handleDropdownDisplay(thirdDrop, [firstDropChoice, secondDropChoice]);
+      thirdDrop.disabled = false;
+    });
+
     // disable step 1 buttons
     startButton.disabled = true;
     finishButton.disabled = true;
@@ -210,16 +230,32 @@ function handlePointSelection(start, end, map, shorelineBase) {
       // only call the model that is selected, and only add those properties
       const firstPriorityFunc = modelFuncs[firstDrop.value];
       firstPriorityFunc(map, resolutionCollection);
-      const secondPriorityFunc = modelFuncs[secondDrop.value];
-      secondPriorityFunc(map, resolutionCollection);
+      if (secondDrop.value != 'ns') {
+        const secondPriorityFunc = modelFuncs[secondDrop.value];
+        secondPriorityFunc(map, resolutionCollection);
+      }
+      if (thirdDrop.value != 'ns') {
+        const thirdPriorityFunc = modelFuncs[thirdDrop.value];
+        thirdPriorityFunc(map, resolutionCollection);
+      }
+
 
       // calculate final score for each coastline piece and add that as properties
       const firstProp = modelProps[firstDrop.value];
       const secondProp = modelProps[secondDrop.value];
+      const thirdProp = modelProps[thirdDrop.value];
 
       for (const coastline of resolutionCollection.features) {
-        const finalValue = coastline.properties[firstProp] * 0.6 + coastline.properties[secondProp] * 0.4;
-        coastline.properties.finalValue = finalValue;
+        if (secondDrop.value == 'ns') {
+          const finalValue = coastline.properties[firstProp];
+          coastline.properties.finalValue = finalValue;
+        } else if (thirdDrop.value == 'ns') {
+          const finalValue = coastline.properties[firstProp] * 0.6 + coastline.properties[secondProp] * 0.4;
+          coastline.properties.finalValue = finalValue;
+        } else {
+          const finalValue = coastline.properties[firstProp] * 0.5 + coastline.properties[secondProp] * 0.3 + coastline.properties[thirdProp] * 0.2;
+          coastline.properties.finalValue = finalValue;
+        }
       }
 
       // add the resolution data to map and color that based on the final score of each coastline piece
@@ -290,30 +326,79 @@ function handlePointSelection(start, end, map, shorelineBase) {
           }
           console.log(unitsBox);
 
-          // style the boxes
+          // style the boxes, adjust pop up based on number of selected priorities
           const firstPropName = modelName[firstDrop.value];
-          const secondPropName = modelName[secondDrop.value];
-          map.finalUnitLayer = L.geoJSON(unitsBox, {
-            style: (sample) => {
-              const colorValue = unitColorScale(sample.properties.unit / catNum);
-              return {
-                stroke: true,
-                fill: true,
-                fillOpacity: 0, // in order to make the tooltip more smooth, this should be a polygon with transparent fill
-                color: colorValue,
-                weight: 3,
-              };
-            },
-          }).bindTooltip((l) => { // final unit box tooltip options
-            return `<p class="unit-tooltip"><strong>Category:</strong> ${l.feature.properties.unit}</p>`;
-          }).bindPopup((l) => { // final unit box popup options
-            return `<h3 class="unit-pop-title">Unit: ${l.feature.properties.ID + 1}</h3>
-                    <p class="unit-finalscore"><strong>Category:</strong> ${l.feature.properties.unit}</p>
-                    <p class="unit-finalscore"><strong>Final Score:</strong> ${l.feature.properties.finalScore.toFixed(2)}</p>
-                    <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
-                    <p class="unit-second-priority"><strong>${secondPropName}:</strong> ${l.feature.properties[secondProp].toFixed(2)}</p>
-            `;
-          }).addTo(map);
+          if (secondDrop.value == 'ns') {
+            map.finalUnitLayer = L.geoJSON(unitsBox, {
+              style: (sample) => {
+                const colorValue = unitColorScale(sample.properties.unit / catNum);
+                return {
+                  stroke: true,
+                  fill: true,
+                  fillOpacity: 0, // in order to make the tooltip more smooth, this should be a polygon with transparent fill
+                  color: colorValue,
+                  weight: 3,
+                };
+              },
+            }).bindTooltip((l) => { // final unit box tooltip options
+              return `<p class="unit-tooltip"><strong>Category:</strong> ${l.feature.properties.unit}</p>`;
+            }).bindPopup((l) => { // final unit box popup options
+              return `<h3 class="unit-pop-title">Unit: ${l.feature.properties.ID + 1}</h3>
+                      <p class="unit-finalscore"><strong>Category:</strong> ${l.feature.properties.unit}</p>
+                      <p class="unit-finalscore"><strong>Final Score:</strong> ${l.feature.properties.finalScore.toFixed(2)}</p>
+                      <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
+              `;
+            }).addTo(map);
+          } else if (thirdDrop.value == 'ns') {
+            const secondPropName = modelName[secondDrop.value];
+            map.finalUnitLayer = L.geoJSON(unitsBox, {
+              style: (sample) => {
+                const colorValue = unitColorScale(sample.properties.unit / catNum);
+                return {
+                  stroke: true,
+                  fill: true,
+                  fillOpacity: 0, // in order to make the tooltip more smooth, this should be a polygon with transparent fill
+                  color: colorValue,
+                  weight: 3,
+                };
+              },
+            }).bindTooltip((l) => { // final unit box tooltip options
+              return `<p class="unit-tooltip"><strong>Category:</strong> ${l.feature.properties.unit}</p>`;
+            }).bindPopup((l) => { // final unit box popup options
+              return `<h3 class="unit-pop-title">Unit: ${l.feature.properties.ID + 1}</h3>
+                      <p class="unit-finalscore"><strong>Category:</strong> ${l.feature.properties.unit}</p>
+                      <p class="unit-finalscore"><strong>Final Score:</strong> ${l.feature.properties.finalScore.toFixed(2)}</p>
+                      <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
+                      <p class="unit-second-priority"><strong>${secondPropName}:</strong> ${l.feature.properties[secondProp].toFixed(2)}</p>
+              `;
+            }).addTo(map);
+          } else {
+            const secondPropName = modelName[secondDrop.value];
+            const thirdPropName = modelName[thirdDrop.value];
+            map.finalUnitLayer = L.geoJSON(unitsBox, {
+              style: (sample) => {
+                const colorValue = unitColorScale(sample.properties.unit / catNum);
+                return {
+                  stroke: true,
+                  fill: true,
+                  fillOpacity: 0, // in order to make the tooltip more smooth, this should be a polygon with transparent fill
+                  color: colorValue,
+                  weight: 3,
+                };
+              },
+            }).bindTooltip((l) => { // final unit box tooltip options
+              return `<p class="unit-tooltip"><strong>Category:</strong> ${l.feature.properties.unit}</p>`;
+            }).bindPopup((l) => { // final unit box popup options
+              return `<h3 class="unit-pop-title">Unit: ${l.feature.properties.ID + 1}</h3>
+                      <p class="unit-finalscore"><strong>Category:</strong> ${l.feature.properties.unit}</p>
+                      <p class="unit-finalscore"><strong>Final Score:</strong> ${l.feature.properties.finalScore.toFixed(2)}</p>
+                      <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
+                      <p class="unit-second-priority"><strong>${secondPropName}:</strong> ${l.feature.properties[secondProp].toFixed(2)}</p>
+                      <p class="unit-second-priority"><strong>${thirdPropName}:</strong> ${l.feature.properties[thirdProp].toFixed(2)}</p>
+              `;
+            }).addTo(map);
+          }
+
 
           // finish unit step and go to next step
           finishGroupButton.addEventListener('click', () => {
@@ -461,12 +546,8 @@ function resToGroupArray(resolutionCollection, catNum) {
   return groupArray;
 }
 
-function arrayOfGroupsToArrayOfLines(resGroupArray, firstProp, secondProp) {
+function arrayOfGroupsToArrayOfLines(resGroupArray, firstProp, secondProp, thirdProp) {
   const featureCollectionArray = [];
-  // prepare the properties name for later use
-  const firstPriorityValName = firstProp;
-  const secondPriorityValName = secondProp;
-
   for (const eachGroup of resGroupArray) {
     // if group only has one string
     if (eachGroup.length == 1) {
@@ -477,9 +558,16 @@ function arrayOfGroupsToArrayOfLines(resGroupArray, firstProp, secondProp) {
       newUnit.properties = {};
       newUnit.properties.unit = eachGroup[0].properties.unit;
       newUnit.properties.finalScore = eachGroup[0].properties.finalValue;
-      // use the piority selection to add properties name
-      newUnit.properties[firstPriorityValName] = eachGroup[0].properties[firstProp];
-      newUnit.properties[secondPriorityValName] = eachGroup[0].properties[secondProp];
+
+      // use the priority selection to add properties name
+      newUnit.properties[firstProp] = eachGroup[0].properties[firstProp];
+      if (secondDrop.value != 'ns') {
+        newUnit.properties[secondProp] = eachGroup[0].properties[secondProp];
+      }
+      if (thirdDrop.value != 'ns') {
+        newUnit.properties[thirdProp] = eachGroup[0].properties[thirdProp];
+      }
+
       featureCollectionArray.push(newUnit);
       continue; // save else indentation
     }
@@ -499,18 +587,34 @@ function arrayOfGroupsToArrayOfLines(resGroupArray, firstProp, secondProp) {
     // final value to add to properties
     const finalValueArray = eachGroup.map((f) => f.properties.finalValue);
     const finalValueAverage = average(finalValueArray);
-    // first piority value to add to properties
+    // first priority value to add to properties
     const firstDropArray = eachGroup.map((f) => f.properties[firstProp]);
     const firstDropAverage = average(firstDropArray);
-    // second piority value to add to properties
-    const secondDropArray = eachGroup.map((f) => f.properties[secondProp]);
-    const secondDropAverage = average(secondDropArray);
+    // second priority value to add to properties
+    let secondDropAverage = null;
+    if (secondDrop.value != 'ns') {
+      const secondDropArray = eachGroup.map((f) => f.properties[secondProp]);
+      secondDropAverage = average(secondDropArray);
+    }
+    // third priority value to add to properties
+    let thirdDropAverage = null;
+    if (thirdDrop.value != 'ns') {
+      const thirdDropArray = eachGroup.map((f) => f.properties[thirdProp]);
+      thirdDropAverage = average(thirdDropArray);
+    }
+
 
     // create the geojson structure
     const combineLine = {'type': 'Feature', 'properties': {'unit': eachGroup[0].properties.unit, 'finalScore': finalValueAverage}, 'geometry': {'type': 'LineString', 'coordinates': coorArray}};
-    // need to add the properties name based on piority selection
-    combineLine.properties[firstPriorityValName] = firstDropAverage;
-    combineLine.properties[secondPriorityValName] = secondDropAverage;
+    // need to add the properties name based on priority selection
+    combineLine.properties[firstProp] = firstDropAverage;
+    if (secondDrop.value != 'ns') {
+      combineLine.properties[secondProp] = secondDropAverage;
+    }
+    if (thirdDrop.value != 'ns') {
+      combineLine.properties[thirdProp] = thirdDropAverage;
+    }
+
     featureCollectionArray.push(combineLine);
   }
   return featureCollectionArray;

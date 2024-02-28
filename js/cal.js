@@ -341,10 +341,10 @@ function handlePointSelection(start, end, map, shorelineBase) {
                 };
               },
             }).bindTooltip((l) => { // final unit box tooltip options
-              return `<p class="unit-tooltip"><strong>Category:</strong> ${l.feature.properties.unit}</p>`;
+              return `<p class="unit-tooltip"><strong>Group:</strong> ${l.feature.properties.unit}</p>`;
             }).bindPopup((l) => { // final unit box popup options
               return `<h3 class="unit-pop-title">Unit: ${l.feature.properties.ID + 1}</h3>
-                      <p class="unit-finalscore"><strong>Category:</strong> ${l.feature.properties.unit}</p>
+                      <p class="unit-finalscore"><strong>Group:</strong> ${l.feature.properties.unit}</p>
                       <p class="unit-finalscore"><strong>Final Score:</strong> ${l.feature.properties.finalScore.toFixed(2)}</p>
                       <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
               `;
@@ -363,10 +363,10 @@ function handlePointSelection(start, end, map, shorelineBase) {
                 };
               },
             }).bindTooltip((l) => { // final unit box tooltip options
-              return `<p class="unit-tooltip"><strong>Category:</strong> ${l.feature.properties.unit}</p>`;
+              return `<p class="unit-tooltip"><strong>Group:</strong> ${l.feature.properties.unit}</p>`;
             }).bindPopup((l) => { // final unit box popup options
               return `<h3 class="unit-pop-title">Unit: ${l.feature.properties.ID + 1}</h3>
-                      <p class="unit-finalscore"><strong>Category:</strong> ${l.feature.properties.unit}</p>
+                      <p class="unit-finalscore"><strong>Group:</strong> ${l.feature.properties.unit}</p>
                       <p class="unit-finalscore"><strong>Final Score:</strong> ${l.feature.properties.finalScore.toFixed(2)}</p>
                       <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
                       <p class="unit-second-priority"><strong>${secondPropName}:</strong> ${l.feature.properties[secondProp].toFixed(2)}</p>
@@ -387,10 +387,10 @@ function handlePointSelection(start, end, map, shorelineBase) {
                 };
               },
             }).bindTooltip((l) => { // final unit box tooltip options
-              return `<p class="unit-tooltip"><strong>Category:</strong> ${l.feature.properties.unit}</p>`;
+              return `<p class="unit-tooltip"><strong>Group:</strong> ${l.feature.properties.unit}</p>`;
             }).bindPopup((l) => { // final unit box popup options
               return `<h3 class="unit-pop-title">Unit: ${l.feature.properties.ID + 1}</h3>
-                      <p class="unit-finalscore"><strong>Category:</strong> ${l.feature.properties.unit}</p>
+                      <p class="unit-finalscore"><strong>Group:</strong> ${l.feature.properties.unit}</p>
                       <p class="unit-finalscore"><strong>Final Score:</strong> ${l.feature.properties.finalScore.toFixed(2)}</p>
                       <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
                       <p class="unit-second-priority"><strong>${secondPropName}:</strong> ${l.feature.properties[secondProp].toFixed(2)}</p>

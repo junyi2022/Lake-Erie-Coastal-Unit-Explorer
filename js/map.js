@@ -12,6 +12,16 @@ function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, 
   });
   baseTileLayer.addTo(map);
 
+  // other tile options for layer control
+  const esriWorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+  });
+
+  const baseMaps = {
+    'Simple': baseTileLayer,
+    'Satellite': esriWorldImagery,
+  };
+
   // add layers
   // if have a lot of layers, it is better to add layers as map's attributes
   map.dataBoundaryLayer = L.geoJSON(dataBoundary,
@@ -99,7 +109,11 @@ function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, 
     'Sediment Budget': map.sedimentBudgetLayer,
   };
 
-  L.control.layers(null, layerControl).addTo(map);
+  // if only have one tile layer
+  // L.control.layers(null, layerControl).addTo(map);
+
+  // multiple tile layer
+  L.control.layers(baseMaps, layerControl).addTo(map);
 
   // add scale bar
   L.control.scale().addTo(map);

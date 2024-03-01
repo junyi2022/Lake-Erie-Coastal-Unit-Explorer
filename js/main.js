@@ -36,7 +36,7 @@ const shorelineBase = await shore.json();
 
 // working layers
 
-const sb = await fetch('data/sediment-budget-new.json');
+const sb = await fetch('data/sediment-budget-rrbh.geojson');
 const sendimentBudget = await sb.json();
 
 const shoretype = await fetch('data/edge-clean.geojson');

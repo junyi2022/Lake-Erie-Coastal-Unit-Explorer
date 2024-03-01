@@ -36,6 +36,10 @@
     align-items: center;
 }
 
+.step3-title {
+    margin-top: 20px;
+}
+
 .unit-generator {
     display: inline;
 }
@@ -69,11 +73,16 @@
 
 #step-2-pop {
     bottom: 60vh;
-	left: 200px;
+	left: 250px;
     z-index: 10000;
 }
 
 #step-3-pop {
+	left: 250px;
+    z-index: 10000;
+}
+
+#step-4-pop {
     bottom: 22vh;
 	left: 300px;
     z-index: 10000;

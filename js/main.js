@@ -1,10 +1,12 @@
 import { initializeMap } from './map.js';
-import { applySliderState } from './stateControl/slider.js';
+import { handleSliderState } from './stateControl/slider.js';
+import { applyDialogState } from './stateControl/dialog.js';
 import { state } from './stateControl/state.js';
 
 
 // state control
-applySliderState(state);
+handleSliderState(state);
+applyDialogState(state);
 
 // if want model dialog, need to do it in JS
 // const dialog = document.getElementById('start-box');

@@ -101,6 +101,10 @@ header {
     background: linear-gradient(90deg, rgba(233,246,237,1) 6%, rgba(194,219,242,1) 100%);
 }
 
+.no-transition {
+    transition: none;
+}
+
 .show {
     display: none;
     position: absolute;

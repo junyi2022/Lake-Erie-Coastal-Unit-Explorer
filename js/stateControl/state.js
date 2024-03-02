@@ -1,6 +1,7 @@
 // state.js
 const state = JSON.parse(window.localStorage.getItem('state')) || {
   sliderPosition: 'down',
+  dialog: 'open',
 };
 
 function updateState(key, val) {

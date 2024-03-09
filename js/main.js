@@ -1,16 +1,6 @@
 import { initializeMap } from './map.js';
-import { handleSliderState } from './stateControl/slider.js';
-import { applyDialogState } from './stateControl/dialog.js';
-import { state } from './stateControl/state.js';
+import { handleMenuBar } from './control.js';
 
-
-// state control
-handleSliderState(state);
-applyDialogState(state);
-
-// if want model dialog, need to do it in JS
-// const dialog = document.getElementById('start-box');
-// dialog.showModal();
 
 // read files
 // reference layers
@@ -60,3 +50,6 @@ window.shorelineBase = shorelineBase;
 window.shorelineType = shorelineType;
 window.soilErosion = soilErosion;
 window.map = initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, flowline, sendimentBudget); // remember to add new layer her as well
+
+// menu bar
+handleMenuBar();

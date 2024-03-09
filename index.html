@@ -17,6 +17,8 @@
         <link rel="stylesheet" href="css/map-style.css">
         <link rel="stylesheet" href="css/toolbar-style.css">
 
+        <link rel="stylesheet" href="css/documentation-style.css">
+
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-EYVJ0DGECR"></script>
         <script>
@@ -33,8 +35,8 @@
           
         <header>
             <div class="slider" id="slider">
-                <!-- <button class="show" onclick="slider.classList.remove('collapsed')"></button> -->
-                <button class="show">
+                <button class="show" onclick="slider.classList.remove('collapsed')">
+                <!-- <button class="show"> -->
                     <p class="back-text"><strong>Back</strong></p>
                     <svg class="show-svg" width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="matrix(1, 0, 0, -1, 0, 0)">
                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -50,8 +52,8 @@
                     <h1 class="cover-title">Lake Erie Coastal Units Explorer</h1>
                     <h3 class="cover-lab">University of Pennsylvania EMLab</h3>
                     <p class="cover-description">This site is a working site for the process of the final web explorer. At its current state, it remains incomplete as the team is still working on the type of priority models that users can use to create their coastal units. However, the overall framework is complete, and feel free to play with it! If you find any bugs or errors when using this tool and are willing to share them with the team for future improvements, please email <em>junyiy@upenn.edu</em>. We really appreciate that!</p>
-                    <!-- <button class="hide" onclick="slider.classList.add('collapsed')"></button> -->
-                    <button class="hide">
+                    <button class="hide" onclick="slider.classList.add('collapsed')">
+                    <!-- <button class="hide"> -->
                         <!-- https://www.svgrepo.com/svg/524509/double-alt-arrow-up?edit=true -->
                         <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -66,77 +68,37 @@
                 </section>
             </div>
             <div class="menu">
-                <div class="unit-generator menu-cat"><a href="/"><strong>Unit Generator</strong></a></div>
-                <div class="strategy-filter menu-cat"><a href="html/strategy-filter.html"><strong>Strategy Filter</strong></a></div>
-                <div class="data-explorer menu-cat"><a href="html/data-explorer.html"><strong>Data Explorer</strong></a></div>
-                <div class="strategy-library menu-cat"><a href="html/strategy-library.html"><strong>Strategy Library</strong></a></div>
-                <div class="documentation menu-cat"><a href="html/documentation.html"><strong>Documentation</strong></a></div>
+                <div class="unit-generator-button menu-cat"><strong>Unit Generator</strong></div>
+                <div class="strategy-filter menu-cat"><strong>Strategy Filter</strong></div>
+                <div class="data-explorer menu-cat"><strong>Data Explorer</strong></div>
+                <div class="strategy-library menu-cat"><strong>Strategy Library</strong></div>
+                <div class="documentation menu-cat"><strong>Documentation</strong></div>
             </div>
 
         </header>
 
         <main>
-            <dialog open class="start-box" id="start-box">
-                <!-- because of the settings of dialog tag, need to have a div within it to do the flex style -->
-                <div class="dialog-content">
-                    <h4>Purpose and Goal</h4>
-                    <p>Operational coastal units are seen as a relatively untested and novel approach to coastal analysis that could hold particular potential in decision-making processes that require considering both local conditions and regional transferability. At its most simplistic, the operational coastal unit method assumes that there is value in defining new boundaries for where particular strategies are or are not applicable based on the contextual conditions found in specific places. And perhaps most importantly, that these new boundaries need not respond to existing administrative jurisdictions. Underpinning this idea are two overarching goals, balanced with one another.</p>
-                    <ol>
-                        <li><p>That local conditions and context are important culturally and ecologically. Decision-making regarding the shoreline should take into consideration the cultural values and knowledge that exist and have evolved in those specific areas. Additionally, the ecological context of any given location should be considered as important and special as opposed to generalized into a larger and more abstract idea of 'ecology'. In these ways, local conditions can be both acknowledged and formative in the decision-making processes to encourage the development of more sensitive and contextual outcomes. Put simply, the more local, the better.</p></li>
-                        <li><p>That transferability is to some degree essential to the practicality of any formal coastal management decision. This does not mean that transferability is what is desired, but only that it is what is necessary to get projects funded and completed. In this way, projects should aim to be as contextually specific as possible while only being as transferable as necessary. However, in the correct circumstances, transferability could provide the opportunity for ideas to spread within areas of similar contextual conditions which does offer both cost savings and project innovation.</p></li>
-                    </ol>
-                    <p>With these two balanced goals in mind, this project aims to establish a method for creating coastal units that are particular and appropriate for a given task. This specific project asks to look at the application of the operational coastal units in coastal management decisions that involve strategic sediment management and adaptability as a defining feature, although many other objectives could also be met with the coastal unit methods and efforts have been made to develop a more robust unit structure to accommodate some of these alternative objectives.</p>
-                    <form method="dialog">
-                      <button class="start-box-OK button">OK</button>
-                    </form>
-                </div>
-            </dialog>
-
-            <div class="toolbar">
-                <section class="step">
-                    <div class="step-explain">
-                        <h4 class="unit-generator">Step 1: Choose your area</h4>
-                        <svg class="info-tag" width="25px" height="25px" viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier"> 
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 11V13C5.5 16.3137 8.18629 19 11.5 19H13.5C16.8137 19 19.5 16.3137 19.5 13V11C19.5 7.68629 16.8137 5 13.5 5H11.5C8.18629 5 5.5 7.68629 5.5 11Z" stroke="#4f5b8c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
-                                <path d="M11.75 16C11.75 16.4142 12.0858 16.75 12.5 16.75C12.9142 16.75 13.25 16.4142 13.25 16H11.75ZM12.5 11H13.25C13.25 10.5858 12.9142 10.25 12.5 10.25V11ZM11.5 10.25C11.0858 10.25 10.75 10.5858 10.75 11C10.75 11.4142 11.0858 11.75 11.5 11.75V10.25ZM12.5 16.75C12.9142 16.75 13.25 16.4142 13.25 16C13.25 15.5858 12.9142 15.25 12.5 15.25V16.75ZM11.5 15.25C11.0858 15.25 10.75 15.5858 10.75 16C10.75 16.4142 11.0858 16.75 11.5 16.75V15.25ZM12.5 15.25C12.0858 15.25 11.75 15.5858 11.75 16C11.75 16.4142 12.0858 16.75 12.5 16.75V15.25ZM13.5 16.75C13.9142 16.75 14.25 16.4142 14.25 16C14.25 15.5858 13.9142 15.25 13.5 15.25V16.75ZM13.25 8C13.25 7.58579 12.9142 7.25 12.5 7.25C12.0858 7.25 11.75 7.58579 11.75 8H13.25ZM11.75 9C11.75 9.41421 12.0858 9.75 12.5 9.75C12.9142 9.75 13.25 9.41421 13.25 9H11.75ZM13.25 16V11H11.75V16H13.25ZM12.5 10.25H11.5V11.75H12.5V10.25ZM12.5 15.25H11.5V16.75H12.5V15.25ZM12.5 16.75H13.5V15.25H12.5V16.75ZM11.75 8V9H13.25V8H11.75Z" fill="#4f5b8c"></path> 
-                            </g>
-                        </svg>
-                        <span id="step-1-pop"><p>Drag the markers to your area of interest, which will be the base of the calculations in the following steps.</p></span>
+            <div id="unit-generator-body">
+                <dialog open class="start-box" id="start-box">
+                    <!-- because of the settings of dialog tag, need to have a div within it to do the flex style -->
+                    <div class="dialog-content">
+                        <h4>Purpose and Goal</h4>
+                        <p>Operational coastal units are seen as a relatively untested and novel approach to coastal analysis that could hold particular potential in decision-making processes that require considering both local conditions and regional transferability. At its most simplistic, the operational coastal unit method assumes that there is value in defining new boundaries for where particular strategies are or are not applicable based on the contextual conditions found in specific places. And perhaps most importantly, that these new boundaries need not respond to existing administrative jurisdictions. Underpinning this idea are two overarching goals, balanced with one another.</p>
+                        <ol>
+                            <li><p>That local conditions and context are important culturally and ecologically. Decision-making regarding the shoreline should take into consideration the cultural values and knowledge that exist and have evolved in those specific areas. Additionally, the ecological context of any given location should be considered as important and special as opposed to generalized into a larger and more abstract idea of 'ecology'. In these ways, local conditions can be both acknowledged and formative in the decision-making processes to encourage the development of more sensitive and contextual outcomes. Put simply, the more local, the better.</p></li>
+                            <li><p>That transferability is to some degree essential to the practicality of any formal coastal management decision. This does not mean that transferability is what is desired, but only that it is what is necessary to get projects funded and completed. In this way, projects should aim to be as contextually specific as possible while only being as transferable as necessary. However, in the correct circumstances, transferability could provide the opportunity for ideas to spread within areas of similar contextual conditions which does offer both cost savings and project innovation.</p></li>
+                        </ol>
+                        <p>With these two balanced goals in mind, this project aims to establish a method for creating coastal units that are particular and appropriate for a given task. This specific project asks to look at the application of the operational coastal units in coastal management decisions that involve strategic sediment management and adaptability as a defining feature, although many other objectives could also be met with the coastal unit methods and efforts have been made to develop a more robust unit structure to accommodate some of these alternative objectives.</p>
+                        <form method="dialog">
+                        <button class="start-box-OK button">OK</button>
+                        </form>
                     </div>
-                    
-                    <button class="select-point button">Start / Reset</button>
-                    <button class="finish-point button">Next</button>
-                </section>
+                </dialog>
 
-                <section class="step">
-                    <div class="step-explain">
-                        <h4 class="unit-generator">Step 2: Choose resolution</h4>
-                        <svg class="info-tag" width="25px" height="25px" viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier"> 
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 11V13C5.5 16.3137 8.18629 19 11.5 19H13.5C16.8137 19 19.5 16.3137 19.5 13V11C19.5 7.68629 16.8137 5 13.5 5H11.5C8.18629 5 5.5 7.68629 5.5 11Z" stroke="#4f5b8c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
-                                <path d="M11.75 16C11.75 16.4142 12.0858 16.75 12.5 16.75C12.9142 16.75 13.25 16.4142 13.25 16H11.75ZM12.5 11H13.25C13.25 10.5858 12.9142 10.25 12.5 10.25V11ZM11.5 10.25C11.0858 10.25 10.75 10.5858 10.75 11C10.75 11.4142 11.0858 11.75 11.5 11.75V10.25ZM12.5 16.75C12.9142 16.75 13.25 16.4142 13.25 16C13.25 15.5858 12.9142 15.25 12.5 15.25V16.75ZM11.5 15.25C11.0858 15.25 10.75 15.5858 10.75 16C10.75 16.4142 11.0858 16.75 11.5 16.75V15.25ZM12.5 15.25C12.0858 15.25 11.75 15.5858 11.75 16C11.75 16.4142 12.0858 16.75 12.5 16.75V15.25ZM13.5 16.75C13.9142 16.75 14.25 16.4142 14.25 16C14.25 15.5858 13.9142 15.25 13.5 15.25V16.75ZM13.25 8C13.25 7.58579 12.9142 7.25 12.5 7.25C12.0858 7.25 11.75 7.58579 11.75 8H13.25ZM11.75 9C11.75 9.41421 12.0858 9.75 12.5 9.75C12.9142 9.75 13.25 9.41421 13.25 9H11.75ZM13.25 16V11H11.75V16H13.25ZM12.5 10.25H11.5V11.75H12.5V10.25ZM12.5 15.25H11.5V16.75H12.5V15.25ZM12.5 16.75H13.5V15.25H12.5V16.75ZM11.75 8V9H13.25V8H11.75Z" fill="#4f5b8c"></path> 
-                            </g>
-                        </svg>
-                        <span id="step-2-pop"><p>This step will divide the coastline you choose in step 1 to multiple small pieces with the same length, which is called Resolution.</p></span>
-                    </div>
-
-                    <form class="step-two-form">
-                        <div class="substep">
-                            <h5 class="substep-title">Resolution</h5>
-                            <input type="text" name="resolution-entry" class="resolution" placeholder="Type a number: e.g. 1000" disabled="true" required>
-                            <select class="unit" disabled="true">
-                                <option value="ft">Feet</option>
-                                <option value="m">Meters</option>
-                            </select>
-                        </div>
-
-                        <div class="step-explain step3-title">
-                            <h4 class="unit-generator">Step 3: Choose priority</h4>
+                <div class="toolbar">
+                    <section class="step">
+                        <div class="step-explain">
+                            <h4 class="unit-generator">Step 1: Choose your area</h4>
                             <svg class="info-tag" width="25px" height="25px" viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -145,81 +107,365 @@
                                     <path d="M11.75 16C11.75 16.4142 12.0858 16.75 12.5 16.75C12.9142 16.75 13.25 16.4142 13.25 16H11.75ZM12.5 11H13.25C13.25 10.5858 12.9142 10.25 12.5 10.25V11ZM11.5 10.25C11.0858 10.25 10.75 10.5858 10.75 11C10.75 11.4142 11.0858 11.75 11.5 11.75V10.25ZM12.5 16.75C12.9142 16.75 13.25 16.4142 13.25 16C13.25 15.5858 12.9142 15.25 12.5 15.25V16.75ZM11.5 15.25C11.0858 15.25 10.75 15.5858 10.75 16C10.75 16.4142 11.0858 16.75 11.5 16.75V15.25ZM12.5 15.25C12.0858 15.25 11.75 15.5858 11.75 16C11.75 16.4142 12.0858 16.75 12.5 16.75V15.25ZM13.5 16.75C13.9142 16.75 14.25 16.4142 14.25 16C14.25 15.5858 13.9142 15.25 13.5 15.25V16.75ZM13.25 8C13.25 7.58579 12.9142 7.25 12.5 7.25C12.0858 7.25 11.75 7.58579 11.75 8H13.25ZM11.75 9C11.75 9.41421 12.0858 9.75 12.5 9.75C12.9142 9.75 13.25 9.41421 13.25 9H11.75ZM13.25 16V11H11.75V16H13.25ZM12.5 10.25H11.5V11.75H12.5V10.25ZM12.5 15.25H11.5V16.75H12.5V15.25ZM12.5 16.75H13.5V15.25H12.5V16.75ZM11.75 8V9H13.25V8H11.75Z" fill="#4f5b8c"></path> 
                                 </g>
                             </svg>
-                            <span id="step-3-pop"><p>This step will do the socring for each resolution based on the criteria you choose in the Priority dropdown box and color each resolution by its final score.</p></span>
+                            <span id="step-1-pop"><p>Drag the markers to your area of interest, which will be the base of the calculations in the following steps.</p></span>
+                        </div>
+                        
+                        <button class="select-point button">Start / Reset</button>
+                        <button class="finish-point button">Next</button>
+                    </section>
+
+                    <section class="step">
+                        <div class="step-explain">
+                            <h4 class="unit-generator">Step 2: Choose resolution</h4>
+                            <svg class="info-tag" width="25px" height="25px" viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier"> 
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 11V13C5.5 16.3137 8.18629 19 11.5 19H13.5C16.8137 19 19.5 16.3137 19.5 13V11C19.5 7.68629 16.8137 5 13.5 5H11.5C8.18629 5 5.5 7.68629 5.5 11Z" stroke="#4f5b8c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+                                    <path d="M11.75 16C11.75 16.4142 12.0858 16.75 12.5 16.75C12.9142 16.75 13.25 16.4142 13.25 16H11.75ZM12.5 11H13.25C13.25 10.5858 12.9142 10.25 12.5 10.25V11ZM11.5 10.25C11.0858 10.25 10.75 10.5858 10.75 11C10.75 11.4142 11.0858 11.75 11.5 11.75V10.25ZM12.5 16.75C12.9142 16.75 13.25 16.4142 13.25 16C13.25 15.5858 12.9142 15.25 12.5 15.25V16.75ZM11.5 15.25C11.0858 15.25 10.75 15.5858 10.75 16C10.75 16.4142 11.0858 16.75 11.5 16.75V15.25ZM12.5 15.25C12.0858 15.25 11.75 15.5858 11.75 16C11.75 16.4142 12.0858 16.75 12.5 16.75V15.25ZM13.5 16.75C13.9142 16.75 14.25 16.4142 14.25 16C14.25 15.5858 13.9142 15.25 13.5 15.25V16.75ZM13.25 8C13.25 7.58579 12.9142 7.25 12.5 7.25C12.0858 7.25 11.75 7.58579 11.75 8H13.25ZM11.75 9C11.75 9.41421 12.0858 9.75 12.5 9.75C12.9142 9.75 13.25 9.41421 13.25 9H11.75ZM13.25 16V11H11.75V16H13.25ZM12.5 10.25H11.5V11.75H12.5V10.25ZM12.5 15.25H11.5V16.75H12.5V15.25ZM12.5 16.75H13.5V15.25H12.5V16.75ZM11.75 8V9H13.25V8H11.75Z" fill="#4f5b8c"></path> 
+                                </g>
+                            </svg>
+                            <span id="step-2-pop"><p>This step will divide the coastline you choose in step 1 to multiple small pieces with the same length, which is called Resolution.</p></span>
                         </div>
 
-                        <div class="substep">
-                            <h5 class="substep-title">Priority</h5>
-                            <div class="piority-list">
-                                <div class="choice-options">
-                                    <p>First: </p>
-                                    <p>Second: </p>
-                                    <p>Third: </p>
-                                </div>
-                                <div class="choice-options">
-                                    <select class="priority" id="first-priority" disabled="true" required>
-                                        <option value="">--Please choose an option--</option>
-                                        <option value="sl">Sediment Loss</option>
-                                        <option value="sg">Sediment Gain</option>
-                                        <!-- <option value="cp">Coastline Protection</option> -->
-                                    </select>
-                                    <select class="priority" id="second-priority" disabled="true" required>
-                                        <!-- <option value="">--Please choose an option--</option>
-                                        <option value="sl">Sediment Loss</option>
-                                        <option value="sg">Sediment Gain</option> -->
-                                        <!-- <option value="cp">Coastline Protection</option> -->
-                                    </select>
-                                    <select class="priority" id="third-priority" disabled="true" required>
-                                        <!-- <option value="">--Please choose an option--</option>
-                                        <option value="sl">Sediment Loss</option>
-                                        <option value="sg">Sediment Gain</option> -->
-                                        <!-- <option value="cp">Coastline Protection</option> -->
-                                    </select>
+                        <form class="step-two-form">
+                            <div class="substep">
+                                <h5 class="substep-title">Resolution</h5>
+                                <input type="text" name="resolution-entry" class="resolution" placeholder="Type a number: e.g. 1000" disabled="true" required>
+                                <select class="unit" disabled="true">
+                                    <option value="ft">Feet</option>
+                                    <option value="m">Meters</option>
+                                </select>
+                            </div>
+
+                            <div class="step-explain step3-title">
+                                <h4 class="unit-generator">Step 3: Choose priority</h4>
+                                <svg class="info-tag" width="25px" height="25px" viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier"> 
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 11V13C5.5 16.3137 8.18629 19 11.5 19H13.5C16.8137 19 19.5 16.3137 19.5 13V11C19.5 7.68629 16.8137 5 13.5 5H11.5C8.18629 5 5.5 7.68629 5.5 11Z" stroke="#4f5b8c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+                                        <path d="M11.75 16C11.75 16.4142 12.0858 16.75 12.5 16.75C12.9142 16.75 13.25 16.4142 13.25 16H11.75ZM12.5 11H13.25C13.25 10.5858 12.9142 10.25 12.5 10.25V11ZM11.5 10.25C11.0858 10.25 10.75 10.5858 10.75 11C10.75 11.4142 11.0858 11.75 11.5 11.75V10.25ZM12.5 16.75C12.9142 16.75 13.25 16.4142 13.25 16C13.25 15.5858 12.9142 15.25 12.5 15.25V16.75ZM11.5 15.25C11.0858 15.25 10.75 15.5858 10.75 16C10.75 16.4142 11.0858 16.75 11.5 16.75V15.25ZM12.5 15.25C12.0858 15.25 11.75 15.5858 11.75 16C11.75 16.4142 12.0858 16.75 12.5 16.75V15.25ZM13.5 16.75C13.9142 16.75 14.25 16.4142 14.25 16C14.25 15.5858 13.9142 15.25 13.5 15.25V16.75ZM13.25 8C13.25 7.58579 12.9142 7.25 12.5 7.25C12.0858 7.25 11.75 7.58579 11.75 8H13.25ZM11.75 9C11.75 9.41421 12.0858 9.75 12.5 9.75C12.9142 9.75 13.25 9.41421 13.25 9H11.75ZM13.25 16V11H11.75V16H13.25ZM12.5 10.25H11.5V11.75H12.5V10.25ZM12.5 15.25H11.5V16.75H12.5V15.25ZM12.5 16.75H13.5V15.25H12.5V16.75ZM11.75 8V9H13.25V8H11.75Z" fill="#4f5b8c"></path> 
+                                    </g>
+                                </svg>
+                                <span id="step-3-pop"><p>This step will do the socring for each resolution based on the criteria you choose in the Priority dropdown box and color each resolution by its final score.</p></span>
+                            </div>
+
+                            <div class="substep">
+                                <h5 class="substep-title">Priority</h5>
+                                <div class="piority-list">
+                                    <div class="choice-options">
+                                        <p>First: </p>
+                                        <p>Second: </p>
+                                        <p>Third: </p>
+                                    </div>
+                                    <div class="choice-options">
+                                        <select class="priority" id="first-priority" disabled="true" required>
+                                            <option value="">--Please choose an option--</option>
+                                            <option value="sl">Sediment Loss</option>
+                                            <option value="sg">Sediment Gain</option>
+                                            <!-- <option value="cp">Coastline Protection</option> -->
+                                        </select>
+                                        <select class="priority" id="second-priority" disabled="true" required>
+                                            <!-- <option value="">--Please choose an option--</option>
+                                            <option value="sl">Sediment Loss</option>
+                                            <option value="sg">Sediment Gain</option> -->
+                                            <!-- <option value="cp">Coastline Protection</option> -->
+                                        </select>
+                                        <select class="priority" id="third-priority" disabled="true" required>
+                                            <!-- <option value="">--Please choose an option--</option>
+                                            <option value="sl">Sediment Loss</option>
+                                            <option value="sg">Sediment Gain</option> -->
+                                            <!-- <option value="cp">Coastline Protection</option> -->
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
+                        </form>
+                        <button class="generate-resolution button">Generate / Reset</button>
+                        <button class="finish-resolution button">Next</button>
+                    </section>
+
+                    <section class="step">
+                        <div class="step-explain">
+                            <h4 class="unit-generator">Step 4: Group into Final Units</h4>
+                            <svg class="info-tag" width="25px" height="25px" viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier"> 
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 11V13C5.5 16.3137 8.18629 19 11.5 19H13.5C16.8137 19 19.5 16.3137 19.5 13V11C19.5 7.68629 16.8137 5 13.5 5H11.5C8.18629 5 5.5 7.68629 5.5 11Z" stroke="#4f5b8c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+                                <path d="M11.75 16C11.75 16.4142 12.0858 16.75 12.5 16.75C12.9142 16.75 13.25 16.4142 13.25 16H11.75ZM12.5 11H13.25C13.25 10.5858 12.9142 10.25 12.5 10.25V11ZM11.5 10.25C11.0858 10.25 10.75 10.5858 10.75 11C10.75 11.4142 11.0858 11.75 11.5 11.75V10.25ZM12.5 16.75C12.9142 16.75 13.25 16.4142 13.25 16C13.25 15.5858 12.9142 15.25 12.5 15.25V16.75ZM11.5 15.25C11.0858 15.25 10.75 15.5858 10.75 16C10.75 16.4142 11.0858 16.75 11.5 16.75V15.25ZM12.5 15.25C12.0858 15.25 11.75 15.5858 11.75 16C11.75 16.4142 12.0858 16.75 12.5 16.75V15.25ZM13.5 16.75C13.9142 16.75 14.25 16.4142 14.25 16C14.25 15.5858 13.9142 15.25 13.5 15.25V16.75ZM13.25 8C13.25 7.58579 12.9142 7.25 12.5 7.25C12.0858 7.25 11.75 7.58579 11.75 8H13.25ZM11.75 9C11.75 9.41421 12.0858 9.75 12.5 9.75C12.9142 9.75 13.25 9.41421 13.25 9H11.75ZM13.25 16V11H11.75V16H13.25ZM12.5 10.25H11.5V11.75H12.5V10.25ZM12.5 15.25H11.5V16.75H12.5V15.25ZM12.5 16.75H13.5V15.25H12.5V16.75ZM11.75 8V9H13.25V8H11.75Z" fill="#4f5b8c"></path> 
+                            </g>
+                            </svg>
+                            <span id="step-4-pop"><p>This step will group the resolution with similar scores from step 2 to different Categories and display the final units through a box around each unit.</p></span>
                         </div>
-                    </form>
-                    <button class="generate-resolution button">Generate / Reset</button>
-                    <button class="finish-resolution button">Next</button>
-                </section>
+                        
+                        
+                        <div class="substep">
+                            <h5 class="substep-title">Number of groups</h5>
+                            <input type="number" name="category-number-entry" class="category" placeholder="Type a number: e.g. 5" disabled="true" required>
+                        </div>
+                        <button class="generate-group button">Generate / Reset</button>
+                        <button class="finish-group button">Next</button>
+                    </section>
 
-                <section class="step">
-                    <div class="step-explain">
-                        <h4 class="unit-generator">Step 4: Group into Final Units</h4>
-                        <svg class="info-tag" width="25px" height="25px" viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                        <g id="SVGRepo_iconCarrier"> 
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 11V13C5.5 16.3137 8.18629 19 11.5 19H13.5C16.8137 19 19.5 16.3137 19.5 13V11C19.5 7.68629 16.8137 5 13.5 5H11.5C8.18629 5 5.5 7.68629 5.5 11Z" stroke="#4f5b8c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
-                            <path d="M11.75 16C11.75 16.4142 12.0858 16.75 12.5 16.75C12.9142 16.75 13.25 16.4142 13.25 16H11.75ZM12.5 11H13.25C13.25 10.5858 12.9142 10.25 12.5 10.25V11ZM11.5 10.25C11.0858 10.25 10.75 10.5858 10.75 11C10.75 11.4142 11.0858 11.75 11.5 11.75V10.25ZM12.5 16.75C12.9142 16.75 13.25 16.4142 13.25 16C13.25 15.5858 12.9142 15.25 12.5 15.25V16.75ZM11.5 15.25C11.0858 15.25 10.75 15.5858 10.75 16C10.75 16.4142 11.0858 16.75 11.5 16.75V15.25ZM12.5 15.25C12.0858 15.25 11.75 15.5858 11.75 16C11.75 16.4142 12.0858 16.75 12.5 16.75V15.25ZM13.5 16.75C13.9142 16.75 14.25 16.4142 14.25 16C14.25 15.5858 13.9142 15.25 13.5 15.25V16.75ZM13.25 8C13.25 7.58579 12.9142 7.25 12.5 7.25C12.0858 7.25 11.75 7.58579 11.75 8H13.25ZM11.75 9C11.75 9.41421 12.0858 9.75 12.5 9.75C12.9142 9.75 13.25 9.41421 13.25 9H11.75ZM13.25 16V11H11.75V16H13.25ZM12.5 10.25H11.5V11.75H12.5V10.25ZM12.5 15.25H11.5V16.75H12.5V15.25ZM12.5 16.75H13.5V15.25H12.5V16.75ZM11.75 8V9H13.25V8H11.75Z" fill="#4f5b8c"></path> 
-                        </g>
-                        </svg>
-                        <span id="step-4-pop"><p>This step will group the resolution with similar scores from step 2 to different Categories and display the final units through a box around each unit.</p></span>
-                    </div>
-                    
-                    
-                    <div class="substep">
-                        <h5 class="substep-title">Number of groups</h5>
-                        <input type="number" name="category-number-entry" class="category" placeholder="Type a number: e.g. 5" disabled="true" required>
-                    </div>
-                    <button class="generate-group button">Generate / Reset</button>
-                    <button class="finish-group button">Next</button>
-                </section>
-
-                <section class="step">
-                    <h4 class="unit-generator">Step 5: Download</h4>
-                    <div class="substep">
-                        <h5 class="substep-title">Download Units</h5>
-                        <select class="file-type" disabled="true">
-                            <option value="geojson">geojson</option>
-                            <option value="shapefile">shapefile</option>
-                        </select>
-                        <button class="download-unit button" disabled="true">Download</button>
-                    </div>
-                </section>
-                      
+                    <section class="step">
+                        <h4 class="unit-generator">Step 5: Download</h4>
+                        <div class="substep">
+                            <h5 class="substep-title">Download Units</h5>
+                            <select class="file-type" disabled="true">
+                                <option value="geojson">geojson</option>
+                                <option value="shapefile">shapefile</option>
+                            </select>
+                            <button class="download-unit button" disabled="true">Download</button>
+                        </div>
+                    </section>
+                        
+                </div>
+                <div id="map"></div>    
             </div>
-            <div id="map"></div>
+            
+            <div class="container">
+                <div class="toc">
+                    <ul class="section table-of-contents">
+                        <li><a href="#documentation"><em>Go to top</em></a></li>
+                        <li><a href="#unit-generator-explanation">Unit Generator Explanation</a></li>
+                            <li><a href="#steps-explanation">Steps Explanation</a></li>
+                            <li>
+                                <a href="#model-explain">Criteria Models Explanation</a>
+                                <ul class="table-of-contents">
+                                    <li><a href="#sediment-loss">Sediment Loss Model</a></li>
+                                    <li><a href="#sediment-gain">Sediment Gain Model</a></li>
+                                </ul>
+                            </li>
+                                
+                    </ul>
+                </div>
+                <div class="doc">
+                    
+                    <h1 id="documentation" class="section scrollspy">Documentation</h1>
+                    <h2 id="unit-generator-explanation" class="section scrollspy">Unit Generator Explanation</h2>
+                    <h3 id="steps-explanation" class="section scrollspy">Steps Explanation</h3>
+    
+                    <h4 id="general" class="section scrollspy">General</h4>
+                    <ul>
+                        <li>
+                            <h5>How to use the buttons in each step:</h5> At the initial state, all the input boxes and buttons are locked except the <code>Start/Reset</code> button in step one. To start generating the units, click the <code>Start/Reset</code> button. For all the other buttons, they should be clicked in sequence. That is to say, after finishing choosing or typing the inputs, click the <code>Generate/Reset</code> button to preview the result, and if the result looks good, click the <code>Next</code> button in each step to unlock the input boxes and buttons in the following step.
+                        </li>
+                        <li>
+                            <h5>Vocabulary:</h5>
+                            <ul>
+                                <li>
+                                    <em><p>Resolution:</p></em>
+                                    <P>Continuous small pieces with the same length. It is the product of dividing a longer line. This is the overall fidelity or detail of the unit generation process along the length of the selected study area. It is effectively the “cell size” that the selected area is split into before attributes are applied to them and they are then re-assembled into units. For example: If 50 meters is selected as the resolution, the selected study area will be split into 50-meter segments along its length and attributes of the following steps applied to those 50-meter segments.</P>
+                                </li>
+                                <li>
+                                    <em><p>Priority:</p></em>
+                                    <P>List of criteria that will be used to weight the calculations. These are the topics of interest to the user that assemble different data sets together to be applied to the cells created in the previous step. For example: If “coastal erosion” and “habitat creation” are selected, datasets will be assembled to create operational coastal units that prioritize coastal erosion first and habitat creation second. The outcome of this process is the application of a rating for each segment from 0-1, based on how it applies to the selected priorities. More details on what datasets are used for what priority are included below.</P>
+                                </li>
+                                <li>
+                                    <em><p>Group:</p></em>
+                                    <P>The number of group types. A group means a group of resolution that has similar score from calculations. Multiple units may be in the same group. This indicates how many groups the user would like the prioritized cells to be assembled into. For example, in Figure 5 below, the user selected 3 groups, making values of 1-3 in the red group, 4-6 in the yellow group, and 7-10 in the blue group. As the example illustrates, 3 groups do not equal 3 units, (the example has 6 units) as the unit number will vary based on the distribution of priority ratings.</P>
+                                </li>
+                                <li>
+                                    <em><p>Unit:</p></em>
+                                    <P>Final product of this tool with a unique ID.</P>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <h5>Summary of the working method for operational coastal unit delineation</h5>
+                            <section class="insert-table">
+                                <div class="insert-table-group-sum">
+                                    <p class="insert-table-text-sum"><strong>Figure 1. Divide:</strong> Coast divided into "cells" of set size, e.g. 10 meters.</p>
+                                    <img src="../img/documentation/sum-1.jpg" class="insert-table-img-sum">
+                                </div>
+                                <div class="insert-table-group-sum">
+                                    <p class="insert-table-text-sum"><strong>Figure 2. Match:</strong> Datasets are also divided and matched to cells.</p>
+                                    <img src="../img/documentation/sum-2.jpg" class="insert-table-img-sum">
+                                </div>
+                                <div class="insert-table-group-sum">
+                                    <p class="insert-table-text-sum"><strong>Figure 3. Class:</strong> Data in each cell is classed based on user priority.</p>
+                                    <img src="../img/documentation/sum-3.jpg" class="insert-table-img-sum">
+                                </div>
+                                <div class="insert-table-group-sum">
+                                    <p class="insert-table-text-sum"><strong>Figure 4. Score:</strong> Scores are assigned to each cell based on classification.</p>
+                                    <img src="../img/documentation/sum-4.jpg" class="insert-table-img-sum">
+                                </div>
+                                <div class="insert-table-group-sum">
+                                    <p class="insert-table-text-sum"><strong>Figure 5. Group:</strong> Cells are grouped into coastal units based on scores and desired group number.</p>
+                                    <img src="../img/documentation/sum-5.jpg" class="insert-table-img-sum">
+                                </div>
+                            </section>
+                        </li>
+                    </ul>
+    
+                    <h4 id="step-by-step" class="section scrollspy">Step by Step Instructions</h4>
+    
+                    <h4 id="divide-step1" class="section scrollspy">Step 1: Choose your area</h4>
+                    <ul>
+                        <li><h5>Purpose:</h5> This step will help choose your area of interest along the Lake Erie shoreline of New York State, which will be the base of the calculations in the following steps and the area that will eventually be divided into units.</li>
+                        <li>
+                            <h5>Method:</h5> 
+                            <ol>
+                                <li>Click the <code>Start/Reset</code> button to start. After clicking it, you will see two pins appear at the two ends of the coastal line.</li>
+                                <li>Drag the two pins to the two ends of the area of interest along the coastline. The pins will automatically snap to the location of the coastline. You can drag and redrag for multiple times until you are satisfied with the result.</li> 
+                                <li>After you drag the pins to the desired location, click the <code>Next</code> button to move to step 2, which will zoom the map to your selected location and unlock the input boxes in step 2.</li>
+                            </ol>
+                        </li>
+                        <li><h5>Input Description:</h5> There are no input boxes in this step: interact with the map to choose your area.</li>
+                        <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 2.</li>
+                    </ul>
+    
+                    <h4 id="divide-step2" class="section scrollspy">Step 2: Set size</h4>
+                    <ul>
+                        <li><h5>Purpose:</h5> This step will first divide the coastline you choose in step 1 to multiple small pieces with the same length, which is called <code>Resolution</code>. It will also do the scoring for each resolution based on the criteria you choose in the <code>Priority</code> dropdown box and color each resolution by its final score.</li>
+                        <li>
+                            <h5>Method:</h5> 
+                            <ol>
+                                <li>In the input box below the <code>Resolution</code>, type the length (as numbers) you want to have for each resolution. You can choose the unit (e.g. feet, meter) in the dropdown box next to the input box.</li>
+                                <li>Next, in the <code>Priority</code> section, pick the scoring criteria that you are interested in. In the dropdown box next to <code>First</code>, select the criterion that you care the most. The score for each resolution will be weighted based on the priority list you choose.</li>
+                                <li>After you fill in all the input boxes, click the <code>Generate/Reset</code> button to preview the result, which will display the score for each resolution in a color gradient. You can click the <code>Generate/Reset</code> for multiple times.</li>
+                                <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 3, which will unlock the input boxes in step 3.</li>
+                            </ol>
+                        </li>
+                        <li>
+                            <h5>Input Description:</h5>
+                            <ul>
+                                <li><code>Resolutipn</code>: The length that will be used to divide the coastline. For example, if you type "30" and choose "feet" as the unit type, the coastline chunk you selected in the previous step will be separated into small line segments that are 30 feet each. </li>
+                                <li><code>Priority</code>: In this part, you will specify the criteria you want to use to determine the final units of your selected coastline. The score calculation for each criterion behind the scenes is linked to a certain calculation of GIS layers related to that criteria, called the "criteria model". See the "Criteria Models Explanation" below for details about each calculation.</li>
+                            </ul>
+                        </li>
+                        <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 2.</li>
+                        <li><h5>Warning:</h5> Because of the limitation of the original GIS layers, some GIS layers may not cover the whole coastline of Lake Erie. In that case, the final result of this tool may not be precise. See the "Criteria Models Explanation" below for details.</li>
+                    </ul>
+    
+                    <h4 id="divide-step3" class="section scrollspy">Step 3: Group into Final Units</h4>
+                    <ul>
+                        <li><h5>Purpose:</h5> This step will group the resolution with similar scores from step 2 into different <code>groups</code> and display the final units through a box around each unit.</li>
+                        <li>
+                            <h5>Method:</h5> 
+                            <ol>
+                                <li>In the input box below the <code>Number of groups</code>, type the number of groups (as numbers) you want to have for the final result. Multiple final units may be in the same group. The group stands for the number of group types that you want to have for the final result. </li>
+                                <li>Next, click the <code>Generate/Reset</code> button to preview the result, which will display the final units generated from the number of groups you specified above by circling them in boxes. When hover over each box, a pop-up will show the group type of that unit, and when you click each box, a panel will display more detailed information about each unit. You can click the <code>Generate/Reset</code> for multiple times.</li>
+                                <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 4, which will unlock the input boxes in step 4.</li>
+                            </ol>
+                        </li>
+                        <li><h5>Input Description:</h5><code>Number of groups</code>: The number of unit types you want to have for the final units based on the score of the resolution. Resolutions with similar final scores will be grouped together to form the final unit. Each group may belong to multiple units. It is also possible that one or multiple group types are not connected to any units.</li>
+                        <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 2.</li>
+                    </ul>
+                    <h4 id="divide-step4" class="section scrollspy">Step 4: Download</h4>
+                    <ul>
+                        <li><h5>Purpose:</h5> This step will let you download your result generated from the previous steps and use it elsewhere.</li>
+                        <li>
+                            <h5>Method:</h5> 
+                            <ol>
+                                <li>In the input box below the <code>Download Units</code>, choose the type of file that you want to generate. Currently, this step accepts geoJSON and shapefile.</li>
+                                <li>Next, click the <code>Download</code> button and a pop-up window will allow you the select the saving location.</li>
+                            </ol>
+                        </li>
+                    </ul>
+    
+                    <h3 id="model-explain" class="section scrollspy">Criteria Models Explanation</h3>
+                    <h4 id="model-resolution" class="section scrollspy">General</h4>
+                    <ul>
+                        <li><h5>What's the weight for each priority:</h5> First priority 50%, second priority 30%, third priority 20%.</li>
+                        <li><h5>How to assign value from GIS layer to each resolution:</h5> The resolution line will be offset for a certain distance (default is 200 meters) in both directions to create a bounding box. The values in each GIS layer will be assigned to the resolution if they overlap with the bounding box of the resolution line. If more than one value overlaps with the bounding box, the values will be averaged. If no value overlaps with the bounding box, the value for the resolution will be the value of the nearest GIS object.</li>
+                    </ul>
+    
+                    <h4 id="sediment-loss" class="section scrollspy">Sediment Loss Model</h4>
+                    <ul>
+                        <li><h5>Description:</h5> This model focuses on the actual sediment loss amount along the shoreline. Higher score means higher amount of sediment loss.</li>
+                        <li>
+                            <h5>GIS Data Used:</h5> 
+                            <ul>
+                                <li>
+                                    Sediment budget: The Sediment Budget, produced by the United States Army Corps of Engineers for both Lake Erie and Lake Ontario covers the large extent of our study area.  The sediment budget estimates the gain, loss, and movement of sediment across the lake shoreline, through a series of cells, each measuring approximately a half mile in length.
+                                    <section class="insert-table">
+                                        <div class="insert-table-group-sb">
+                                            <p class="insert-table-text-sb"><strong>Coarse out:</strong> Coarse Material leaving the cell for open water.</p>
+                                            <img src="../img/documentation/sb-coarseout.jpg" class="insert-table-img-sb">
+                                        </div>
+                                        <div class="insert-table-group-sb">
+                                            <p class="insert-table-text-sb"><strong>Bypass:</strong> Material moved manually from one cell to another.</p>
+                                            <img src="../img/documentation/sb-bypass.jpg" class="insert-table-img-sb">
+                                        </div>
+                                        <div class="insert-table-group-sb">
+                                            <p class="insert-table-text-sb"><strong>Downdrift Loss:</strong> Material leaving cell to adjacent cell by downdrift.</p>
+                                            <img src="../img/documentation/sb-downdrift.jpg" class="insert-table-img-sb">
+                                        </div>
+                                        <div class="insert-table-group-sb">
+                                            <p class="insert-table-text-sb"><strong>Fines out:</strong> Fine Material leaving cell for open water.</p>
+                                            <img src="../img/documentation/sb-finesout.jpg" class="insert-table-img-sb">
+                                        </div>
+                                        <div class="insert-table-group-sb">
+                                            <p class="insert-table-text-sb"><strong>Littoral coarse out:</strong> Coarse Material leaving cell to open water via littoral transport.</p>
+                                            <img src="../img/documentation/sb-littoralcoarseout.jpg" class="insert-table-img-sb">
+                                        </div>
+                                    </section>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <h5>Calculating Algorithm:</h5>
+                            <ol>
+                                <li>For each sediment budget cell, sediment loss = Coarse out + Bypass + Downdrift loss + Fines out + Littoral coarse out</li>
+                                <li>Rescale: the actual sediment loss value of all the resolution will be projected to a scale of 0 to 1, where closer to 0 means less loss and closer to 1 means more loss.</li>
+                            </ol>
+                        </li>
+                        <li><h5>Warning:</h5>The sediment budget layer does not have values for the area near Buffalo City. If the selected coastline includes those areas, the result may not be precise.</li>
+                    </ul>
+    
+                    <h4 id="sediment-gain" class="section scrollspy">Sediment Gain Model</h4>
+                    <ul>
+                        <li><h5>Description:</h5> This model focuses on the actual sediment gain amount along the shoreline. Higher score means higher amount of sediment gain.</li>
+                        <li>
+                            <h5>GIS Data:</h5> 
+                            <ol>
+                                <li>
+                                    Sediment budget: The Sediment Budget, produced by the United States Army Corps of Engineers for both Lake Erie and Lake Ontario covers the large extent of our study area.  The sediment budget estimates the gain, loss, and movement of sediment across the lake shoreline, through a series of cells, each measuring approximately a half mile in length.
+                                    <section class="insert-table">
+                                        <div class="insert-table-group-sb">
+                                            <p class="insert-table-text-sb"><strong>Bluff in:</strong> Erosion from Bluff added to cell.</p>
+                                            <img src="../img/documentation/sb-bluffin.jpg" class="insert-table-img-sb">
+                                        </div>
+                                        <div class="insert-table-group-sb">
+                                            <p class="insert-table-text-sb"><strong>Tributary bedload:</strong> Material added to cell via river input.</p>
+                                            <img src="../img/documentation/sb-bedload.jpg" class="insert-table-img-sb">
+                                        </div>
+                                        <div class="insert-table-group-sb">
+                                            <p class="insert-table-text-sb"><strong>Downdrift gain:</strong> Material added to cell from adjacent cell by downdrift.</p>
+                                            <img src="../img/documentation/sb-downdrift.jpg" class="insert-table-img-sb">
+                                        </div>
+                                        <div class="insert-table-group-sb">
+                                            <p class="insert-table-text-sb"><strong>Littoral coarse in:</strong> Coarse Material added to cell from open water via littoral transport.</p>
+                                            <img src="../img/documentation/sb-littoralcoarsein.jpg" class="insert-table-img-sb">
+                                        </div>
+                                    </section>
+                                </li>
+                            </ol>
+                        </li>
+                        <li>
+                            <h5>Calculating Algorithm:</h5>
+                            <ol>
+                                <li>For each sediment budget cell, sediment gain = Bluff in + Tributary bedload + Downdrift gain + Littoral coarse in</li>
+                                <li>Rescale: the actual sediment gain value of all the resolution will be projected to a scale of 0 to 1, where closer to 0 means less gain and closer to 1 means more loss.</li>
+                            </ol>
+                        </li>
+                        <li><h5>Warning:</h5>The sediment budget layer does not have values for the area near Buffalo City. If the selected coastline includes those areas, the result may not be precise.</li>
+                    </ul>
+                    <!-- <h2>Strategy Filter Steps Explanation</h2>
+                    <h3>Steps Explanation</h3>
+                    <h4>Step 1</h4>
+                    <h4>Step 2</h4>
+                    <h4>Step 3</h4>
+                    <h4>Step 4</h4> -->
+                    
+                </div>
+                
+                
+    
+            </div>
 
         </main>
 

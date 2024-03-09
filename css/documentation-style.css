@@ -1,6 +1,6 @@
 .container {
     height: 88vh;
-    display: block;
+    display: none;
     overflow: auto;
     width: 100%;
 }

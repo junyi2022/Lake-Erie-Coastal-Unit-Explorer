@@ -2,13 +2,22 @@
 
 // get all the buttons
 const unitGeneratorButton = document.querySelector('.unit-generator-button');
+const strategyFilterButton = document.querySelector('.strategy-filter');
+const dataExplorerButton = document.querySelector('.data-explorer');
+const strategyLibraryButton = document.querySelector('.strategy-library');
 const documentationButton = document.querySelector('.documentation');
+
+const menuBlock = document.querySelector('.menu-block');
+
 
 // get all divs
 const unitGeneratorDiv = document.querySelector('#unit-generator-body');
-const documentationDiv = document.querySelector('.container');
+const strategyFilterDiv = document.querySelector('#strategy-filter-body');
+const dataExplorerDiv = document.querySelector('#data-explorer-body');
+const strategyLibraryDiv = document.querySelector('#strategy-library-body');
+const documentationDiv = document.querySelector('#documentation-body');
 
-const menuAll = [unitGeneratorDiv, documentationDiv];
+const menuAll = [unitGeneratorDiv, strategyFilterDiv, dataExplorerDiv, strategyLibraryDiv, documentationDiv];
 
 // create a function to handle menu bar situation
 
@@ -19,21 +28,41 @@ function handleMenuDisplay(select) {
     }
   }
   // different div has different display method
-  if (select == unitGeneratorDiv) {
-    unitGeneratorDiv.style.display = 'flex';
-  } else if (select == documentationDiv) {
-    documentationDiv.style.display = 'block';
+  if (select == unitGeneratorDiv || strategyFilterDiv) {
+    select.style.display = 'flex';
+  } else {
+    select.style.display = 'block';
   }
 }
 
 function handleMenuBar() {
-  documentationButton.addEventListener('click', () => {
-    const select = documentationDiv;
+  unitGeneratorButton.addEventListener('click', () => {
+    const select = unitGeneratorDiv;
+    menuBlock.style.left = 0;
     handleMenuDisplay(select);
   });
 
-  unitGeneratorButton.addEventListener('click', () => {
-    const select = unitGeneratorDiv;
+  strategyFilterButton.addEventListener('click', () => {
+    const select = strategyFilterDiv;
+    menuBlock.style.left = '130px';
+    handleMenuDisplay(select);
+  });
+
+  dataExplorerButton.addEventListener('click', () => {
+    const select = dataExplorerDiv;
+    menuBlock.style.left = '260px';
+    handleMenuDisplay(select);
+  });
+
+  strategyLibraryButton.addEventListener('click', () => {
+    const select = strategyLibraryDiv;
+    menuBlock.style.left = '390px';
+    handleMenuDisplay(select);
+  });
+
+  documentationButton.addEventListener('click', () => {
+    const select = documentationDiv;
+    menuBlock.style.left = '520px';
     handleMenuDisplay(select);
   });
 }

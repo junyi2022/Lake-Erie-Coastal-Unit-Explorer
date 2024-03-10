@@ -67,18 +67,22 @@
                     </button>
                 </section>
             </div>
-            <div class="menu">
-                <div class="unit-generator-button menu-cat"><strong>Unit Generator</strong></div>
-                <div class="strategy-filter menu-cat"><strong>Strategy Filter</strong></div>
-                <div class="data-explorer menu-cat"><strong>Data Explorer</strong></div>
-                <div class="strategy-library menu-cat"><strong>Strategy Library</strong></div>
-                <div class="documentation menu-cat"><strong>Documentation</strong></div>
+            <div class="menu-background">
+                <nav class="menu">
+                    <div class="unit-generator-button menu-cat"><strong>Unit Generator</strong></div>
+                    <div class="strategy-filter menu-cat"><strong>Strategy Filter</strong></div>
+                    <div class="data-explorer menu-cat"><strong>Data Explorer</strong></div>
+                    <div class="strategy-library menu-cat"><strong>Strategy Library</strong></div>
+                    <div class="documentation menu-cat"><strong>Documentation</strong></div>
+                    <div class="menu-block"></div>
+                </nav>
             </div>
+            
 
         </header>
 
         <main>
-            <div id="unit-generator-body">
+            <div id="unit-generator-body" class="container">
                 <dialog open class="start-box" id="start-box">
                     <!-- because of the settings of dialog tag, need to have a div within it to do the flex style -->
                     <div class="dialog-content">
@@ -225,26 +229,61 @@
                 <div id="map"></div>    
             </div>
             
-            <div class="container">
+            <div id="strategy-filter-body" class="container">
+                <h1>Stay tuned!</h1>
+            </div>
+
+            <div id="data-explorer-body" class="container">
+                <h1>Stay tuned!</h1>
+            </div>
+
+            <div id="strategy-library-body" class="container">
+                <h1>Stay tuned!</h1>
+            </div>
+
+
+
+
+
+
+            <!-- documentation -->
+
+            <div id="documentation-body" class="container">
                 <div class="toc">
                     <ul class="section table-of-contents">
                         <li><a href="#documentation"><em>Go to top</em></a></li>
-                        <li><a href="#unit-generator-explanation">Unit Generator Explanation</a></li>
-                            <li><a href="#steps-explanation">Steps Explanation</a></li>
-                            <li>
-                                <a href="#model-explain">Criteria Models Explanation</a>
-                                <ul class="table-of-contents">
-                                    <li><a href="#sediment-loss">Sediment Loss Model</a></li>
-                                    <li><a href="#sediment-gain">Sediment Gain Model</a></li>
-                                </ul>
-                            </li>
+                        <li>
+                            <a href="#unit-generator-explanation">Unit Generator Explanation</a>
+                            <ul class="table-of-contents">
+                                <li><a href="#purpose-goal">Purpose and Goal</a></li>
+                                <li><a href="#steps-explanation">Steps Explanation</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#model-explain">Criteria Models Explanation</a>
+                            <ul class="table-of-contents">
+                                <li><a href="#sediment-loss">Sediment Loss Model</a></li>
+                                <li><a href="#sediment-gain">Sediment Gain Model</a></li>
+                            </ul>
+                        </li>
                                 
                     </ul>
                 </div>
+
                 <div class="doc">
                     
                     <h1 id="documentation" class="section scrollspy">Documentation</h1>
+
                     <h2 id="unit-generator-explanation" class="section scrollspy">Unit Generator Explanation</h2>
+                    <h3 id="purpose-goal" class="section scrollspy">Purpose and Goal</h3>
+                    <p>Operational coastal units are seen as a relatively untested and novel approach to coastal analysis that could hold particular potential in decision-making processes that require considering both local conditions and regional transferability. At its most simplistic, the operational coastal unit method assumes that there is value in defining new boundaries for where particular strategies are or are not applicable based on the contextual conditions found in specific places. And perhaps most importantly, that these new boundaries need not respond to existing administrative jurisdictions. Underpinning this idea are two overarching goals, balanced with one another.</p>
+                    <ol>
+                        <li><p>That local conditions and context are important culturally and ecologically. Decision-making regarding the shoreline should take into consideration the cultural values and knowledge that exist and have evolved in those specific areas. Additionally, the ecological context of any given location should be considered as important and special as opposed to generalized into a larger and more abstract idea of 'ecology'. In these ways, local conditions can be both acknowledged and formative in the decision-making processes to encourage the development of more sensitive and contextual outcomes. Put simply, the more local, the better.</p></li>
+                        <li><p>That transferability is to some degree essential to the practicality of any formal coastal management decision. This does not mean that transferability is what is desired, but only that it is what is necessary to get projects funded and completed. In this way, projects should aim to be as contextually specific as possible while only being as transferable as necessary. However, in the correct circumstances, transferability could provide the opportunity for ideas to spread within areas of similar contextual conditions which does offer both cost savings and project innovation.</p></li>
+                    </ol>
+                    <p>With these two balanced goals in mind, this project aims to establish a method for creating coastal units that are particular and appropriate for a given task. This specific project asks to look at the application of the operational coastal units in coastal management decisions that involve strategic sediment management and adaptability as a defining feature, although many other objectives could also be met with the coastal unit methods and efforts have been made to develop a more robust unit structure to accommodate some of these alternative objectives.</p>
+
                     <h3 id="steps-explanation" class="section scrollspy">Steps Explanation</h3>
     
                     <h4 id="general" class="section scrollspy">General</h4>

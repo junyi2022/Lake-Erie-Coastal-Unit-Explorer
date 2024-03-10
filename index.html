@@ -248,23 +248,32 @@
 
             <!-- documentation -->
 
+            <!-- have a function to enable smooth scroll when using toc instead of jumping -->
+            <script>
+                function smoothScroll(sectionId) {
+                    event.preventDefault(); // Prevent default anchor behavior
+                    const section = document.getElementById(sectionId);
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+            </script>
+
             <div id="documentation-body" class="container">
                 <div class="toc">
                     <ul class="section table-of-contents">
-                        <li><a href="#documentation"><em>Go to top</em></a></li>
+                        <li><a href="#documentation" onclick="smoothScroll('documentation')"><em>Go to top</em></a></li>
                         <li>
-                            <a href="#unit-generator-explanation">Unit Generator Explanation</a>
+                            <a href="#unit-generator-explanation" onclick="smoothScroll('unit-generator-explanation')">Unit Generator Explanation</a>
                             <ul class="table-of-contents">
-                                <li><a href="#purpose-goal">Purpose and Goal</a></li>
-                                <li><a href="#steps-explanation">Steps Explanation</a></li>
+                                <li><a href="#purpose-goal" onclick="smoothScroll('purpose-goal')">Purpose and Goal</a></li>
+                                <li><a href="#steps-explanation" onclick="smoothScroll('steps-explanation')">Steps Explanation</a></li>
                             </ul>
                         </li>
 
                         <li>
-                            <a href="#model-explain">Criteria Models Explanation</a>
+                            <a href="#model-explain" onclick="smoothScroll('model-explain')">Criteria Models Explanation</a>
                             <ul class="table-of-contents">
-                                <li><a href="#sediment-loss">Sediment Loss Model</a></li>
-                                <li><a href="#sediment-gain">Sediment Gain Model</a></li>
+                                <li><a href="#sediment-loss" onclick="smoothScroll('sediment-loss')">Sediment Loss Model</a></li>
+                                <li><a href="#sediment-gain" onclick="smoothScroll('sediment-gain')">Sediment Gain Model</a></li>
                             </ul>
                         </li>
                                 

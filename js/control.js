@@ -28,7 +28,7 @@ function handleMenuDisplay(select) {
     }
   }
   // different div has different display method
-  if (select == unitGeneratorDiv || strategyFilterDiv) {
+  if (select == unitGeneratorDiv) { // when working on SF add this || strategyFilterDiv
     select.style.display = 'flex';
   } else {
     select.style.display = 'block';

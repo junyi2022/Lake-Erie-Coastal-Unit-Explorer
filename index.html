@@ -229,16 +229,19 @@
                 <div id="map"></div>    
             </div>
             
-            <div id="strategy-filter-body" class="container">
-                <h1>Stay tuned!</h1>
+            <div id="strategy-filter-body" class="container draft">
+                <h2>Strategy Filter (Stay tuned!)</h2>
+                <p><strong>Overview:</strong> This sector will enable users to "filter" the coastline and get the ideal location for a certain strategy they want to build, which does the opposite work of the unit generator. The unit generator will give suggestions for the coastal engineering strategy in a certain area, but the strategy filter will return areas that are suitable for a certain coastal engineering strategy.</p>
             </div>
 
-            <div id="data-explorer-body" class="container">
-                <h1>Stay tuned!</h1>
+            <div id="data-explorer-body" class="container draft">
+                <h2>Data Explorer (Stay tuned!)</h2>
+                <p><strong>Overview:</strong> This sector will present all the GIS data used in the whole site, either the unit generator or the strategy filter, and the source for each of them.</p>
             </div>
 
-            <div id="strategy-library-body" class="container">
-                <h1>Stay tuned!</h1>
+            <div id="strategy-library-body" class="container draft">
+                <h2>Strategy List (Stay tuned!)</h2>
+                <p><strong>Overview:</strong> This sector will describe all the possible coastal engineering strategies that you can get from the unit generator or input in the strategy filter.</p>
             </div>
 
 
@@ -365,30 +368,44 @@
                         <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 2.</li>
                     </ul>
     
-                    <h4 id="divide-step2" class="section scrollspy">Step 2: Set size</h4>
+                    <h4 id="divide-step2" class="section scrollspy">Step 2: Choose resolution</h4>
                     <ul>
-                        <li><h5>Purpose:</h5> This step will first divide the coastline you choose in step 1 to multiple small pieces with the same length, which is called <code>Resolution</code>. It will also do the scoring for each resolution based on the criteria you choose in the <code>Priority</code> dropdown box and color each resolution by its final score.</li>
-                        <li>
+                        <li><h5>Purpose:</h5> This step will divide the coastline you choose in step 1 to multiple small pieces with the same length, which is called <code>Resolution</code>.<li>
                             <h5>Method:</h5> 
                             <ol>
                                 <li>In the input box below the <code>Resolution</code>, type the length (as numbers) you want to have for each resolution. You can choose the unit (e.g. feet, meter) in the dropdown box next to the input box.</li>
-                                <li>Next, in the <code>Priority</code> section, pick the scoring criteria that you are interested in. In the dropdown box next to <code>First</code>, select the criterion that you care the most. The score for each resolution will be weighted based on the priority list you choose.</li>
-                                <li>After you fill in all the input boxes, click the <code>Generate/Reset</code> button to preview the result, which will display the score for each resolution in a color gradient. You can click the <code>Generate/Reset</code> for multiple times.</li>
-                                <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 3, which will unlock the input boxes in step 3.</li>
                             </ol>
                         </li>
                         <li>
                             <h5>Input Description:</h5>
                             <ul>
                                 <li><code>Resolutipn</code>: The length that will be used to divide the coastline. For example, if you type "30" and choose "feet" as the unit type, the coastline chunk you selected in the previous step will be separated into small line segments that are 30 feet each. </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h4 id="divide-step2" class="section scrollspy">Step 3: Choose priority</h4>
+                    <ul>
+                        <li><h5>Purpose:</h5> This step will do the scoring for each resolution based on the criteria you choose in the <code>Priority</code> dropdown box and color each resolution by its final score.</li>
+                        <li>
+                            <h5>Method:</h5> 
+                            <ol>
+                                <li>Pick the scoring criteria that you are interested in. In the dropdown box next to <code>First</code>, select the criterion that you care the most. The score for each resolution will be weighted based on the priority list you choose.</li>
+                                <li>After you fill in all the input boxes, click the <code>Generate/Reset</code> button to preview the result, which will display the score for each resolution in a color gradient. You can click the <code>Generate/Reset</code> for multiple times to change inputs (you can also change the resolution in step 2 at this point).</li>
+                                <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 3, which will unlock the input boxes in step 3.</li>
+                            </ol>
+                        </li>
+                        <li>
+                            <h5>Input Description:</h5>
+                            <ul>
                                 <li><code>Priority</code>: In this part, you will specify the criteria you want to use to determine the final units of your selected coastline. The score calculation for each criterion behind the scenes is linked to a certain calculation of GIS layers related to that criteria, called the "criteria model". See the "Criteria Models Explanation" below for details about each calculation.</li>
                             </ul>
                         </li>
-                        <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 2.</li>
+                        <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 4.</li>
                         <li><h5>Warning:</h5> Because of the limitation of the original GIS layers, some GIS layers may not cover the whole coastline of Lake Erie. In that case, the final result of this tool may not be precise. See the "Criteria Models Explanation" below for details.</li>
                     </ul>
     
-                    <h4 id="divide-step3" class="section scrollspy">Step 3: Group into Final Units</h4>
+                    <h4 id="divide-step3" class="section scrollspy">Step 4: Group into Final Units</h4>
                     <ul>
                         <li><h5>Purpose:</h5> This step will group the resolution with similar scores from step 2 into different <code>groups</code> and display the final units through a box around each unit.</li>
                         <li>
@@ -402,7 +419,8 @@
                         <li><h5>Input Description:</h5><code>Number of groups</code>: The number of unit types you want to have for the final units based on the score of the resolution. Resolutions with similar final scores will be grouped together to form the final unit. Each group may belong to multiple units. It is also possible that one or multiple group types are not connected to any units.</li>
                         <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 2.</li>
                     </ul>
-                    <h4 id="divide-step4" class="section scrollspy">Step 4: Download</h4>
+
+                    <h4 id="divide-step4" class="section scrollspy">Step 5: Download</h4>
                     <ul>
                         <li><h5>Purpose:</h5> This step will let you download your result generated from the previous steps and use it elsewhere.</li>
                         <li>

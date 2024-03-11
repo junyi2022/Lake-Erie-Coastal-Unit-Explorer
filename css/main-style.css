@@ -199,6 +199,13 @@ header {
     width: 100%;
 }
 
+/* temporary style for the placeholder */
+.draft {
+    left: 300px;
+    position: relative;
+    width: 70%;
+}
+
 /* main part style*/
 
 /* unit generator */

@@ -53,7 +53,7 @@ window.sendimentBudget = sendimentBudget;
 window.shorelineBase = shorelineBase;
 window.shorelineType = shorelineType;
 window.soilErosion = soilErosion;
-window.map = initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, flowline, sendimentBudget, shorelineType); // remember to add new layer her as well
+window.map = initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, flowline, sendimentBudget, shorelineType, soilErosion); // remember to add new layer her as well
 
 // menu bar
 handleMenuBar();

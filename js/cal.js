@@ -19,13 +19,13 @@ const modelFuncs = {
 const modelProps = {
   'sl': 'normalsedimentLoss',
   'sg': 'normalsedimentGain',
-  'ep': 'normalshorelineType', // change later
+  'ep': 'normalerosionPotential',
 };
 
 const modelName = {
   'sl': 'Normalized Sediment Loss',
   'sg': 'Normalized Sediment Gain',
-  'ep': 'Normalized Shoreline Type', // change later
+  'ep': 'Normalized Erosion Potential',
 };
 
 // color scale for the resolution
@@ -223,6 +223,7 @@ function handlePointSelection(start, end, map, shorelineBase) {
       }
 
       const resolutionCollection = getResolution(); // feature collection of a lot of linestrings
+      console.log(resolutionCollection);
 
       // need to add ID to these line for identification later
       for (let i = 0; i < resolutionCollection.features.length; i++) {

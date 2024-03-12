@@ -21,12 +21,24 @@ function sedimentGainModel(map, resolutionCollection) {
 // erosion potential model
 function erosionPotentialModel(map, resolutionCollection) {
   // get different boxes for different data layers
+  // add retreat rate data to each coastline from sediment budget layer
+  calDataFromLayer(map, map.sedimentBudgetLayer, resolutionCollection, 0.2, calRetreatRateFromArray, 'retreatRate', 1); // scale factor = 1 means linear
+
   // add shoreline type data to each coastline from shoreline type layer
-  calDataFromLayer(map, map.shorelineTypeLayer, resolutionCollection, 0.2, calShorelineTypeFromArray, 'shorelineType', 1);
+  calDataFromLayer(map, map.shorelineTypeLayer, resolutionCollection, 0.05, calShorelineTypeFromArray, 'shorelineType', 1); // scale factor = 1 means linear
+
+  // add soil erosion data to each coastline from soil erosion layer
+  calDataFromLayer(map, map.soilErosionLayer, resolutionCollection, 0.2, calSoilErosionFromArray, 'soilErosion', 1); // scale factor = 1 means linear
+
+  // weight all the layers
+  for (const coastline of resolutionCollection.features) {
+    coastline.properties.normalerosionPotential = coastline.properties.normalretreatRate * 0.5 + coastline.properties.normalshorelineType * 0.3 + coastline.properties.normalsoilErosion * 0.2;
+  }
 }
 
 
 // add data to each coatline piece
+// only support single layer
 function calDataFromLayer(map, whichLayer, resolutionCollection, num, dataNeedToCal, pname, scaleFactor) { // dataNeedToCal is the function for what thing to cal, depending on the data here; pname is the properties name to add to the coastline chunk properties
   const layerResolutionBoxes = getResolutionBoxes(resolutionCollection, num); // layerResolutionBoxes already have ID
   console.log(layerResolutionBoxes);
@@ -102,7 +114,8 @@ function layerLoopToGetOverlapBoxPropArray(whichLayer, box) {
   return overlapArray;
 }
 
-// cal sediment loss from array of each coast box
+// cal from array of each coast box
+
 function calSedimentLossFromArray(propArray) {
   const sedimentLossArray = [];
   for (const eachData of propArray) {
@@ -121,6 +134,16 @@ function calSedimentGainFromArray(propArray) {
   }
   const sedimentGain = average(sedimentGainArray);
   return sedimentGain;
+}
+
+function calRetreatRateFromArray(propArray) {
+  const retreatRateArray = [];
+  for (const eachData of propArray) {
+    const retreatRate = eachData.RetreatRat;
+    retreatRateArray.push(retreatRate);
+  }
+  const retreatRate = average(retreatRateArray);
+  return retreatRate;
 }
 
 function calShorelineTypeFromArray(propArray) {
@@ -149,6 +172,16 @@ function calShorelineTypeFromArray(propArray) {
   }
   const shorelineType = average(shorelineTypeArray);
   return shorelineType;
+}
+
+function calSoilErosionFromArray(propArray) {
+  const soilErosionArray = [];
+  for (const eachData of propArray) {
+    const soilErosion = eachData.Kfactor;
+    soilErosionArray.push(soilErosion);
+  }
+  const soilErosion = average(soilErosionArray);
+  return soilErosion;
 }
 
 

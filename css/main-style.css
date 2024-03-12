@@ -12,6 +12,14 @@ p {
     line-height: 1.5;
 }
 
+.step-notes {
+    font-size: 12px;
+    margin: 0;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    color: gray;
+}
+
 li {
     font-size: 14px;
     margin-top: 5px;

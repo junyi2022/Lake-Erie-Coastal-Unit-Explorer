@@ -2,7 +2,7 @@
 
 import { handlePointSelection } from './cal.js';
 
-function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, flowline, sendimentBudget) {
+function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, flowline, sendimentBudget, shorelineType) {
   const map = L.map('map', {zoomSnap: 0}).setView([42.57, -79.22], 10); // zoomSnap 0 make the zoom level to real number
   const baseTileLayer = L.tileLayer('https://api.mapbox.com/styles/v1/junyiy/clpdjdrj7005r01qjb99zhdr5/tiles/{tileSize}/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoianVueWl5IiwiYSI6ImNsbXMza292bjAxcXoybG1meHhuZ3N1cjYifQ.EYo5VECxk9-NCAEgc3dm9w', {
     maxZoom: 19,
@@ -69,12 +69,18 @@ function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, 
       weight: 0.5,
     });
 
+  // layers for model
+
   map.sedimentBudgetLayer = L.geoJSON(sendimentBudget,
     { stroke: true,
       fill: false,
       color: '#8996F5',
       weight: 1.5,
     });
+
+  map.shorelineTypeLayer = L.geoJSON(shorelineType);
+
+  // coastline scope
 
   map.shorelineBaseLayer = L.geoJSON(shorelineBase,
     { stroke: true,

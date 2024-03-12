@@ -4,6 +4,7 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 import { average } from './model.js';
 import { sedimentLossModel } from './model.js';
 import { sedimentGainModel } from './model.js';
+import { erosionPotentialModel } from './model.js';
 import { legend1Style } from './map.js';
 import { legend2Style } from './map.js';
 import { handleDropdownDisplay } from './logistics.js';
@@ -12,16 +13,19 @@ import { handleDropdownDisplay } from './logistics.js';
 const modelFuncs = {
   'sl': sedimentLossModel,
   'sg': sedimentGainModel,
+  'ep': erosionPotentialModel,
 };
 
 const modelProps = {
   'sl': 'normalsedimentLoss',
   'sg': 'normalsedimentGain',
+  'ep': 'normalshorelineType', // change later
 };
 
 const modelName = {
   'sl': 'Normalized Sediment Loss',
   'sg': 'Normalized Sediment Gain',
+  'ep': 'Normalized Shoreline Type', // change later
 };
 
 // color scale for the resolution
@@ -313,7 +317,7 @@ function handlePointSelection(start, end, map, shorelineBase) {
           const resGroupArray = resToGroupArray(resolutionCollection, catNum);
           console.log(resGroupArray);
           // join line together as array
-          const featureCollectionArray = arrayOfGroupsToArrayOfLines(resGroupArray, firstProp, secondProp);
+          const featureCollectionArray = arrayOfGroupsToArrayOfLines(resGroupArray, firstProp, secondProp, thirdProp);
           console.log(featureCollectionArray);
           // get final feature collection
           const units = turf.featureCollection(featureCollectionArray);

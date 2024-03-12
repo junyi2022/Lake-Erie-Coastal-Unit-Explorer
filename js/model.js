@@ -18,6 +18,14 @@ function sedimentGainModel(map, resolutionCollection) {
   calDataFromLayer(map, map.sedimentBudgetLayer, resolutionCollection, 0.2, calSedimentGainFromArray, 'sedimentGain', 1.5);
 }
 
+// erosion potential model
+function erosionPotentialModel(map, resolutionCollection) {
+  // get different boxes for different data layers
+  // add shoreline type data to each coastline from shoreline type layer
+  calDataFromLayer(map, map.shorelineTypeLayer, resolutionCollection, 0.2, calShorelineTypeFromArray, 'shorelineType', 1);
+}
+
+
 // add data to each coatline piece
 function calDataFromLayer(map, whichLayer, resolutionCollection, num, dataNeedToCal, pname, scaleFactor) { // dataNeedToCal is the function for what thing to cal, depending on the data here; pname is the properties name to add to the coastline chunk properties
   const layerResolutionBoxes = getResolutionBoxes(resolutionCollection, num); // layerResolutionBoxes already have ID
@@ -62,6 +70,7 @@ function calDataFromLayer(map, whichLayer, resolutionCollection, num, dataNeedTo
   // see avaliable scale here: https://d3js.org/d3-scale
   // scale descriptions: https://observablehq.com/@d3/continuous-scales
   // here use power scale
+  // scale factor is the thing to control the shape of the reprojection
   const scaleFunc = d3.scalePow([min, max], [0, 1]).exponent(scaleFactor); // need to map to 0 to 1 because the later color scale only take numbers between 0 and 1
   // add the normalized value to each coastline properties
   for (const coastline of resolutionCollection.features) {
@@ -114,6 +123,35 @@ function calSedimentGainFromArray(propArray) {
   return sedimentGain;
 }
 
+function calShorelineTypeFromArray(propArray) {
+  const shorelineTypeArray = [];
+  for (const eachData of propArray) {
+    // const shorelineType = eachData.Bluff_In + eachData.Bedload + eachData.GainDowndr + eachData.Littoral_1;
+    if (eachData.Shoreline1 == 'Bedrock_(Resistant)_no_overburden' || eachData.Shoreline1 == 'Artificial_Good_Quality_Well_Engineered') {
+      const shorelineType = 0;
+      shorelineTypeArray.push(shorelineType);
+    } else if (eachData.Shoreline1 == 'Bedrock_(Resistant)_with_glacial_overburden' || eachData.Shoreline1 == 'Artificial_Moderate_Quality_Moderately_Engineered' || eachData.Shoreline1 == 'Open_Shore_Wetlands') {
+      const shorelineType = 1;
+      shorelineTypeArray.push(shorelineType);
+    } else if (eachData.Shoreline1 == 'Bedrock_(Erosive)_no_overburden' || eachData.Shoreline1 == 'Bedrock_(Erosive)_with_glacial_Overburden' || eachData.Shoreline1 == 'Open_Shoreline_Wetlands' || eachData.Shoreline1 == 'Composite_Low_Bank_/_Low_Plain') {
+      const shorelineType = 2;
+      shorelineTypeArray.push(shorelineType);
+    } else if (eachData.Shoreline1 == 'Artificial_Poor_Quality_Poorly_Engineered' || eachData.Shoreline1 == 'Pocket_Beach' || eachData.Shoreline1 == 'Artificial_Depositional_(e.g.,_jetty,_groin_fill)' || eachData.Shoreline1 == 'Bedrock_(Resistant)_with_sand_overburden') {
+      const shorelineType = 3;
+      shorelineTypeArray.push(shorelineType);
+    } else if (eachData.Shoreline1 == 'Bedrock_(Erosion)_with_sand_overburden' || eachData.Shoreline1 == 'Baymouth_–_Barrier_(fronting_wetlands_or_shallow_embayments,_estuaries)' || eachData.Shoreline1 == 'Low_Bank' || eachData.Shoreline1 == 'Natural_Depositional_(areas_with_active_supply/deposition)') {
+      const shorelineType = 4;
+      shorelineTypeArray.push(shorelineType);
+    } else {
+      const shorelineType = 5;
+      shorelineTypeArray.push(shorelineType);
+    }
+  }
+  const shorelineType = average(shorelineTypeArray);
+  return shorelineType;
+}
+
+
 // calculate average from array of numbers
 // const average = (array) => array.reduce((a, b) => a + b) / array.length;
 function average(array) {
@@ -161,5 +199,6 @@ function findClosestData(whichLayer, coastline) {
 export {
   sedimentLossModel,
   sedimentGainModel,
+  erosionPotentialModel,
   average,
 };

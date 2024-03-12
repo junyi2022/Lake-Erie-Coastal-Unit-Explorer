@@ -4,6 +4,7 @@ const dropdownOptions = [
   {'label': '--Please choose an option--', 'value': ''},
   {'label': 'Sediment Loss', 'value': 'sl'},
   {'label': 'Sediment Gain', 'value': 'sg'},
+  {'label': 'Erosion Potential', 'value': 'ep'},
 ];
 
 function handleDropdownDisplay(DropdownSelect, exclude=[]) {

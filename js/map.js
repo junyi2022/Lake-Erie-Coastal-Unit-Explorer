@@ -215,7 +215,7 @@ function legend2Style(map, unitColorScale, numvalues) {
   const unitColorLegendDiv = document.createElement('div');
   unitColorLegendDiv.classList.add('unit-legend');
   let html = `
-    <strong><p>Category Number</p></strong>
+    <strong><p>Group Number</p></strong>
     <div class="catWrapper">
   `;
 
@@ -223,7 +223,7 @@ function legend2Style(map, unitColorScale, numvalues) {
     html += `
     <div class="colorTextPair">
     <div class="catColorBox" style="background-color: ${unitColorScale(i / numvalues)}"></div>
-    <p class="catText">Category ${i+1}</p>
+    <p class="catText">Group ${i+1}</p>
     </div>
     `;
   }

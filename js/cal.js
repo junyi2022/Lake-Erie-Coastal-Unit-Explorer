@@ -8,6 +8,8 @@ import { erosionPotentialModel } from './model.js';
 import { legend1Style } from './map.js';
 import { legend2Style } from './map.js';
 import { handleDropdownDisplay } from './logistics.js';
+import { showSpinner } from './logistics.js';
+import { hideSpinner } from './logistics.js';
 
 // list all the dropdown's avaliable models and associated properties
 const modelFuncs = {
@@ -147,6 +149,7 @@ function handlePointSelection(start, end, map, shorelineBase) {
 
   // handle start and end marker points after user moved them
   function doSomethingWithEndpoints(newStart, newEnd, coastLine) {
+    showSpinner();
     // translate from leaflet to turf
     const startPointForCut = turf.point([newStart.lng, newStart.lat]);
     const endPointForCut = turf.point([newEnd.lng, newEnd.lat]);
@@ -154,6 +157,7 @@ function handlePointSelection(start, end, map, shorelineBase) {
     // selected coastline
     const coastalSliced = turf.lineSlice(startPointForCut, endPointForCut, coastLine);
     map.sliceLayer.addData(coastalSliced);
+    hideSpinner();
 
     // enable step 2 input boxes
     resolutionBox.disabled = false;
@@ -282,6 +286,7 @@ function handlePointSelection(start, end, map, shorelineBase) {
       map.legend.addTo(map);
 
       console.log(resolutionCollection);
+
 
       // process to the following step if user click next
       finishResButton.addEventListener('click', () => {

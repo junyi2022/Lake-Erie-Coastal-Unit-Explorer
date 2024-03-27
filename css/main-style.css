@@ -273,7 +273,6 @@ a {
   a:active {
     color: rgb(202, 92, 92);
   }
-
 /* define "remove" status */
 .hidden {
     display: none;

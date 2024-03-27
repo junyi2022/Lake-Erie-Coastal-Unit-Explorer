@@ -31,21 +31,27 @@ function handleDropdownDisplay(DropdownSelect, exclude=[]) {
 // handle loading spinner
 
 const spinner = document.getElementById('loader');
-let timerID = null;
+
 
 function showSpinner() {
-  timerID = setTimeout(() => { // setTimeout means after 500ms, run this function
-    spinner.style.display = 'block';
-  }, 500);
+  spinner.style.display = 'block';
 }
 
 function hideSpinner() {
-  clearTimeout(timerID);
   spinner.style.display = 'none';
+}
+
+function withSpinnerDo(callback) {
+  showSpinner();
+  setTimeout(() => {
+    callback();
+    hideSpinner();
+  }, 0);
 }
 
 export {
   handleDropdownDisplay,
   showSpinner,
   hideSpinner,
+  withSpinnerDo,
 };

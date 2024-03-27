@@ -7,8 +7,7 @@ import { sedimentGainModel } from './model.js';
 import { erosionPotentialModel } from './model.js';
 import { legend1Style } from './map.js';
 import { legend2Style } from './map.js';
-import { handleDropdownDisplay } from './logistics.js';
-import { showSpinner } from './logistics.js';
+import { handleDropdownDisplay, withSpinnerDo } from './logistics.js';
 import { hideSpinner } from './logistics.js';
 
 // list all the dropdown's avaliable models and associated properties
@@ -118,7 +117,9 @@ function handlePointSelection(start, end, map, shorelineBase) {
     // next button part after user selected the area
     // this button is set within the start button to make sure nothing will happen if people do not "start"
     finishButton.addEventListener('click', () => {
-      doSomethingWithEndpoints(startMarker.getLatLng(), endMarker.getLatLng(), coastLine);
+      withSpinnerDo(() => {
+        doSomethingWithEndpoints(startMarker.getLatLng(), endMarker.getLatLng(), coastLine);
+      });
     });
   }
 
@@ -149,7 +150,8 @@ function handlePointSelection(start, end, map, shorelineBase) {
 
   // handle start and end marker points after user moved them
   function doSomethingWithEndpoints(newStart, newEnd, coastLine) {
-    showSpinner();
+    // showSpinner();
+
     // translate from leaflet to turf
     const startPointForCut = turf.point([newStart.lng, newStart.lat]);
     const endPointForCut = turf.point([newEnd.lng, newEnd.lat]);
@@ -194,7 +196,9 @@ function handlePointSelection(start, end, map, shorelineBase) {
 
     // handle inputs from form
     generateResButton.addEventListener('click', () => {
-      handleCalculations();
+      withSpinnerDo(() => {
+        handleCalculations();
+      });
     });
 
     // divide the slice into certain length

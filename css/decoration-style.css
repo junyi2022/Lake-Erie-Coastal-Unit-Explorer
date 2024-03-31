@@ -10,6 +10,7 @@
     background-color: rgb(251 251 251 / 56%);
     position: absolute;
     z-index: 9998;
+    margin-top: -9vh;
 }
 
 .loader {
@@ -29,7 +30,7 @@
   .wave {
     width: 6px;
     height: 50px;
-    background: linear-gradient(45deg, rgb(61, 119, 206), #fff);
+    background: linear-gradient(45deg, rgb(192 235 199) 6%, rgb(177 212 245) 100%);
     margin: 10px;
     animation: wave 1s linear infinite;
     border-radius: 20px;

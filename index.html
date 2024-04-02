@@ -289,6 +289,7 @@
                             <ul class="table-of-contents">
                                 <li><a href="#sediment-loss" onclick="smoothScroll('sediment-loss')">Sediment Loss Model</a></li>
                                 <li><a href="#sediment-gain" onclick="smoothScroll('sediment-gain')">Sediment Gain Model</a></li>
+                                <li><a href="#erosion-potential" onclick="smoothScroll('erosion-potential')">Erosion Potential Model</a></li>
                             </ul>
                         </li>
                                 
@@ -455,10 +456,10 @@
                     <ul>
                         <li><h5>Description:</h5> This model focuses on the actual sediment loss amount along the shoreline. Higher score means higher amount of sediment loss.</li>
                         <li>
-                            <h5>GIS Data Used:</h5> 
-                            <ul>
+                            <h5>GIS Data:</h5> 
+                            <ol>
                                 <li>
-                                    Sediment budget: The Sediment Budget, produced by the United States Army Corps of Engineers for both Lake Erie and Lake Ontario covers the large extent of our study area.  The sediment budget estimates the gain, loss, and movement of sediment across the lake shoreline, through a series of cells, each measuring approximately a half mile in length.
+                                    <strong>Sediment budget:</strong> The Sediment Budget, produced by the United States Army Corps of Engineers for both Lake Erie and Lake Ontario covers the large extent of our study area. The sediment budget estimates the gain, loss, and movement of sediment across the lake shoreline, through a series of cells, each measuring approximately a half mile in length.
                                     <section class="insert-table">
                                         <div class="insert-table-group-sb">
                                             <p class="insert-table-text-sb"><strong>Coarse out:</strong> Coarse Material leaving the cell for open water.</p>
@@ -482,7 +483,7 @@
                                         </div>
                                     </section>
                                 </li>
-                            </ul>
+                            </ol>
                         </li>
                         <li>
                             <h5>Calculating Algorithm:</h5>
@@ -501,7 +502,7 @@
                             <h5>GIS Data:</h5> 
                             <ol>
                                 <li>
-                                    Sediment budget: The Sediment Budget, produced by the United States Army Corps of Engineers for both Lake Erie and Lake Ontario covers the large extent of our study area.  The sediment budget estimates the gain, loss, and movement of sediment across the lake shoreline, through a series of cells, each measuring approximately a half mile in length.
+                                    <strong>Sediment budget:</strong> The Sediment Budget, produced by the United States Army Corps of Engineers for both Lake Erie and Lake Ontario covers the large extent of our study area. The sediment budget estimates the gain, loss, and movement of sediment across the lake shoreline, through a series of cells, each measuring approximately a half mile in length.
                                     <section class="insert-table">
                                         <div class="insert-table-group-sb">
                                             <p class="insert-table-text-sb"><strong>Bluff in:</strong> Erosion from Bluff added to cell.</p>
@@ -532,6 +533,46 @@
                         </li>
                         <li><h5>Warning:</h5>The sediment budget layer does not have values for the area near Buffalo City. If the selected coastline includes those areas, the result may not be precise.</li>
                     </ul>
+
+                    <h4 id="erosion-potential" class="section scrollspy">Erosion Potential Model</h4>
+                    <ul>
+                        <li><h5>Description:</h5> This model focuses on the erosion potential of the coastal edge. Higher score means higher erosion potential.</li>
+                        <li>
+                            <h5>GIS Data:</h5> 
+                            <ol>
+                                <li>
+                                    <strong>Retreat rate:</strong> The retreat rate is one of the properties of the sediment budget, which is produced by the United States Army Corps of Engineers for both Lake Erie and Lake Ontario. Similar to the other values from the sediment budget that are used in the sediment loss/gain model, the retreat rate value is recorded through a series of cells, each measuring approximately a half mile in length. Specifically, the retreat rate is the rate at which the shoreline is eroding, measured in feet per year.
+                                </li>
+                                <li>
+                                    <strong>Shoreline type:</strong> The shoreline type GIS data contains baseline hardened shoreline classification, which specifies the current shoreline condition along the study area. The original data was created for the National Oceanic and Atmospheric Administration's Office for Coastal Management, in partnership with the United States Army Corps of Engineers, and funded through the Great Lakes Restoration Initiative to support detailed shoreline mapping.
+                                </li>
+                                <li>
+                                    <strong>Soil erosion K factor:</strong> The soil K factor used in this model is from the USDA Natural Resources Conservation Service's Web Soil Survey. Based on their description, the K factor indicates the susceptibility of soil to sheet and rill erosion by water. The estimates are based primarily on the percentage of silt, sand, and organic matter and on soil structure and saturated hydraulic conductivity (Ksat). Values of K range from 0.02 to 0.69. Other factors being equal, the higher the value, the more susceptible the soil is to sheet and rill erosion by water. Specifically, we are using the K factor for the whole soil, which includes modifications based on the presence of rock fragments.
+                                </li>
+                            </ol>
+                        </li>
+                        <li>
+                            <h5>Calculating Algorithm:</h5>
+                            <ol>
+                                <li>Weight among all GIS data: erosion potential for each resolution = 0.5 * retreat rate + 0.3 * shoreline type + 0.2 * soil K factor</li>
+                                <li>Rescale: the actual retreat rate value of all the resolution will be projected to a scale of 0 to 1, where closer to 0 means less shoreline erosion and closer to 1 means more shoreline erosion.</li>
+                                <li>Rescale: the actual soil K factor value of all the resolution will be projected to a scale of 0 to 1, where closer to 0 means less soil erosion and closer to 1 means more soil erosion.</li>
+                                <li>Because the shoreline type is categorical data, we assign a value of 0 to 5 to each category based on the category's eroding characteristics, and then rescale it to a scale of 0 to 1. Higher value means more related to erosion. The categories associated with each value are shown below:
+                                <ul>
+                                    <li>0: 'Bedrock (Resistant) no overburden', 'Artificial Good Quality Well Engineered'</li>
+                                    <li>1: 'Bedrock (Resistant) with glacial overburden', 'Artificial Moderate Quality Moderately Engineered', 'Open Shore Wetlands'</li>
+                                    <li>2: 'Bedrock (Erosive) no overburden', 'Bedrock (Erosive) with glacial Overburden', 'Open Shoreline Wetlands', 'Composite Low Bank / Low Plain'</li>
+                                    <li>3: 'Artificial Poor Quality Poorly Engineered', 'Pocket Beach', 'Artificial Depositional (e.g., jetty, groin fill)', 'Bedrock (Resistant) with sand overburden'</li>
+                                    <li>4: 'Bedrock (Erosion) with sand overburden', 'Baymouth - Barrier (fronting wetlands or shallow embayments, estuaries)', 'Low Bank', 'Natural Depositional (areas with active supply/deposition)'</li>
+                                    <li>5: 'Rivermouth / Sheltered Wetlands', 'Sandy Low Bank / Low Plain', 'Sandy Beach / Dune (relict deposits, areas with no new deposition)', 'Cohesive Bluffs (composition unknown)',  'Sandy Beach / Dune Complex', 'Coarse Beaches', 'Sand or Cohesive Bluffs (Till or Lacustrine)', 'Composite Bluffs (sand content 20-50%)', 'Composite Bluffs (sand content >50%)', 'Gravel Beaches'</li>
+                                </ul>
+                                </li>
+                            </ol>
+                        </li>
+                        <li><h5>Warning:</h5>The sediment budget layer does not have values (retreat rate) for the area near Buffalo City. Besides, the soil K factor also has many null values near Buffalo City. If the selected coastline includes those areas, the result may not be precise.</li>
+                    </ul>
+
+
                     <!-- <h2>Strategy Filter Steps Explanation</h2>
                     <h3>Steps Explanation</h3>
                     <h4>Step 1</h4>
@@ -549,7 +590,7 @@
 
         <footer>
             <p id="footnote">
-                <strong>University of Pennsylvania</strong> <a href="https://emlabupenn.com/" target="_blank"><strong>EMLab</strong></a> Last update: March 2024.
+                <strong>University of Pennsylvania</strong> <a href="https://emlabupenn.com/" target="_blank"><strong>EMLab</strong></a> Last update: Apirl 2024.
             </p>
 
         </footer>

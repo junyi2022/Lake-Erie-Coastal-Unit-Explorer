@@ -49,9 +49,21 @@ function withSpinnerDo(callback) {
   }, 0);
 }
 
+// handle input box input value range
+
+function unitInputRange(categoryBox) {
+  categoryBox.addEventListener('change', () => {
+    if (categoryBox.value < '2') {
+      categoryBox.value = '';
+      alert('Please enter a number greater than 1.');
+    }
+  });
+}
+
 export {
   handleDropdownDisplay,
   showSpinner,
   hideSpinner,
   withSpinnerDo,
+  unitInputRange,
 };

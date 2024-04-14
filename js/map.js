@@ -222,7 +222,7 @@ function legend2Style(map, unitColorScale, numvalues) {
   for (let i = 0; i < numvalues; i++) {
     html += `
     <div class="colorTextPair">
-    <div class="catColorBox" style="background-color: ${unitColorScale(i / numvalues)}"></div>
+    <div class="catColorBox" style="background-color: ${unitColorScale(i / (numvalues - 1))}"></div>
     <p class="catText">Group ${i+1}</p>
     </div>
     `;

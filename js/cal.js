@@ -7,7 +7,7 @@ import { sedimentGainModel } from './model.js';
 import { erosionPotentialModel } from './model.js';
 import { legend1Style } from './map.js';
 import { legend2Style } from './map.js';
-import { handleDropdownDisplay, withSpinnerDo } from './logistics.js';
+import { handleDropdownDisplay, withSpinnerDo, unitInputRange } from './logistics.js';
 import { hideSpinner } from './logistics.js';
 
 // list all the dropdown's avaliable models and associated properties
@@ -300,6 +300,8 @@ function handlePointSelection(start, end, map, shorelineBase) {
       function startGroupRes() {
         // enable step 3 box
         categoryBox.disabled = false;
+        // prevent people from entering invalid number
+        unitInputRange(categoryBox);
         // disable step 2 buttons
         finishResButton.disabled = true;
         generateResButton.disabled = true;
@@ -345,7 +347,7 @@ function handlePointSelection(start, end, map, shorelineBase) {
           if (secondDrop.value == 'ns') {
             map.finalUnitLayer = L.geoJSON(unitsBox, {
               style: (sample) => {
-                const colorValue = unitColorScale(sample.properties.unit / catNum);
+                const colorValue = unitColorScale((sample.properties.unit - 1) / (catNum - 1));
                 return {
                   stroke: true,
                   fill: true,

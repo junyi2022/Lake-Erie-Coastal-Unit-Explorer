@@ -3,6 +3,9 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 
 import { getResolutionBoxes } from './cal.js';
 
+// because point cloud has too many features, it is better to import the data instead of using map layer as a middle step
+import { fishWildlifePoints } from './main.js';
+
 
 // sediment loss model
 function sedimentLossModel(map, resolutionCollection) {
@@ -36,13 +39,16 @@ function erosionPotentialModel(map, resolutionCollection) {
   }
 }
 
+// habitat protection model
+function habitatProtectionModel(map, resolutionCollection) {
+  calDataFromPoints(map, fishWildlifePoints, resolutionCollection, 0.5, calRasterIndex, 'wild_index', 'habitatProtection', 1);
+}
 
 // add data to each coatline piece
-// only support single layer
+
+// only support single, polygon layer
 function calDataFromLayer(map, whichLayer, resolutionCollection, num, dataNeedToCal, pname, scaleFactor) { // dataNeedToCal is the function for what thing to cal, depending on the data here; pname is the properties name to add to the coastline chunk properties
   const layerResolutionBoxes = getResolutionBoxes(resolutionCollection, num); // layerResolutionBoxes already have ID
-  console.log(layerResolutionBoxes);
-  // L.geoJSON(layerResolutionBoxes).addTo(map);
 
   // input value to coastline through overlap of boxes and data layer
   // loop through each coast line
@@ -91,6 +97,62 @@ function calDataFromLayer(map, whichLayer, resolutionCollection, num, dataNeedTo
     coastline.properties[newPropName] = normalResult;
   }
 }
+
+// raster data - point cloud
+// support point cloud layer
+function calDataFromPoints(map, whichData, resolutionCollection, num, dataNeedToCal, whatIndex, pname, scaleFactor) { // dataNeedToCal is the function for what thing to cal, depending on the data here; pname is the properties name to add to the coastline chunk properties
+  const layerResolutionBoxes = getResolutionBoxes(resolutionCollection, num); // layerResolutionBoxes already have ID
+
+  // input value to coastline through points in box
+  // loop through each coast line
+  for (const coastline of resolutionCollection.features) {
+    // get the box of each coastline
+    const box = findBoxFromLine(coastline, layerResolutionBoxes);
+
+    // get points within box
+    // important, this is let not const because we may resign values to this array if it does not have value
+    let pointsWithin = turf.pointsWithinPolygon(whichData, box);
+
+    // calculate that value
+    // if the coastline piece is very small, it may not have points within. So need to specify other function to handle that situation
+    if (pointsWithin.features.length == 0) {
+      // add data by finding closet data
+      const coastlinecenter = turf.pointOnFeature(coastline);
+      pointsWithin = turf.nearestPoint(coastlinecenter, whichData);
+    }
+
+    // calculate data based on the rule of each model
+    const value = dataNeedToCal(pointsWithin, whatIndex);
+
+    // add the cal result to coastline properties
+    coastline.properties[pname] = value;
+  }
+
+  // need to normalize the values
+  // this is becuase the data from different models are in different scale, need normalized value of each model to calculate the final score
+
+  // get an array of all the values of the coastline piece of this model calculation
+  const propertiesValueArray = resolutionCollection.features.map((f) => f.properties[pname]); // map will return an array of all the properties[pname]
+
+  // calculate the min max of the values
+  const min = Math.min(...propertiesValueArray); // ...flatten the array because min/max doesn't take array
+  const max = Math.max(...propertiesValueArray);
+
+  // use a D3 scale to normalize this data
+  // see avaliable scale here: https://d3js.org/d3-scale
+  // scale descriptions: https://observablehq.com/@d3/continuous-scales
+  // here use power scale
+  // scale factor is the thing to control the shape of the reprojection
+  const scaleFunc = d3.scalePow([min, max], [0, 1]).exponent(scaleFactor); // need to map to 0 to 1 because the later color scale only take numbers between 0 and 1
+  // add the normalized value to each coastline properties
+  for (const coastline of resolutionCollection.features) {
+    const normalResult = scaleFunc(coastline.properties[pname]);
+    const newPropName = 'normal'+ pname;
+    coastline.properties[newPropName] = normalResult;
+  }
+}
+
+// supportive functions for adding data
 
 // find coast box related to selected coastline
 function findBoxFromLine(coastline, layerResolutionBoxes) {
@@ -184,6 +246,17 @@ function calSoilErosionFromArray(propArray) {
   return soilErosion;
 }
 
+// points calculation part
+
+function calRasterIndex(pointsWithin, whatIndex) {
+  const rasterIndexArray = [];
+  for (const point of pointsWithin.features) {
+    const index = point.properties[whatIndex];
+    rasterIndexArray.push(index);
+  }
+  const indexAverage = average(rasterIndexArray);
+  return indexAverage;
+}
 
 // calculate average from array of numbers
 // const average = (array) => array.reduce((a, b) => a + b) / array.length;
@@ -203,6 +276,7 @@ function average(array) {
 // (6, 4) => 10
 // (10, 5) => 15
 
+// find closest polygon and get properties
 function findClosestData(whichLayer, coastline) {
   const coastlinecenter = turf.pointOnFeature(coastline);
   // need to loop through each shape to get center points because the turf function only take one shape each time
@@ -233,5 +307,6 @@ export {
   sedimentLossModel,
   sedimentGainModel,
   erosionPotentialModel,
+  habitatProtectionModel,
   average,
 };

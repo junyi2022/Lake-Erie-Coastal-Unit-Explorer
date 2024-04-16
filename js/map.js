@@ -176,31 +176,6 @@ function legend1Style(map, colorScale) {
   return legendDiv;
 }
 
-// function legend2Style(map, unitColorScale, numvalues) {
-//   const unitColorLegendDiv = document.createElement('div');
-//   unitColorLegendDiv.classList.add('unit-legend');
-//   unitColorLegendDiv.innerHTML = `
-//     <strong><p>Category Number</p></strong>
-
-//   `;
-//   // <div class="catWrapper">
-
-//   const dynamicUnitDiv = document.createElement('div');
-//   dynamicUnitDiv.classList.add('dynamic-legend');
-//   for (let i = 0; i < numvalues; i++) {
-//     dynamicUnitDiv.innerHTML += `
-//     <div class="catColorBox" style="background-color: ${unitColorScale(i / numvalues)}"></div>
-//     <p class="catText">Category ${i+1}</p>
-//     `;
-//     console.log(dynamicUnitDiv);
-//   }
-//   unitColorLegendDiv.appendChild(dynamicUnitDiv);
-//   // unitColorLegendDiv.innerHTML += '</div>'; // Close the wrapper
-//   console.log(unitColorLegendDiv);
-
-//   const legendContent = document.querySelector('.legend-content');
-//   legendContent.appendChild(unitColorLegendDiv);
-// }
 
 function legend2Style(map, unitColorScale, numvalues) {
   const legendContent = document.querySelector('.legend-content');

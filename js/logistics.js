@@ -5,6 +5,7 @@ const dropdownOptions = [
   {'label': 'Sediment Loss', 'value': 'sl'},
   {'label': 'Sediment Gain', 'value': 'sg'},
   {'label': 'Erosion Potential', 'value': 'ep'},
+  {'label': 'Habitat Protection', 'value': 'hp'},
 ];
 
 function handleDropdownDisplay(DropdownSelect, exclude=[]) {

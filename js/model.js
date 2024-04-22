@@ -41,7 +41,7 @@ function erosionPotentialModel(map, resolutionCollection) {
 
 // habitat protection model
 function habitatProtectionModel(map, resolutionCollection) {
-  calDataFromPoints(map, fishWildlifePoints, resolutionCollection, 0.5, calRasterIndex, 'wild_index', 'habitatProtection', 1);
+  calDataFromPoints(map, fishWildlifePoints, resolutionCollection, 0.2, calRasterIndex, 'wild_index', 'habitatProtection', 1);
 }
 
 // add data to each coatline piece

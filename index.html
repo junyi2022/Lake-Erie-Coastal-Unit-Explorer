@@ -186,7 +186,7 @@
                                             <option value="sl">Sediment Loss</option>
                                             <option value="sg">Sediment Gain</option>
                                             <option value="ep">Erosion Potential</option>
-                                            <option value="hp">Habitat Protection</option>
+                                            <option value="hp">NFWF Habitat Protection</option>
                                         </select>
                                         <select class="priority" id="second-priority" disabled="true" required>
 
@@ -291,6 +291,7 @@
                                 <li><a href="#sediment-loss" onclick="smoothScroll('sediment-loss')">Sediment Loss Model</a></li>
                                 <li><a href="#sediment-gain" onclick="smoothScroll('sediment-gain')">Sediment Gain Model</a></li>
                                 <li><a href="#erosion-potential" onclick="smoothScroll('erosion-potential')">Erosion Potential Model</a></li>
+                                <li><a href="#habitat-protection" onclick="smoothScroll('habitat-protection')">NFWF Habitat Protection Model</a></li>
                             </ul>
                         </li>
                                 
@@ -571,6 +572,33 @@
                             </ol>
                         </li>
                         <li><h5>Warning:</h5>The sediment budget layer does not have values (retreat rate) for the area near Buffalo City. Besides, the soil K factor also has many null values near Buffalo City. If the selected coastline includes those areas, the result may not be precise.</li>
+                    </ul>
+
+                    <h4 id="habitat-protection" class="section scrollspy">NFWF Habitat Protection Model</h4>
+                    <ul>
+                        <li><h5>Description:</h5> This model identifies critical habitat and protected areas for terrestrial and aquatic species of conservation concern. Higher scores represent areas that are important for numerous species of concern, where implementing a restoration project would likely provide the greatest benefit to wildlife. </li>
+                        <li>
+                            <h5>GIS Data:</h5> 
+                            <ol>
+                                <li>
+                                    <strong>Fish and Wildlife Index:</strong> 
+                                    <P>This model is based on the Fish and Wildlife Index developed by the National Fish and Wildlife Foundation. This index is the sum of the terrestrial and aquatic indexes, also developed by the NFWF, plus protected areas.</P>
+                                    <p>The terrestrial index identifies terrestrial wildlife species of greatest conservation need from state wildlife action plans, federally listed species, and GLIFWC harvest regulations. It then identifies suitable habitat for each species and sums them by taxonomic group, using the following datasets: USGS GAP Analysis, Critical Habitat, Important Bird Areas & Key Biodiversity Areas, and Coastal Bluffs and Dunes. </p>
+                                    <p>Using similar methodology, the aquatic index identifies species of concern in riverine and lacustrine habitats from the same three sources as the terrestrial index. It then identifies areas of suitable habitat for each species using the following datasets: Species Habitat Distribution, Critical Habitat, Spawning and Reef Locations, and the Great Lakes Eastern Brook Trout Conservation Portfolio. </p>
+                                    <p>Protected areas included in the model were sourced from the USGS Gap Analysis Project, Protected Areas Database of the United States (PAD-US) 2.1: U.S. Geological Survey data release, NOAA National Marine Sanctuaries, and ProtectedSeas. </p>
+                                </li>
+                            </ol>
+                        </li>
+                        <li>
+                            <h5>Calculating Algorithm:</h5>
+                            <ol>
+                                <li>
+                                    <P>Detailed methodology for calculating the Fish and Wildlife Index, including a complete list of species included in the analysis, input data sources, and geoprocessing steps, can be found in the following report: </P>
+                                    <p>Dobson, J.G., Johnson, I.P., Orlando, J.L., Lussier, B.C., and Byler, K.A. (2023) U.S. <lm>Great Lakes Coastal Resilience Assessment</lm> (Appendix A.3-5, F-G). UNC Asheville National Environmental Modeling and Analysis Center, Asheville, NC. Prepared for the National Fish and Wildlife Foundation. </p>
+                                </li>
+                            </ol>
+                        </li>
+                        
                     </ul>
 
 

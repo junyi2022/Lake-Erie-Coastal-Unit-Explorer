@@ -41,10 +41,10 @@ const shorelineType = turf.buffer(shorelineTypeline, 0.01);
 const soil = await fetch('data/soil-erosion-k.geojson');
 const soilErosion = await soil.json();
 
-const fishWildlife = await fetch('data/fish-wildlife-points.json');
+const fishWildlife = await fetch('data/fish-wildlife-points800.json');
 const fishWildlifePoints = await fishWildlife.json();
 
-const wetlandPotential = await fetch('data/wetland-potential-points.geojson');
+const wetlandPotential = await fetch('data/wetland-potential-points800.geojson');
 const wetlandPotentialPoints = await wetlandPotential.json();
 
 
@@ -62,11 +62,12 @@ window.soilErosion = soilErosion;
 window.fishWildlifePoints = fishWildlifePoints;
 window.wetlandPotentialPoints = wetlandPotentialPoints;
 
-window.map = initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, flowline, sendimentBudget, shorelineType, soilErosion, fishWildlifePoints, wetlandPotentialPoints); // remember to add new layer her as well
+window.map = initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, flowline, sendimentBudget, shorelineType, soilErosion); // remember to add new layer her as well
 
 // menu bar
 handleMenuBar();
 
 export {
   fishWildlifePoints,
+  wetlandPotentialPoints,
 };

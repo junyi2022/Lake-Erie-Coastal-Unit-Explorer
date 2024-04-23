@@ -4,7 +4,7 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 import { getResolutionBoxes } from './cal.js';
 
 // because point cloud has too many features, it is better to import the data instead of using map layer as a middle step
-import { fishWildlifePoints } from './main.js';
+import { fishWildlifePoints, wetlandPotentialPoints } from './main.js';
 
 
 // sediment loss model
@@ -43,6 +43,12 @@ function erosionPotentialModel(map, resolutionCollection) {
 function habitatProtectionModel(map, resolutionCollection) {
   calDataFromPoints(map, fishWildlifePoints, resolutionCollection, 0.2, calRasterIndex, 'wild_index', 'habitatProtection', 1);
 }
+
+// habitat protection model
+function wetlandProtectionRestorationModel(map, resolutionCollection) {
+  calDataFromPoints(map, wetlandPotentialPoints, resolutionCollection, 0.2, calRasterIndex, 'potential', 'wetlandProtectionRestoration', 1);
+}
+
 
 // add data to each coatline piece
 
@@ -308,5 +314,6 @@ export {
   sedimentGainModel,
   erosionPotentialModel,
   habitatProtectionModel,
+  wetlandProtectionRestorationModel,
   average,
 };

@@ -236,6 +236,7 @@ header {
 .toolbar {
     width: 450px;
     overflow: auto;
+    padding: 1rem;
 }
 
 .step {

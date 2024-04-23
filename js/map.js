@@ -62,12 +62,12 @@ function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, 
       weight: 1,
     });
 
-  map.flowlineLayer = L.geoJSON(flowline,
-    { stroke: true,
-      fill: false,
-      color: '#BFD3EF',
-      weight: 0.5,
-    });
+  // map.flowlineLayer = L.geoJSON(flowline,
+  //   { stroke: true,
+  //     fill: false,
+  //     color: '#BFD3EF',
+  //     weight: 0.5,
+  //   });
 
   // layers for model
 
@@ -113,7 +113,7 @@ function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, 
     'County': map.countyLayer,
     'HUC 10': map.huc10Layer,
     'HUC12': map.huc12Layer,
-    'Flowline': map.flowlineLayer,
+    // 'Flowline': map.flowlineLayer,
     'Sediment Budget': map.sedimentBudgetLayer,
   };
 

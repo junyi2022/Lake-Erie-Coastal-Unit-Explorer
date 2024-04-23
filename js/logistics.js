@@ -6,6 +6,7 @@ const dropdownOptions = [
   {'label': 'Sediment Gain', 'value': 'sg'},
   {'label': 'Erosion Potential', 'value': 'ep'},
   {'label': 'NFWF Habitat Protection', 'value': 'hp'},
+  {'label': 'NOAA Wetland Protection/Restoration', 'value': 'wpr'},
 ];
 
 function handleDropdownDisplay(DropdownSelect, exclude=[]) {

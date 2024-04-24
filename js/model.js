@@ -11,27 +11,27 @@ import { fishWildlifePoints, wetlandPotentialPoints } from './main.js';
 function sedimentLossModel(map, resolutionCollection) {
   // get different boxes for different data layers
   // add sediment loss data to each coastline from sediment budget layer
-  calDataFromLayer(map, map.sedimentBudgetLayer, resolutionCollection, 0.2, calSedimentLossFromArray, 'sedimentLoss', 1.5);
+  calDataFromLayer(map, map.sedimentBudgetLayer, resolutionCollection, 0.1, calSedimentLossFromArray, 'sedimentLoss', 1.5);
 }
 
 // sediment gain model
 function sedimentGainModel(map, resolutionCollection) {
   // get different boxes for different data layers
   // add sediment loss data to each coastline from sediment budget layer
-  calDataFromLayer(map, map.sedimentBudgetLayer, resolutionCollection, 0.2, calSedimentGainFromArray, 'sedimentGain', 1.5);
+  calDataFromLayer(map, map.sedimentBudgetLayer, resolutionCollection, 0.1, calSedimentGainFromArray, 'sedimentGain', 1.5);
 }
 
 // erosion potential model
 function erosionPotentialModel(map, resolutionCollection) {
   // get different boxes for different data layers
   // add retreat rate data to each coastline from sediment budget layer
-  calDataFromLayer(map, map.sedimentBudgetLayer, resolutionCollection, 0.2, calRetreatRateFromArray, 'retreatRate', 1); // scale factor = 1 means linear
+  calDataFromLayer(map, map.sedimentBudgetLayer, resolutionCollection, 0.1, calRetreatRateFromArray, 'retreatRate', 1); // scale factor = 1 means linear
 
   // add shoreline type data to each coastline from shoreline type layer
   calDataFromLayer(map, map.shorelineTypeLayer, resolutionCollection, 0.05, calShorelineTypeFromArray, 'shorelineType', 1); // scale factor = 1 means linear
 
   // add soil erosion data to each coastline from soil erosion layer
-  calDataFromLayer(map, map.soilErosionLayer, resolutionCollection, 0.2, calSoilErosionFromArray, 'soilErosion', 1); // scale factor = 1 means linear
+  calDataFromLayer(map, map.soilErosionLayer, resolutionCollection, 0.05, calSoilErosionFromArray, 'soilErosion', 1); // scale factor = 1 means linear
 
   // weight all the layers
   for (const coastline of resolutionCollection.features) {
@@ -41,12 +41,12 @@ function erosionPotentialModel(map, resolutionCollection) {
 
 // habitat protection model
 function habitatProtectionModel(map, resolutionCollection) {
-  calDataFromPoints(map, fishWildlifePoints, resolutionCollection, 0.2, calRasterIndex, 'wild_index', 'habitatProtection', 1);
+  calDataFromPoints(map, fishWildlifePoints, resolutionCollection, 0.15, calRasterIndex, 'wild_index', 'habitatProtection', 1);
 }
 
 // habitat protection model
 function wetlandProtectionRestorationModel(map, resolutionCollection) {
-  calDataFromPoints(map, wetlandPotentialPoints, resolutionCollection, 0.2, calRasterIndex, 'potential', 'wetlandProtectionRestoration', 1);
+  calDataFromPoints(map, wetlandPotentialPoints, resolutionCollection, 0.15, calRasterIndex, 'potential', 'wetlandProtectionRestoration', 1);
 }
 
 

@@ -281,6 +281,15 @@ a {
   a:active {
     color: rgb(202, 92, 92);
   }
+
+.inline-link {
+    text-decoration: underline;
+}
+
+.inline-link:hover {
+    font-weight: normal;
+}
+
 /* define "remove" status */
 .hidden {
     display: none;

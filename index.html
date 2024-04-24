@@ -293,6 +293,7 @@
                                 <li><a href="#sediment-gain" onclick="smoothScroll('sediment-gain')">Sediment Gain Model</a></li>
                                 <li><a href="#erosion-potential" onclick="smoothScroll('erosion-potential')">Erosion Potential Model</a></li>
                                 <li><a href="#habitat-protection" onclick="smoothScroll('habitat-protection')">NFWF Habitat Protection Model</a></li>
+                                <li><a href="#wetland-protection" onclick="smoothScroll('wetland-protection')">NOAA Wetland Protection Model</a></li>
                             </ul>
                         </li>
                                 
@@ -596,6 +597,40 @@
                                 <li>
                                     <P>Detailed methodology for calculating the Fish and Wildlife Index, including a complete list of species included in the analysis, input data sources, and geoprocessing steps, can be found in the following report: </P>
                                     <p>Dobson, J.G., Johnson, I.P., Orlando, J.L., Lussier, B.C., and Byler, K.A. (2023) U.S. <lm>Great Lakes Coastal Resilience Assessment</lm> (Appendix A.3-5, F-G). UNC Asheville National Environmental Modeling and Analysis Center, Asheville, NC. Prepared for the National Fish and Wildlife Foundation. </p>
+                                </li>
+                            </ol>
+                        </li>
+                        
+                    </ul>
+
+                    <h4 id="wetland-protection" class="section scrollspy">NOAA Wetland Protection/Restoration Model</h4>
+                    <ul>
+                        <li><h5>Description:</h5> This model highlights the potential for land to be a wetland in order to identify areas for restoration. The model does not represent the current landcover condition of wetlands, but rather the likelihood that a wetland would occur at a specific location given its soil characteristics, elevation, and existing landcover. Higher values represent a high likelihood of wetland, and low values represent areas where wetland establishment is very unlikely.  </li>
+                        <li>
+                            <h5>GIS Data:</h5> 
+                            <ol>
+                                <li>
+                                    <strong>NOAA C-CAP National Wetland Potential:</strong> 
+                                    <P>This model is based on the NOAA C-CAP National Wetland Potential dataset by the NOAA Office for Coastal Management. Input data includes the National Wetland Inventory (NWI), Soil Survey Geographic (SSURGO) database, National Hydrography Dataset (NHD), National Elevation Dataset (NED), and Landsat Satellite Imagery.</P>
+                                    
+                                </li>
+                                
+                            </ol>
+                        </li>
+                        <li>
+                            <h5>Calculating Algorithm:</h5>
+                            <ol>
+                                <li>The wetland potential values are defined in the following manner: 
+                                    <ul>
+                                        <li>0: No data</li>
+                                        <li>1 - 9: Extremely low likelihood of wetness to extremely high likelihood of wetness</li>
+                                        <li>10: Open water</li>
+                                        
+                                    </ul>
+                                </li>
+                                <li>
+                                    <P>Detailed methodology and metadata for this dataset can be found at:</P>
+                                    <p>Office for Coastal Management, 2024: NOAA C-CAP National Wetland Potential from 2010-06-15 to 2010-08-15. <a href="https://www.fisheries.noaa.gov/inport/item/48357" class="inline-link" target="_blank">NOAA National Centers for Environmental Information</a>.</p>
                                 </li>
                             </ol>
                         </li>

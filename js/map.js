@@ -78,10 +78,6 @@ function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, 
       weight: 1.5,
     });
 
-  map.shorelineTypeLayer = L.geoJSON(shorelineType);
-
-  map.soilErosionLayer = L.geoJSON(soilErosion);
-
   // coastline scope
 
   map.shorelineBaseLayer = L.geoJSON(shorelineBase,

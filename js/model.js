@@ -4,34 +4,34 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 import { getResolutionBoxes } from './cal.js';
 
 // because point cloud has too many features, it is better to import the data instead of using map layer as a middle step
-import { fishWildlifePoints, wetlandPotentialPoints } from './main.js';
+import { sendimentBudget, shorelineType, soilErosion, fishWildlifePoints, wetlandPotentialPoints } from './main.js';
 
 
 // sediment loss model
 function sedimentLossModel(map, resolutionCollection) {
   // get different boxes for different data layers
   // add sediment loss data to each coastline from sediment budget layer
-  calDataFromLayer(map, map.sedimentBudgetLayer, resolutionCollection, 0.1, calSedimentLossFromArray, 'sedimentLoss', 1.5);
+  calDataFromLayer(map, sendimentBudget, resolutionCollection, 0.1, calSedimentLossFromArray, 'sedimentLoss', 1.5);
 }
 
 // sediment gain model
 function sedimentGainModel(map, resolutionCollection) {
   // get different boxes for different data layers
   // add sediment loss data to each coastline from sediment budget layer
-  calDataFromLayer(map, map.sedimentBudgetLayer, resolutionCollection, 0.1, calSedimentGainFromArray, 'sedimentGain', 1.5);
+  calDataFromLayer(map, sendimentBudget, resolutionCollection, 0.1, calSedimentGainFromArray, 'sedimentGain', 1.5);
 }
 
 // erosion potential model
 function erosionPotentialModel(map, resolutionCollection) {
   // get different boxes for different data layers
   // add retreat rate data to each coastline from sediment budget layer
-  calDataFromLayer(map, map.sedimentBudgetLayer, resolutionCollection, 0.1, calRetreatRateFromArray, 'retreatRate', 1); // scale factor = 1 means linear
+  calDataFromLayer(map, sendimentBudget, resolutionCollection, 0.1, calRetreatRateFromArray, 'retreatRate', 1); // scale factor = 1 means linear
 
   // add shoreline type data to each coastline from shoreline type layer
-  calDataFromLayer(map, map.shorelineTypeLayer, resolutionCollection, 0.05, calShorelineTypeFromArray, 'shorelineType', 1); // scale factor = 1 means linear
+  calDataFromLayer(map, shorelineType, resolutionCollection, 0.05, calShorelineTypeFromArray, 'shorelineType', 1); // scale factor = 1 means linear
 
   // add soil erosion data to each coastline from soil erosion layer
-  calDataFromLayer(map, map.soilErosionLayer, resolutionCollection, 0.05, calSoilErosionFromArray, 'soilErosion', 1); // scale factor = 1 means linear
+  calDataFromLayer(map, soilErosion, resolutionCollection, 0.05, calSoilErosionFromArray, 'soilErosion', 1); // scale factor = 1 means linear
 
   // weight all the layers
   for (const coastline of resolutionCollection.features) {
@@ -53,7 +53,7 @@ function wetlandProtectionRestorationModel(map, resolutionCollection) {
 // add data to each coatline piece
 
 // only support single, polygon layer
-function calDataFromLayer(map, whichLayer, resolutionCollection, num, dataNeedToCal, pname, scaleFactor) { // dataNeedToCal is the function for what thing to cal, depending on the data here; pname is the properties name to add to the coastline chunk properties
+function calDataFromLayer(map, whichData, resolutionCollection, num, dataNeedToCal, pname, scaleFactor) { // dataNeedToCal is the function for what thing to cal, depending on the data here; pname is the properties name to add to the coastline chunk properties
   const layerResolutionBoxes = getResolutionBoxes(resolutionCollection, num); // layerResolutionBoxes already have ID
 
   // input value to coastline through overlap of boxes and data layer
@@ -64,13 +64,13 @@ function calDataFromLayer(map, whichLayer, resolutionCollection, num, dataNeedTo
 
     // get all the values that are connected to the box as an array
     // important, this is let not const because we may resign values to this array if it does not have value
-    let propArray = layerLoopToGetOverlapBoxPropArray(whichLayer, box);
+    let propArray = dataLoopToGetOverlapBoxPropArray(whichData, box);
 
     // calculate that value
     // if the coastline piece is very small, it may not have overlap with data layer. So need to specify other function to handle that situation
     if (propArray.length == 0) {
       // add data by finding closet data
-      propArray = findClosestData(whichLayer, coastline);
+      propArray = findClosestData(whichData, coastline);
     }
 
     // calculate data based on the rule of each model
@@ -170,15 +170,14 @@ function findBoxFromLine(coastline, layerResolutionBoxes) {
 }
 
 // loop through layer to calculate overlap
-function layerLoopToGetOverlapBoxPropArray(whichLayer, box) {
+function dataLoopToGetOverlapBoxPropArray(whichData, box) {
   const overlapArray = [];
-  whichLayer.eachLayer((layer) => {
-    const singlelayerPoly = layer.feature;
-    const intersection = turf.intersect(box, singlelayerPoly, {properties: box.properties}); // will be null if no overlap
+  for (const feature of whichData.features) {
+    const intersection = turf.intersect(box, feature, {properties: box.properties}); // will be null if no overlap
     if (intersection != null) {
-      overlapArray.push(singlelayerPoly.properties);
+      overlapArray.push(feature.properties);
     }
-  });
+  }
   return overlapArray;
 }
 
@@ -283,28 +282,21 @@ function average(array) {
 // (10, 5) => 15
 
 // find closest polygon and get properties
-function findClosestData(whichLayer, coastline) {
+function findClosestData(whichData, coastline) {
   const coastlinecenter = turf.pointOnFeature(coastline);
   // need to loop through each shape to get center points because the turf function only take one shape each time
   const centers = [];
-  // for (const feature of geoJSONdata.features) {
-  //   const featureCenter = turf.pointOnFeature(feature);
-  //   featureCenter.properties = feature.properties; // add all feature properties to point properties (although we don't need it later)
-  //   centers.push(featureCenter);
-  // }
 
-  whichLayer.eachLayer((layer) => {
-    const feature = layer.feature;
+  for (const feature of whichData.features) {
     const featureCenter = turf.pointOnFeature(feature);
     featureCenter.properties = feature.properties; // add all feature properties to point properties (although we don't need it later)
     centers.push(featureCenter);
-  });
+  }
 
   // find nearest center point and use that to get the park shape
   const dataNear = turf.nearestPoint(coastlinecenter, turf.featureCollection(centers)); // truf function take turf feature collection, not just simple array
 
   const prop = [dataNear.properties];
-  console.log(prop);
   return prop;
 }
 

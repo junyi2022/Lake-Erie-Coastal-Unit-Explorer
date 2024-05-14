@@ -480,6 +480,37 @@ function getStartEndPointsFromLine(lineString) { // returns point's coordinate a
   return [start, end];
 }
 
+function getSimplerLineFromLine(lineString) { // returns point's coordinate arrays
+  const linePoints = lineString.geometry.coordinates;
+  const pointNum = linePoints.length;
+  const start = linePoints[0];
+  const end = linePoints[pointNum - 1];
+  // prepare for the middle points addition
+  const pointArray = [];
+  pointArray.push(start);
+
+  if (pointNum < 6) {
+    return [start, end];
+  } else if (pointNum < 40) { // add middle point for line with more than 6 points but less than 20 points
+    const chunkLength = Math.floor(pointNum / 2); // calculate the interval of selection and get the integer part
+    const mid = linePoints[chunkLength];
+    pointArray.push(mid);
+    pointArray.push(end);
+    return pointArray;
+  } else { // more than 20 points, add 4 middle points
+    const chunkLength = Math.floor(pointNum / 4); // calculate the interval of selection and get the integer part
+    for (let i = chunkLength; i < pointNum - 1; i = i + chunkLength) {
+      const midPoint = linePoints[i];
+      // Sometimes the last midPoint will be the same as the end point, and turf cannot process that
+      if (midPoint[0] !== end[0] || midPoint[1] !== end[1]) {
+        pointArray.push(midPoint);
+      }
+    }
+    pointArray.push(end);
+    return pointArray;
+  }
+}
+
 // get box within certain distance to prepare for overlap analysis when assigning values
 function getResolutionBoxes(Collection, num) {
   const allBoxes = [];
@@ -489,8 +520,8 @@ function getResolutionBoxes(Collection, num) {
     // console.log(length);
 
     // simplify the coastaline
-    const [simpleIStart, simpleIEnd] = getStartEndPointsFromLine(i);
-    const simpleI = turf.lineString([simpleIStart, simpleIEnd]);
+    const simplerArray = getSimplerLineFromLine(i);
+    const simpleI = turf.lineString(simplerArray);
     // L.geoJson(simpleI, {color: 'black'}).addTo(map);
 
     // offset simplified coastline and get end points for each
@@ -512,6 +543,7 @@ function getResolutionBoxes(Collection, num) {
     // L.geoJSON(connectLine4, {color: 'pink'}).addTo(map);
 
     const resolutionBoxLines = turf.featureCollection([offsetLine1, connectLine2, offsetLine2, connectLine4]);
+    console.log(resolutionBoxLines.features.length);
     const resolutionBox = turf.polygonize(resolutionBoxLines);
 
     // add all the properties from line to box

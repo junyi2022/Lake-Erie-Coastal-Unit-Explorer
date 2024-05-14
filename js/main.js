@@ -68,6 +68,9 @@ window.map = initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBa
 handleMenuBar();
 
 export {
+  sendimentBudget,
+  shorelineType,
+  soilErosion,
   fishWildlifePoints,
   wetlandPotentialPoints,
 };

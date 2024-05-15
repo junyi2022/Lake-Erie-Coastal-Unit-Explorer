@@ -37,11 +37,11 @@ const modelName = {
 
 // color scale for the resolution
 // more info at: https://d3js.org/d3-interpolate/color#interpolateRgb
-const colorScale = d3.interpolateRgbBasis(['rgb(240, 232, 170)', 'rgb(109, 212, 211)', 'rgb(125, 173, 255)', 'rgb(124, 102, 255)']);
+const colorScale = d3.interpolateRgbBasis(['rgb(140, 152, 255)', 'rgb(154, 220, 255)', 'rgb(211, 250, 192)', 'rgb(255, 214, 169)', 'rgb(255, 155, 144)']);
 window.colorScale = colorScale;
 
 // color scale for the unit
-const unitColorScale = d3.interpolateRgbBasis(['rgb(255, 207, 77)', 'rgb(252, 156, 76)', 'rgb(252, 93, 76)']);
+const unitColorScale = d3.interpolateRgbBasis(['rgb(255, 207, 77)', 'rgb(252, 156, 76)', 'rgb(252, 93, 76)', 'rgb(255, 64, 202)', 'rgb(165, 76, 255)']);
 window.unitColorScale = unitColorScale;
 
 // marker icon
@@ -277,10 +277,25 @@ function handlePointSelection(start, end, map, shorelineBase) {
         }
       }
 
+      // The final value now may be skewed, need to normalize it to make sure it will be between 0 and 1
+      const finalValueArray = resolutionCollection.features.map((f) => f.properties.finalValue); // map will return an array of all the properties.finalValue
+
+      // calculate the min max of the values
+      const min = Math.min(...finalValueArray); // ...flatten the array because min/max doesn't take array
+      const max = Math.max(...finalValueArray);
+
+      // here use power scale
+      const scaleFunc = d3.scalePow([min, max], [0, 1]).exponent(1); // need to map to 0 to 1 because the later color scale only take numbers between 0 and 1
+      // add the normalized value to each coastline properties
+      for (const coastline of resolutionCollection.features) {
+        coastline.properties.finalValueNormal = scaleFunc(coastline.properties.finalValue);
+      }
+
+
       // add the resolution data to map and color that based on the final score of each coastline piece
       map.colorLayer = L.geoJSON(resolutionCollection, {
         style: (sample) => {
-          const colorValue = colorScale(sample.properties.finalValue);
+          const colorValue = colorScale(sample.properties.finalValueNormal);
           return {
             stroke: true,
             color: colorValue,
@@ -340,26 +355,27 @@ function handlePointSelection(start, end, map, shorelineBase) {
           // get final feature collection
           const units = turf.featureCollection(featureCollectionArray);
           // display box
-          const unitsBox = getResolutionBoxes(units, 0.5);
+          // const unitsBox = getResolutionBoxes(units, 0.5);
+          console.log(units);
 
           // need to add ID as unit numbering
-          for (let i = 0; i < unitsBox.features.length; i++) {
-            unitsBox.features[i].properties.ID = i;
-          }
-          console.log(unitsBox);
+          // for (let i = 0; i < unitsBox.features.length; i++) {
+          //   unitsBox.features[i].properties.ID = i;
+          // }
+          // console.log(unitsBox);
 
           // style the boxes, adjust pop up based on number of selected priorities
           const firstPropName = modelName[firstDrop.value];
           if (secondDrop.value == 'ns') {
-            map.finalUnitLayer = L.geoJSON(unitsBox, {
+            map.finalUnitLayer = L.geoJSON(units, {
               style: (sample) => {
                 const colorValue = unitColorScale((sample.properties.unit - 1) / (catNum - 1));
                 return {
                   stroke: true,
-                  fill: true,
-                  fillOpacity: 0, // in order to make the tooltip more smooth, this should be a polygon with transparent fill
                   color: colorValue,
-                  weight: 3,
+                  weight: 23,
+                  opacity: 0.8,
+                  lineCap: 'butt',
                 };
               },
             }).bindTooltip((l) => { // final unit box tooltip options
@@ -371,17 +387,18 @@ function handlePointSelection(start, end, map, shorelineBase) {
                       <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
               `;
             }).addTo(map);
+            map.colorLayer.bringToFront();
           } else if (thirdDrop.value == 'ns') {
             const secondPropName = modelName[secondDrop.value];
-            map.finalUnitLayer = L.geoJSON(unitsBox, {
+            map.finalUnitLayer = L.geoJSON(units, {
               style: (sample) => {
-                const colorValue = unitColorScale(sample.properties.unit / catNum);
+                const colorValue = unitColorScale((sample.properties.unit - 1) / (catNum - 1));
                 return {
                   stroke: true,
-                  fill: true,
-                  fillOpacity: 0, // in order to make the tooltip more smooth, this should be a polygon with transparent fill
                   color: colorValue,
-                  weight: 3,
+                  weight: 23,
+                  opacity: 0.8,
+                  lineCap: 'butt',
                 };
               },
             }).bindTooltip((l) => { // final unit box tooltip options
@@ -394,18 +411,19 @@ function handlePointSelection(start, end, map, shorelineBase) {
                       <p class="unit-second-priority"><strong>${secondPropName}:</strong> ${l.feature.properties[secondProp].toFixed(2)}</p>
               `;
             }).addTo(map);
+            map.colorLayer.bringToFront();
           } else {
             const secondPropName = modelName[secondDrop.value];
             const thirdPropName = modelName[thirdDrop.value];
-            map.finalUnitLayer = L.geoJSON(unitsBox, {
+            map.finalUnitLayer = L.geoJSON(units, {
               style: (sample) => {
-                const colorValue = unitColorScale(sample.properties.unit / catNum);
+                const colorValue = unitColorScale((sample.properties.unit - 1) / (catNum - 1));
                 return {
                   stroke: true,
-                  fill: true,
-                  fillOpacity: 0, // in order to make the tooltip more smooth, this should be a polygon with transparent fill
                   color: colorValue,
-                  weight: 3,
+                  weight: 23,
+                  opacity: 0.8,
+                  lineCap: 'butt',
                 };
               },
             }).bindTooltip((l) => { // final unit box tooltip options
@@ -419,6 +437,7 @@ function handlePointSelection(start, end, map, shorelineBase) {
                       <p class="unit-second-priority"><strong>${thirdPropName}:</strong> ${l.feature.properties[thirdProp].toFixed(2)}</p>
               `;
             }).addTo(map);
+            map.colorLayer.bringToFront();
           }
 
 
@@ -577,7 +596,7 @@ function resToGroupArray(resolutionCollection, catNum) {
   let array = [];
   const groupArray = [];
   for (let i = 0; i < resolutionCollection.features.length; i++) {
-    const eachResScore = resolutionCollection.features[i].properties.finalValue;
+    const eachResScore = resolutionCollection.features[i].properties.finalValueNormal;
     const eachResCat = assignCatToScore(eachResScore, catNum);
     resolutionCollection.features[i].properties.unit = eachResCat;
     // first res will be different from other
@@ -611,7 +630,7 @@ function arrayOfGroupsToArrayOfLines(resGroupArray, firstProp, secondProp, third
       // clear target object's proper and add new
       newUnit.properties = {};
       newUnit.properties.unit = eachGroup[0].properties.unit;
-      newUnit.properties.finalScore = eachGroup[0].properties.finalValue;
+      newUnit.properties.finalScore = eachGroup[0].properties.finalValueNormal;
 
       // use the priority selection to add properties name
       newUnit.properties[firstProp] = eachGroup[0].properties[firstProp];
@@ -639,7 +658,7 @@ function arrayOfGroupsToArrayOfLines(resGroupArray, firstProp, secondProp, third
 
     // calculate the average values of each joined unit
     // final value to add to properties
-    const finalValueArray = eachGroup.map((f) => f.properties.finalValue);
+    const finalValueArray = eachGroup.map((f) => f.properties.finalValueNormal);
     const finalValueAverage = average(finalValueArray);
     // first priority value to add to properties
     const firstDropArray = eachGroup.map((f) => f.properties[firstProp]);

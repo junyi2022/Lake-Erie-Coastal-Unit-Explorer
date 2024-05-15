@@ -363,9 +363,9 @@ function handlePointSelection(start, end, map, shorelineBase) {
           console.log(units);
 
           // need to add ID as unit numbering
-          // for (let i = 0; i < unitsBox.features.length; i++) {
-          //   unitsBox.features[i].properties.ID = i;
-          // }
+          for (let i = 0; i < units.features.length; i++) {
+            units.features[i].properties.ID = i;
+          }
           // console.log(unitsBox);
 
           // style the boxes, adjust pop up based on number of selected priorities

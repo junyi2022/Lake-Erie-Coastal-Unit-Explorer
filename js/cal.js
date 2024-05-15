@@ -334,6 +334,10 @@ function handlePointSelection(start, end, map, shorelineBase) {
 
         // handle inputs from form
         generateGroupButton.addEventListener('click', () => {
+          if (categoryBox.value == '') {
+            alert('Please enter a value.');
+            return;
+          }
           handleGroupRes();
         });
 

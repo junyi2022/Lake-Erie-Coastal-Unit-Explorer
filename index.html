@@ -152,7 +152,7 @@
                         <form class="step-two-form">
                             <div class="substep">
                                 <h5 class="substep-title">Resolution</h5>
-                                <input type="text" name="resolution-entry" class="resolution" placeholder="Type a number: e.g. 1000" disabled="true" required>
+                                <input type="text" name="resolution-entry" class="resolution" placeholder="Type a number: e.g. 3000" disabled="true" required>
                                 <select class="unit" disabled="true">
                                     <option value="ft">Feet</option>
                                     <option value="m">Meters</option>
@@ -218,11 +218,12 @@
                             <span id="step-4-pop"><p>This step will group the resolution with similar scores from step 2 to different Categories and display the final units through a box around each unit.</p></span>
                         </div>
                         
-                        
                         <div class="substep">
                             <h5 class="substep-title">Number of groups</h5>
-                            <input type="number" name="category-number-entry" class="category" placeholder="Type a number: e.g. 5" min="2" step="1" disabled="true" required>
+                            
+                                <input type="number" name="category-number-entry" class="category" placeholder="Type a number: e.g. 5" min="2" step="1" disabled="true" required>
                         </div>
+                        
                         <button class="generate-group button">Generate / Reset</button>
                         <button class="finish-group button">Next</button>
                     </section>

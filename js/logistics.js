@@ -55,7 +55,8 @@ function withSpinnerDo(callback) {
 
 function unitInputRange(categoryBox) {
   categoryBox.addEventListener('change', () => {
-    if (categoryBox.value < '2') {
+    const inputNum = parseInt(categoryBox.value);
+    if (inputNum < 2) {
       categoryBox.value = '';
       alert('Please enter a number greater than 1.');
     }

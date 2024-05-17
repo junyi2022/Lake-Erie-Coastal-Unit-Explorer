@@ -41,7 +41,8 @@ const colorScale = d3.interpolateRgbBasis(['rgb(140, 152, 255)', 'rgb(154, 220, 
 window.colorScale = colorScale;
 
 // color scale for the unit
-const unitColorScale = d3.interpolateRgbBasis(['rgb(255, 207, 77)', 'rgb(252, 156, 76)', 'rgb(252, 93, 76)', 'rgb(255, 64, 202)', 'rgb(165, 76, 255)']);
+// const unitColorScale = d3.interpolateRgbBasis(['rgb(255, 207, 77)', 'rgb(252, 156, 76)', 'rgb(252, 93, 76)', 'rgb(255, 64, 202)', 'rgb(165, 76, 255)']);
+const unitColorScale = d3.interpolateRgbBasis(['rgb(140, 152, 255)', 'rgb(154, 220, 255)', 'rgb(211, 250, 192)', 'rgb(255, 214, 169)', 'rgb(255, 155, 144)']);
 window.unitColorScale = unitColorScale;
 
 // marker icon

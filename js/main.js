@@ -22,14 +22,12 @@ const huc10 = await HUC10.json();
 const HUC12 = await fetch('data/HUC12.json');
 const huc12 = await HUC12.json();
 
-const fl = await fetch('data/flowline.json');
-const flowline = await fl.json();
-
-const shore = await fetch('data/shoreline-base-to-bridge.geojson');
-const shorelineBase = await shore.json();
 
 // working layers
 // because the analysis later (turf.intersect) only takes polygon, need to manipulate lines here before adding them
+
+const shore = await fetch('data/shoreline-base-to-bridge.geojson');
+const shorelineBase = await shore.json();
 
 const sb = await fetch('data/sediment-budget-rrbh.geojson');
 const sendimentBudget = await sb.json();
@@ -47,14 +45,15 @@ const fishWildlifePoints = await fishWildlife.json();
 const wetlandPotential = await fetch('data/wetland-potential-points800.geojson');
 const wetlandPotentialPoints = await wetlandPotential.json();
 
+// reference layers
 
 window.censusTracts = censusTracts;
 window.dataBoundary = dataBoundary;
 window.county = county;
 window.huc10 = huc10;
 window.huc12 = huc12;
-window.flowline = flowline;
 
+// working layers
 window.sendimentBudget = sendimentBudget;
 window.shorelineBase = shorelineBase;
 window.shorelineType = shorelineType;
@@ -62,7 +61,8 @@ window.soilErosion = soilErosion;
 window.fishWildlifePoints = fishWildlifePoints;
 window.wetlandPotentialPoints = wetlandPotentialPoints;
 
-window.map = initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, flowline, sendimentBudget, shorelineType, soilErosion); // remember to add new layer her as well
+// map
+window.map = initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, sendimentBudget); // remember to add new layer her as well
 
 // menu bar
 handleMenuBar();

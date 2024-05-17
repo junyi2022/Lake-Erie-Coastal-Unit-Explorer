@@ -52,6 +52,7 @@ function withSpinnerDo(callback) {
 }
 
 // handle input box input value range
+// category groups validation
 
 function unitInputRange(categoryBox) {
   categoryBox.addEventListener('change', () => {

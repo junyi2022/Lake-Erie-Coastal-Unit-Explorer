@@ -2,13 +2,9 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 
 import { average } from './model.js';
-import { sedimentLossModel } from './model.js';
-import { sedimentGainModel } from './model.js';
-import { erosionPotentialModel, habitatProtectionModel, wetlandProtectionRestorationModel } from './model.js';
-import { legend1Style } from './map.js';
-import { legend2Style } from './map.js';
-import { handleDropdownDisplay, withSpinnerDo, unitInputRange } from './logistics.js';
-import { hideSpinner } from './logistics.js';
+import { sedimentLossModel, sedimentGainModel, erosionPotentialModel, habitatProtectionModel, wetlandProtectionRestorationModel } from './model.js';
+import { legend1Style, legend2Style } from './map.js';
+import { handleDropdownDisplay, withSpinnerDo, unitInputRange, hideSpinner } from './logistics.js';
 
 // list all the dropdown's avaliable models and associated properties
 const modelFuncs = {
@@ -41,7 +37,6 @@ const colorScale = d3.interpolateRgbBasis(['rgb(140, 152, 255)', 'rgb(154, 220, 
 window.colorScale = colorScale;
 
 // color scale for the unit
-// const unitColorScale = d3.interpolateRgbBasis(['rgb(255, 207, 77)', 'rgb(252, 156, 76)', 'rgb(252, 93, 76)', 'rgb(255, 64, 202)', 'rgb(165, 76, 255)']);
 const unitColorScale = d3.interpolateRgbBasis(['rgb(140, 152, 255)', 'rgb(154, 220, 255)', 'rgb(211, 250, 192)', 'rgb(255, 214, 169)', 'rgb(255, 155, 144)']);
 window.unitColorScale = unitColorScale;
 
@@ -92,7 +87,7 @@ const fileTypeSelect = document.querySelector('.file-type');
 // This is intentional and will be easier to control the buttons in each step
 
 // map.js will cal this function
-function handlePointSelection(start, end, map, shorelineBase) {
+function handleAllCalculations(start, end, map, shorelineBase) {
   // get the turf string of coastal base for calculation
   const coastLine = turf.lineString(shorelineBase.features[0].geometry.coordinates);
 
@@ -699,7 +694,7 @@ function arrayOfGroupsToArrayOfLines(resGroupArray, firstProp, secondProp, third
 }
 
 export {
-  handlePointSelection,
+  handleAllCalculations,
   getResolutionBoxes,
 };
 

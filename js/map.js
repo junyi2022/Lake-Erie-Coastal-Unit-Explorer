@@ -1,8 +1,8 @@
 /* globals turf */
 
-import { handlePointSelection } from './cal.js';
+import { handleAllCalculations } from './cal.js';
 
-function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, flowline, sendimentBudget, shorelineType, soilErosion) {
+function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, sendimentBudget) {
   const map = L.map('map', {zoomSnap: 0}).setView([42.57, -79.22], 10); // zoomSnap 0 make the zoom level to real number
   const baseTileLayer = L.tileLayer('https://api.mapbox.com/styles/v1/junyiy/clpdjdrj7005r01qjb99zhdr5/tiles/{tileSize}/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoianVueWl5IiwiYSI6ImNsdWVxcHowcDBxbWUyam92MWx5aW40MnkifQ.QR9kni83fZBO-EFBXAaX7g', {
     maxZoom: 19,
@@ -62,13 +62,6 @@ function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, 
       weight: 1,
     });
 
-  // map.flowlineLayer = L.geoJSON(flowline,
-  //   { stroke: true,
-  //     fill: false,
-  //     color: '#BFD3EF',
-  //     weight: 0.5,
-  //   });
-
   // layers for model
 
   map.sedimentBudgetLayer = L.geoJSON(sendimentBudget,
@@ -109,7 +102,6 @@ function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, 
     'County': map.countyLayer,
     'HUC 10': map.huc10Layer,
     'HUC12': map.huc12Layer,
-    // 'Flowline': map.flowlineLayer,
     'Sediment Budget': map.sedimentBudgetLayer,
   };
 
@@ -123,6 +115,7 @@ function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, 
   L.control.scale().addTo(map);
 
   // make the zoom level fit different browser size
+  // always focus on the buffer zone when initialize the map
   const zoomRef = turf.buffer(dataBoundary, 20);
   map.zoomRefLayer = L.geoJSON(zoomRef);
   map.fitBounds(map.zoomRefLayer.getBounds());
@@ -144,7 +137,7 @@ function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, 
   map.markerLayer.addTo(map);
 
   // call the calculation part
-  handlePointSelection(start, end, map, shorelineBase);
+  handleAllCalculations(start, end, map, shorelineBase);
 
   return map;
 }

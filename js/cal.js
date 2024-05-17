@@ -4,7 +4,7 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 import { average } from './model.js';
 import { sedimentLossModel, sedimentGainModel, erosionPotentialModel, habitatProtectionModel, wetlandProtectionRestorationModel } from './model.js';
 import { legend1Style, legend2Style } from './map.js';
-import { handleDropdownDisplay, withSpinnerDo, unitInputRange, hideSpinner } from './logistics.js';
+import { handleDropdownDisplay, withSpinnerDo, unitInputRange } from './logistics.js';
 
 // list all the dropdown's avaliable models and associated properties
 const modelFuncs = {
@@ -83,9 +83,6 @@ const downloadButton = document.querySelector('.download-unit');
 const fileTypeSelect = document.querySelector('.file-type');
 
 
-// currently each step is set within the previous step, so at the end there will be a lot of indentations
-// This is intentional and will be easier to control the buttons in each step
-
 // map.js will cal this function
 function handleAllCalculations(start, end, map, shorelineBase) {
   // get the turf string of coastal base for calculation
@@ -97,9 +94,11 @@ function handleAllCalculations(start, end, map, shorelineBase) {
   });
 }
 
+
 // step 1 functions
 
-// start button event
+// step 1 botton manipulation part
+
 function handleMapSelection(map, start, end, coastLine) {
   // clear any existing features / reset
   map.flyToBounds(map.zoomRefLayer.getBounds());
@@ -128,51 +127,8 @@ function handleMapSelection(map, start, end, coastLine) {
   });
 }
 
-// handle start and end marker points after user moved them
-function doSomethingWithEndpoints(newStart, newEnd, coastLine, map) {
-  // translate from leaflet to turf
-  const startPointForCut = turf.point([newStart.lng, newStart.lat]);
-  const endPointForCut = turf.point([newEnd.lng, newEnd.lat]);
 
-  // selected coastline
-  const coastalSliced = turf.lineSlice(startPointForCut, endPointForCut, coastLine);
-  map.sliceLayer.addData(coastalSliced);
-
-  // enable step 2 input boxes
-  resolutionBox.disabled = false;
-  unitDrop.disabled = false;
-
-  // handle setp 2 dropdown options
-  firstDrop.disabled = false;
-  firstDrop.addEventListener('change', () => {
-    const firstDropChoice = firstDrop.value;
-    handleDropdownDisplay(secondDrop, [firstDropChoice]);
-    secondDrop.disabled = false;
-  });
-
-  secondDrop.addEventListener('change', () => {
-    const firstDropChoice = firstDrop.value;
-    const secondDropChoice = secondDrop.value;
-    handleDropdownDisplay(thirdDrop, [firstDropChoice, secondDropChoice]);
-    thirdDrop.disabled = false;
-  });
-
-  // disable step 1 buttons
-  startButton.disabled = true;
-  finishButton.disabled = true;
-
-  // set map zoom to the selected chunk
-  const zoomSliced = turf.buffer(coastalSliced, 2);
-  const [minLon, minLat, maxLon, maxLat] =turf.bbox(zoomSliced);
-  map.flyToBounds([[minLat, minLon], [maxLat, maxLon]]);
-
-  // handle inputs from form
-  generateResButton.addEventListener('click', () => {
-    withSpinnerDo(() => {
-      handleCalculations(map, coastalSliced);
-    });
-  });
-}
+// step 1 supporting functions
 
 // add start and end marker to the end of the shoreline
 function initializeEndPoints(map, start, end) {
@@ -201,6 +157,57 @@ function handleMarkerSnap(coastLine, marker) {
 
 
 // step for resolution functions
+
+// step for resolution botton manipulation part
+
+// handle start and end marker points after user moved them
+function doSomethingWithEndpoints(newStart, newEnd, coastLine, map) {
+  // disable step 1 buttons
+  startButton.disabled = true;
+  finishButton.disabled = true;
+
+  // translate from leaflet to turf
+  const startPointForCut = turf.point([newStart.lng, newStart.lat]);
+  const endPointForCut = turf.point([newEnd.lng, newEnd.lat]);
+
+  // selected coastline
+  const coastalSliced = turf.lineSlice(startPointForCut, endPointForCut, coastLine);
+  map.sliceLayer.addData(coastalSliced);
+
+  // enable step 2 input boxes
+  resolutionBox.disabled = false;
+  unitDrop.disabled = false;
+
+  // handle setp 2 dropdown options
+  firstDrop.disabled = false;
+  firstDrop.addEventListener('change', () => {
+    const firstDropChoice = firstDrop.value;
+    handleDropdownDisplay(secondDrop, [firstDropChoice]);
+    secondDrop.disabled = false;
+  });
+
+  secondDrop.addEventListener('change', () => {
+    const firstDropChoice = firstDrop.value;
+    const secondDropChoice = secondDrop.value;
+    handleDropdownDisplay(thirdDrop, [firstDropChoice, secondDropChoice]);
+    thirdDrop.disabled = false;
+  });
+
+
+  // set map zoom to the selected chunk
+  const zoomSliced = turf.buffer(coastalSliced, 2);
+  const [minLon, minLat, maxLon, maxLat] =turf.bbox(zoomSliced);
+  map.flyToBounds([[minLat, minLon], [maxLat, maxLon]]);
+
+  // handle inputs from form
+  generateResButton.addEventListener('click', () => {
+    withSpinnerDo(() => {
+      handleCalculations(map, coastalSliced);
+    });
+  });
+}
+
+// step for resolution calculation part
 
 // actual res calculations
 function handleCalculations(map, coastalSliced) {
@@ -297,6 +304,8 @@ function handleCalculations(map, coastalSliced) {
   });
 }
 
+// step for resolution supporting functions
+
 // divide the slice into certain length
 // need to change units first because the default lineChunk unit is km
 function getResolution(coastalSliced) {
@@ -315,10 +324,9 @@ function getResolution(coastalSliced) {
 }
 
 
-
-
-
 // step for category grouping functions
+
+// step for category grouping botton manipulation part
 
 // prepare and call category grouping functions
 function startGroupRes(map, resolutionCollection, firstProp, secondProp, thirdProp) {
@@ -345,6 +353,7 @@ function startGroupRes(map, resolutionCollection, firstProp, secondProp, thirdPr
   });
 }
 
+// step for category grouping calculation part
 
 function handleGroupRes(map, resolutionCollection, firstProp, secondProp, thirdProp) {
   if (map.finalUnitLayer !== null) {
@@ -363,9 +372,6 @@ function handleGroupRes(map, resolutionCollection, firstProp, secondProp, thirdP
   console.log(featureCollectionArray);
   // get final feature collection
   const units = turf.featureCollection(featureCollectionArray);
-  // display box
-  // const unitsBox = getResolutionBoxes(units, 0.5);
-
 
   // need to add ID as unit numbering
   for (let i = 0; i < units.features.length; i++) {
@@ -463,177 +469,7 @@ function handleGroupRes(map, resolutionCollection, firstProp, secondProp, thirdP
   });
 }
 
-
-// last step functions
-
-// handle download
-// need to be an async function because in the shapefile download part shpwrite.zip generate a promise, and need await for that promise to be down (similar to fetch, also a promise)
-async function handleDownload(units) {
-  // figure out downloading data type based on dropdown box value
-  const fileType = fileTypeSelect.value;
-  let blob; // for the browser download
-  let fileName; // have it here to be reassigned later for the filename based on selection
-  if (fileType == 'geojson') {
-    const stringUnit = JSON.stringify(units); // stringfy geojson feature collection
-    blob = new Blob([stringUnit], {type: 'application/json'});
-    fileName = 'unit.json';
-  } if (fileType == 'shapefile') {
-    // a GeoJSON bridge for features
-    // in the options can have blob as output type
-    blob = await shpwrite.zip(
-      units, // need geojson here
-      shpOptions,
-    );
-    console.log(blob);
-    fileName = 'unit.zip';
-  }
-  // how to download from blob object
-  const url = window.URL.createObjectURL(blob);
-  console.log(url);
-  const a = document.createElement('a');
-  a.style.display = 'none';
-  a.href = url;
-  // the filename you want
-  a.download = fileName;
-  document.body.appendChild(a);
-  a.click();
-  window.URL.revokeObjectURL(url);
-}
-
-
-
-
-
-
-
-
-// get end points from single lineString
-function getStartEndPointsFromLine(lineString) { // returns point's coordinate arrays
-  const linePoints = lineString.geometry.coordinates;
-  const start = linePoints[0];
-  const end = linePoints[linePoints.length - 1];
-  return [start, end];
-}
-
-function getSimplerLineFromLine(lineString) { // returns point's coordinate arrays
-  const linePoints = lineString.geometry.coordinates;
-  const pointNum = linePoints.length;
-  const start = linePoints[0];
-  const end = linePoints[pointNum - 1];
-  // prepare for the middle points addition
-  const pointArray = [];
-  pointArray.push(start);
-
-  if (pointNum < 6) {
-    return [start, end];
-  } else if (pointNum < 40) { // add middle point for line with more than 6 points but less than 20 points
-    const chunkLength = Math.floor(pointNum / 2); // calculate the interval of selection and get the integer part
-    const mid = linePoints[chunkLength];
-    pointArray.push(mid);
-    pointArray.push(end);
-    return pointArray;
-  } else { // more than 20 points, add 4 middle points
-    const chunkLength = Math.floor(pointNum / 4); // calculate the interval of selection and get the integer part
-    for (let i = chunkLength; i < pointNum - 1; i = i + chunkLength) {
-      const midPoint = linePoints[i];
-      // Sometimes the last midPoint will be the same as the end point, and turf cannot process that
-      if (midPoint[0] !== end[0] || midPoint[1] !== end[1]) {
-        pointArray.push(midPoint);
-      }
-    }
-    pointArray.push(end);
-    return pointArray;
-  }
-}
-
-// get box within certain distance to prepare for overlap analysis when assigning values
-function getResolutionBoxes(Collection, num) {
-  const allBoxes = [];
-  for ( const i of Collection.features) {
-    // if want to see the length of each chunk
-    // const length = turf.length(i);
-    // console.log(length);
-
-    // simplify the coastaline
-    const simplerArray = getSimplerLineFromLine(i);
-    const simpleI = turf.lineString(simplerArray);
-    // L.geoJson(simpleI, {color: 'black'}).addTo(map);
-
-    // offset simplified coastline and get end points for each
-    const offsetLine1 = turf.lineOffset(simpleI, num); // unit in km
-    const offsetLine2 = turf.lineOffset(simpleI, -num); // unit in km
-    const [Line1Start, Line1End] = getStartEndPointsFromLine(offsetLine1);
-    const [Line2Start, Line2End] = getStartEndPointsFromLine(offsetLine2);
-
-    // draw the additional boundary lines
-    // const connectLine1 = turf.lineString([Line1Start, Line1End]);
-    const connectLine2 = turf.lineString([Line1End, Line2End]);
-    // const connectLine3 = turf.lineString([Line2End, Line2Start]);
-    const connectLine4 = turf.lineString([Line2Start, Line1Start]);
-
-    // if want to see each individual line
-    // L.geoJSON(offsetLine1).addTo(map);
-    // L.geoJSON(connectLine2, {color: 'red'}).addTo(map);
-    // L.geoJSON(offsetLine2, {color: 'green'}).addTo(map);
-    // L.geoJSON(connectLine4, {color: 'pink'}).addTo(map);
-
-    const resolutionBoxLines = turf.featureCollection([offsetLine1, connectLine2, offsetLine2, connectLine4]);
-    console.log(resolutionBoxLines.features.length);
-    const resolutionBox = turf.polygonize(resolutionBoxLines);
-
-    // add all the properties from line to box
-    resolutionBox.features[0].properties = i.properties;
-
-    allBoxes.push(resolutionBox.features[0]); // .features[0] can avoid the situation of feature collection within feature collection
-  }
-  const allBoxesCollection = turf.featureCollection(allBoxes);
-  return allBoxesCollection;
-}
-
-// assign category number to final score's value
-function assignCatToScore(score, catNum) {
-  const scoreRange = 1 / catNum;
-  // if score == 1, it is possible that scoreRange * catNum will never be larger than 1, so need to handle this situation beforehand
-  if (score == 1) {
-    return catNum;
-  }
-  for (let i = 1; i <= catNum; i++) {
-    if (score <= scoreRange * i) {
-      return i;
-    }
-  }
-}
-
-// after having all the resolution lines, we need to group them together into final units
-function resToGroupArray(resolutionCollection, catNum) {
-  // for (const eachRes of resolutionCollection.features) {
-  //   const eachResScore = eachRes.properties.finalValue;
-  // }
-  let array = [];
-  const groupArray = [];
-  for (let i = 0; i < resolutionCollection.features.length; i++) {
-    const eachResScore = resolutionCollection.features[i].properties.finalValueNormal;
-    const eachResCat = assignCatToScore(eachResScore, catNum);
-    resolutionCollection.features[i].properties.unit = eachResCat;
-    // first res will be different from other
-    if (i == 0) {
-      array.push(resolutionCollection.features[i]);
-    } else {
-      if (eachResCat == resolutionCollection.features[i-1].properties.unit) { // in the same unit
-        array.push(resolutionCollection.features[i]);
-      } else { // not in the same unit
-        groupArray.push(array);
-        array = [];
-        array.push(resolutionCollection.features[i]);
-      }
-    }
-    // handle the situation of last resolution in a different group
-    if (i == resolutionCollection.features.length - 1) {
-      groupArray.push(array);
-    }
-  }
-  return groupArray;
-}
+// step for category grouping supporting functions
 
 function arrayOfGroupsToArrayOfLines(resGroupArray, firstProp, secondProp, thirdProp) {
   const featureCollectionArray = [];
@@ -708,6 +544,169 @@ function arrayOfGroupsToArrayOfLines(resGroupArray, firstProp, secondProp, third
   }
   return featureCollectionArray;
 }
+
+// assign category number to final score's value
+function assignCatToScore(score, catNum) {
+  const scoreRange = 1 / catNum;
+  // if score == 1, it is possible that scoreRange * catNum will never be larger than 1, so need to handle this situation beforehand
+  if (score == 1) {
+    return catNum;
+  }
+  for (let i = 1; i <= catNum; i++) {
+    if (score <= scoreRange * i) {
+      return i;
+    }
+  }
+}
+
+// after having all the resolution lines, we need to group them together into final units
+function resToGroupArray(resolutionCollection, catNum) {
+  // for (const eachRes of resolutionCollection.features) {
+  //   const eachResScore = eachRes.properties.finalValue;
+  // }
+  let array = [];
+  const groupArray = [];
+  for (let i = 0; i < resolutionCollection.features.length; i++) {
+    const eachResScore = resolutionCollection.features[i].properties.finalValueNormal;
+    const eachResCat = assignCatToScore(eachResScore, catNum);
+    resolutionCollection.features[i].properties.unit = eachResCat;
+    // first res will be different from other
+    if (i == 0) {
+      array.push(resolutionCollection.features[i]);
+    } else {
+      if (eachResCat == resolutionCollection.features[i-1].properties.unit) { // in the same unit
+        array.push(resolutionCollection.features[i]);
+      } else { // not in the same unit
+        groupArray.push(array);
+        array = [];
+        array.push(resolutionCollection.features[i]);
+      }
+    }
+    // handle the situation of last resolution in a different group
+    if (i == resolutionCollection.features.length - 1) {
+      groupArray.push(array);
+    }
+  }
+  return groupArray;
+}
+
+
+// last step functions
+
+// handle download
+// need to be an async function because in the shapefile download part shpwrite.zip generate a promise, and need await for that promise to be down (similar to fetch, also a promise)
+async function handleDownload(units) {
+  // figure out downloading data type based on dropdown box value
+  const fileType = fileTypeSelect.value;
+  let blob; // for the browser download
+  let fileName; // have it here to be reassigned later for the filename based on selection
+  if (fileType == 'geojson') {
+    const stringUnit = JSON.stringify(units); // stringfy geojson feature collection
+    blob = new Blob([stringUnit], {type: 'application/json'});
+    fileName = 'unit.json';
+  } if (fileType == 'shapefile') {
+    // a GeoJSON bridge for features
+    // in the options can have blob as output type
+    blob = await shpwrite.zip(
+      units, // need geojson here
+      shpOptions,
+    );
+    console.log(blob);
+    fileName = 'unit.zip';
+  }
+  // how to download from blob object
+  const url = window.URL.createObjectURL(blob);
+  console.log(url);
+  const a = document.createElement('a');
+  a.style.display = 'none';
+  a.href = url;
+  // the filename you want
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(url);
+}
+
+
+// Other functions related to model calculations
+
+// get end points from single lineString
+function getStartEndPointsFromLine(lineString) { // returns point's coordinate arrays
+  const linePoints = lineString.geometry.coordinates;
+  const start = linePoints[0];
+  const end = linePoints[linePoints.length - 1];
+  return [start, end];
+}
+
+function getSimplerLineFromLine(lineString) { // returns point's coordinate arrays
+  const linePoints = lineString.geometry.coordinates;
+  const pointNum = linePoints.length;
+  const start = linePoints[0];
+  const end = linePoints[pointNum - 1];
+  // prepare for the middle points addition
+  const pointArray = [];
+  pointArray.push(start);
+
+  if (pointNum < 6) {
+    return [start, end];
+  } else if (pointNum < 40) { // add middle point for line with more than 6 points but less than 20 points
+    const chunkLength = Math.floor(pointNum / 2); // calculate the interval of selection and get the integer part
+    const mid = linePoints[chunkLength];
+    pointArray.push(mid);
+    pointArray.push(end);
+    return pointArray;
+  } else { // more than 20 points, add 4 middle points
+    const chunkLength = Math.floor(pointNum / 4); // calculate the interval of selection and get the integer part
+    for (let i = chunkLength; i < pointNum - 1; i = i + chunkLength) {
+      const midPoint = linePoints[i];
+      // Sometimes the last midPoint will be the same as the end point, and turf cannot process that
+      if (midPoint[0] !== end[0] || midPoint[1] !== end[1]) {
+        pointArray.push(midPoint);
+      }
+    }
+    pointArray.push(end);
+    return pointArray;
+  }
+}
+
+// get box within certain distance to prepare for overlap analysis when assigning values
+function getResolutionBoxes(Collection, num) {
+  const allBoxes = [];
+  for ( const i of Collection.features) {
+    // if want to see the length of each chunk
+    // const length = turf.length(i);
+    // console.log(length);
+
+    // simplify the coastaline
+    const simplerArray = getSimplerLineFromLine(i);
+    const simpleI = turf.lineString(simplerArray);
+    // L.geoJson(simpleI, {color: 'black'}).addTo(map);
+
+    // offset simplified coastline and get end points for each
+    const offsetLine1 = turf.lineOffset(simpleI, num); // unit in km
+    const offsetLine2 = turf.lineOffset(simpleI, -num); // unit in km
+    const [Line1Start, Line1End] = getStartEndPointsFromLine(offsetLine1);
+    const [Line2Start, Line2End] = getStartEndPointsFromLine(offsetLine2);
+
+    // draw the additional boundary lines
+    // const connectLine1 = turf.lineString([Line1Start, Line1End]);
+    const connectLine2 = turf.lineString([Line1End, Line2End]);
+    // const connectLine3 = turf.lineString([Line2End, Line2Start]);
+    const connectLine4 = turf.lineString([Line2Start, Line1Start]);
+
+    const resolutionBoxLines = turf.featureCollection([offsetLine1, connectLine2, offsetLine2, connectLine4]);
+
+    const resolutionBox = turf.polygonize(resolutionBoxLines);
+
+    // add all the properties from line to box
+    resolutionBox.features[0].properties = i.properties;
+
+    allBoxes.push(resolutionBox.features[0]); // .features[0] can avoid the situation of feature collection within feature collection
+  }
+  const allBoxesCollection = turf.featureCollection(allBoxes);
+  return allBoxesCollection;
+}
+
 
 export {
   handleAllCalculations,

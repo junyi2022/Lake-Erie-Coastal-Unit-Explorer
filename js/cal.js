@@ -93,403 +93,419 @@ function handleAllCalculations(start, end, map, shorelineBase) {
 
   // handle start button
   startButton.addEventListener('click', () => {
-    handleMapSelection();
+    handleMapSelection(map, start, end, coastLine);
+  });
+}
+
+// step 1 functions
+
+// start button event
+function handleMapSelection(map, start, end, coastLine) {
+  // clear any existing features / reset
+  map.flyToBounds(map.zoomRefLayer.getBounds());
+  map.markerLayer.clearLayers();
+  if (map.sliceLayer !== null) {
+    map.sliceLayer.clearLayers();
+  }
+
+  // draggable markers part
+  const [startMarker, endMarker] = initializeEndPoints(map, start, end);
+
+  startMarker.addEventListener('dragend', () => {
+    handleMarkerSnap(coastLine, startMarker);
   });
 
-  // start button event
-  function handleMapSelection() {
-    // clear any existing features / reset
-    map.flyToBounds(map.zoomRefLayer.getBounds());
-    map.markerLayer.clearLayers();
-    if (map.sliceLayer !== null) {
-      map.sliceLayer.clearLayers();
+  endMarker.addEventListener('dragend', () => {
+    handleMarkerSnap(coastLine, endMarker);
+  });
+
+  // next button part after user selected the area
+  // this button is set within the start button to make sure nothing will happen if people do not "start"
+  finishButton.addEventListener('click', () => {
+    withSpinnerDo(() => {
+      doSomethingWithEndpoints(startMarker.getLatLng(), endMarker.getLatLng(), coastLine, map);
+    });
+  });
+}
+
+// handle start and end marker points after user moved them
+function doSomethingWithEndpoints(newStart, newEnd, coastLine, map) {
+  // translate from leaflet to turf
+  const startPointForCut = turf.point([newStart.lng, newStart.lat]);
+  const endPointForCut = turf.point([newEnd.lng, newEnd.lat]);
+
+  // selected coastline
+  const coastalSliced = turf.lineSlice(startPointForCut, endPointForCut, coastLine);
+  map.sliceLayer.addData(coastalSliced);
+
+  // enable step 2 input boxes
+  resolutionBox.disabled = false;
+  unitDrop.disabled = false;
+
+  // handle setp 2 dropdown options
+  firstDrop.disabled = false;
+  firstDrop.addEventListener('change', () => {
+    const firstDropChoice = firstDrop.value;
+    handleDropdownDisplay(secondDrop, [firstDropChoice]);
+    secondDrop.disabled = false;
+  });
+
+  secondDrop.addEventListener('change', () => {
+    const firstDropChoice = firstDrop.value;
+    const secondDropChoice = secondDrop.value;
+    handleDropdownDisplay(thirdDrop, [firstDropChoice, secondDropChoice]);
+    thirdDrop.disabled = false;
+  });
+
+  // disable step 1 buttons
+  startButton.disabled = true;
+  finishButton.disabled = true;
+
+  // set map zoom to the selected chunk
+  const zoomSliced = turf.buffer(coastalSliced, 2);
+  const [minLon, minLat, maxLon, maxLat] =turf.bbox(zoomSliced);
+  map.flyToBounds([[minLat, minLon], [maxLat, maxLon]]);
+
+  // handle inputs from form
+  generateResButton.addEventListener('click', () => {
+    withSpinnerDo(() => {
+      handleCalculations(map, coastalSliced);
+    });
+  });
+}
+
+// add start and end marker to the end of the shoreline
+function initializeEndPoints(map, start, end) {
+  // start and end are inputs from map.js
+  const startMarker = L.marker([start[1], start[0]], {
+    draggable: true,
+    icon: markerIcon,
+  }).addTo(map.markerLayer);
+  const endMarker = L.marker([end[1], end[0]], {
+    draggable: true,
+    icon: markerIcon,
+  }).addTo(map.markerLayer);
+  return [startMarker, endMarker];
+}
+
+// snap the maker to the nearest point on the coastal line after user drag markers
+function handleMarkerSnap(coastLine, marker) {
+  const newPoint = marker.getLatLng(); // get the coordinates of the final marker
+
+  const newPointTurf = turf.point([newPoint.lng, newPoint.lat]); // turf coordinates are the opposite of leaflet
+  const snappedPoint = turf.nearestPointOnLine(coastLine, newPointTurf);
+
+  // reset marker location after dragged, snap to nearest point
+  marker.setLatLng([snappedPoint.geometry.coordinates[1], snappedPoint.geometry.coordinates[0]]); // reset the location of the marker
+}
+
+
+// step for resolution functions
+
+// actual res calculations
+function handleCalculations(map, coastalSliced) {
+  if (map.colorLayer !== null) {
+    map.colorLayer.clearLayers();
+  }
+
+  // check all the boxes are filled
+  // process to the calculations when we have everything
+  if (step2Form.reportValidity() == false) {
+    return; // this just means stop
+  }
+
+  const resolutionCollection = getResolution(coastalSliced); // feature collection of a lot of linestrings
+  console.log(resolutionCollection);
+
+  // need to add ID to these line for identification later
+  for (let i = 0; i < resolutionCollection.features.length; i++) {
+    resolutionCollection.features[i].properties.ID = i;
+  }
+
+  // calculation each subcategory's score
+
+  // only call the model that is selected, and only add those properties
+  const firstPriorityFunc = modelFuncs[firstDrop.value];
+  firstPriorityFunc(map, resolutionCollection);
+  if (secondDrop.value != 'ns') {
+    const secondPriorityFunc = modelFuncs[secondDrop.value];
+    secondPriorityFunc(map, resolutionCollection);
+  }
+  if (thirdDrop.value != 'ns') {
+    const thirdPriorityFunc = modelFuncs[thirdDrop.value];
+    thirdPriorityFunc(map, resolutionCollection);
+  }
+
+
+  // calculate final score for each coastline piece and add that as properties
+  const firstProp = modelProps[firstDrop.value];
+  const secondProp = modelProps[secondDrop.value];
+  const thirdProp = modelProps[thirdDrop.value];
+
+  for (const coastline of resolutionCollection.features) {
+    if (secondDrop.value == 'ns') {
+      const finalValue = coastline.properties[firstProp];
+      coastline.properties.finalValue = finalValue;
+    } else if (thirdDrop.value == 'ns') {
+      const finalValue = coastline.properties[firstProp] * 0.6 + coastline.properties[secondProp] * 0.4;
+      coastline.properties.finalValue = finalValue;
+    } else {
+      const finalValue = coastline.properties[firstProp] * 0.5 + coastline.properties[secondProp] * 0.3 + coastline.properties[thirdProp] * 0.2;
+      coastline.properties.finalValue = finalValue;
     }
-
-    // draggable markers part
-    const [startMarker, endMarker] = initializeEndPoints();
-
-    startMarker.addEventListener('dragend', () => {
-      handleMarkerSnap(startMarker);
-    });
-
-    endMarker.addEventListener('dragend', () => {
-      handleMarkerSnap(endMarker);
-    });
-
-    // next button part after user selected the area
-    // this button is set within the start button to make sure nothing will happen if people do not "start"
-    finishButton.addEventListener('click', () => {
-      withSpinnerDo(() => {
-        doSomethingWithEndpoints(startMarker.getLatLng(), endMarker.getLatLng(), coastLine);
-      });
-    });
   }
 
-  // add start and end marker to the end of the shoreline
-  function initializeEndPoints() {
-    // start and end are inputs from map.js
-    const startMarker = L.marker([start[1], start[0]], {
-      draggable: true,
-      icon: markerIcon,
-    }).addTo(map.markerLayer);
-    const endMarker = L.marker([end[1], end[0]], {
-      draggable: true,
-      icon: markerIcon,
-    }).addTo(map.markerLayer);
-    return [startMarker, endMarker];
+  // The final value now may be skewed, need to normalize it to make sure it will be between 0 and 1
+  const finalValueArray = resolutionCollection.features.map((f) => f.properties.finalValue); // map will return an array of all the properties.finalValue
+
+  // calculate the min max of the values
+  const min = Math.min(...finalValueArray); // ...flatten the array because min/max doesn't take array
+  const max = Math.max(...finalValueArray);
+
+  // here use power scale
+  const scaleFunc = d3.scalePow([min, max], [0, 1]).exponent(1); // need to map to 0 to 1 because the later color scale only take numbers between 0 and 1
+  // add the normalized value to each coastline properties
+  for (const coastline of resolutionCollection.features) {
+    coastline.properties.finalValueNormal = scaleFunc(coastline.properties.finalValue);
   }
 
-  // snap the maker to the nearest point on the coastal line after user drag markers
-  function handleMarkerSnap(marker) {
-    const newPoint = marker.getLatLng(); // get the coordinates of the final marker
 
-    const newPointTurf = turf.point([newPoint.lng, newPoint.lat]); // turf coordinates are the opposite of leaflet
-    const snappedPoint = turf.nearestPointOnLine(coastLine, newPointTurf);
-
-    // reset marker location after dragged, snap to nearest point
-    marker.setLatLng([snappedPoint.geometry.coordinates[1], snappedPoint.geometry.coordinates[0]]); // reset the location of the marker
-  }
-
-  // handle start and end marker points after user moved them
-  function doSomethingWithEndpoints(newStart, newEnd, coastLine) {
-    // showSpinner();
-
-    // translate from leaflet to turf
-    const startPointForCut = turf.point([newStart.lng, newStart.lat]);
-    const endPointForCut = turf.point([newEnd.lng, newEnd.lat]);
-
-    // selected coastline
-    const coastalSliced = turf.lineSlice(startPointForCut, endPointForCut, coastLine);
-    map.sliceLayer.addData(coastalSliced);
-    hideSpinner();
-
-    // enable step 2 input boxes
-    resolutionBox.disabled = false;
-    unitDrop.disabled = false;
-
-    // if do not want dynamic dropdown
-    // for (const i of dropdownAll) {
-    //   i.disabled = false;
-    // }
-
-    // handle setp 2 dropdown options
-    firstDrop.disabled = false;
-    firstDrop.addEventListener('change', () => {
-      const firstDropChoice = firstDrop.value;
-      handleDropdownDisplay(secondDrop, [firstDropChoice]);
-      secondDrop.disabled = false;
-    });
-
-    secondDrop.addEventListener('change', () => {
-      const firstDropChoice = firstDrop.value;
-      const secondDropChoice = secondDrop.value;
-      handleDropdownDisplay(thirdDrop, [firstDropChoice, secondDropChoice]);
-      thirdDrop.disabled = false;
-    });
-
-    // disable step 1 buttons
-    startButton.disabled = true;
-    finishButton.disabled = true;
-
-    // set map zoom to the selected chunk
-    const zoomSliced = turf.buffer(coastalSliced, 2);
-    const [minLon, minLat, maxLon, maxLat] =turf.bbox(zoomSliced);
-    map.flyToBounds([[minLat, minLon], [maxLat, maxLon]]);
-
-    // handle inputs from form
-    generateResButton.addEventListener('click', () => {
-      withSpinnerDo(() => {
-        handleCalculations();
-      });
-    });
-
-    // divide the slice into certain length
-    // need to change units first because the default lineChunk unit is km
-    function getResolution() {
-      // read all the inputting values
-      const resolution = resolutionBox.value;
-      const unitType = unitDrop.value;
-      if (unitType == 'ft') {
-        const resolutionCal = resolution * 0.0003048; // ft to km
-        const resolutionCollection = turf.lineChunk(coastalSliced, resolutionCal); // unit here is km
-        return resolutionCollection;
-      } if (unitType == 'm') {
-        const resolutionCal = resolution / 1000; // m to km
-        const resolutionCollection = turf.lineChunk(coastalSliced, resolutionCal); // unit here is km
-        return resolutionCollection;
-      }
-    }
-
-    // actual calculations
-    function handleCalculations() {
-      if (map.colorLayer !== null) {
-        map.colorLayer.clearLayers();
-      }
-
-      // check all the boxes are filled
-      // process to the calculations when we have everything
-      if (step2Form.reportValidity() == false) {
-        return; // this just means stop
-      }
-
-      const resolutionCollection = getResolution(); // feature collection of a lot of linestrings
-      console.log(resolutionCollection);
-
-      // need to add ID to these line for identification later
-      for (let i = 0; i < resolutionCollection.features.length; i++) {
-        resolutionCollection.features[i].properties.ID = i;
-      }
-
-      // calculation each subcategory's score
-
-      // only call the model that is selected, and only add those properties
-      const firstPriorityFunc = modelFuncs[firstDrop.value];
-      firstPriorityFunc(map, resolutionCollection);
-      if (secondDrop.value != 'ns') {
-        const secondPriorityFunc = modelFuncs[secondDrop.value];
-        secondPriorityFunc(map, resolutionCollection);
-      }
-      if (thirdDrop.value != 'ns') {
-        const thirdPriorityFunc = modelFuncs[thirdDrop.value];
-        thirdPriorityFunc(map, resolutionCollection);
-      }
-
-
-      // calculate final score for each coastline piece and add that as properties
-      const firstProp = modelProps[firstDrop.value];
-      const secondProp = modelProps[secondDrop.value];
-      const thirdProp = modelProps[thirdDrop.value];
-
-      for (const coastline of resolutionCollection.features) {
-        if (secondDrop.value == 'ns') {
-          const finalValue = coastline.properties[firstProp];
-          coastline.properties.finalValue = finalValue;
-        } else if (thirdDrop.value == 'ns') {
-          const finalValue = coastline.properties[firstProp] * 0.6 + coastline.properties[secondProp] * 0.4;
-          coastline.properties.finalValue = finalValue;
-        } else {
-          const finalValue = coastline.properties[firstProp] * 0.5 + coastline.properties[secondProp] * 0.3 + coastline.properties[thirdProp] * 0.2;
-          coastline.properties.finalValue = finalValue;
-        }
-      }
-
-      // The final value now may be skewed, need to normalize it to make sure it will be between 0 and 1
-      const finalValueArray = resolutionCollection.features.map((f) => f.properties.finalValue); // map will return an array of all the properties.finalValue
-
-      // calculate the min max of the values
-      const min = Math.min(...finalValueArray); // ...flatten the array because min/max doesn't take array
-      const max = Math.max(...finalValueArray);
-
-      // here use power scale
-      const scaleFunc = d3.scalePow([min, max], [0, 1]).exponent(1); // need to map to 0 to 1 because the later color scale only take numbers between 0 and 1
-      // add the normalized value to each coastline properties
-      for (const coastline of resolutionCollection.features) {
-        coastline.properties.finalValueNormal = scaleFunc(coastline.properties.finalValue);
-      }
-
-
-      // add the resolution data to map and color that based on the final score of each coastline piece
-      map.colorLayer = L.geoJSON(resolutionCollection, {
-        style: (sample) => {
-          const colorValue = colorScale(sample.properties.finalValueNormal);
-          return {
-            stroke: true,
-            color: colorValue,
-            weight: 3,
-          };
-        },
-      }).addTo(map);
-
-      // add legend for the resolution box
-      map.legend.onAdd = (map) => {
-        return legend1Style(map, colorScale);
+  // add the resolution data to map and color that based on the final score of each coastline piece
+  map.colorLayer = L.geoJSON(resolutionCollection, {
+    style: (sample) => {
+      const colorValue = colorScale(sample.properties.finalValueNormal);
+      return {
+        stroke: true,
+        color: colorValue,
+        weight: 3,
       };
-      map.legend.addTo(map);
+    },
+  }).addTo(map);
 
-      console.log(resolutionCollection);
+  // add legend for the resolution box
+  map.legend.onAdd = (map) => {
+    return legend1Style(map, colorScale);
+  };
+  map.legend.addTo(map);
 
-
-      // process to the following step if user click next
-      finishResButton.addEventListener('click', () => {
-        startGroupRes();
-      });
-
-      function startGroupRes() {
-        // enable step 3 box
-        categoryBox.disabled = false;
-        // prevent people from entering invalid number
-        unitInputRange(categoryBox);
-        // disable step 2 buttons
-        finishResButton.disabled = true;
-        generateResButton.disabled = true;
-        resolutionBox.disabled = true;
-        unitDrop.disabled = true;
-        for (const i of dropdownAll) {
-          i.disabled = true;
-        }
-
-        // handle inputs from form
-        generateGroupButton.addEventListener('click', () => {
-          if (categoryBox.value == '') {
-            alert('Please enter a value.');
-            return;
-          }
-          handleGroupRes();
-        });
-
-        function handleGroupRes() {
-          if (map.finalUnitLayer !== null) {
-            map.finalUnitLayer.clearLayers();
-          }
-          const catNum = parseInt(categoryBox.value);
-          console.log(catNum);
-
-          // add unit legend
-          legend2Style(map, unitColorScale, catNum);
-          // get arrays of resolution that supposed to be grouped
-          const resGroupArray = resToGroupArray(resolutionCollection, catNum);
-          console.log(resGroupArray);
-          // join line together as array
-          const featureCollectionArray = arrayOfGroupsToArrayOfLines(resGroupArray, firstProp, secondProp, thirdProp);
-          console.log(featureCollectionArray);
-          // get final feature collection
-          const units = turf.featureCollection(featureCollectionArray);
-          // display box
-          // const unitsBox = getResolutionBoxes(units, 0.5);
-          console.log(units);
-
-          // need to add ID as unit numbering
-          for (let i = 0; i < units.features.length; i++) {
-            units.features[i].properties.ID = i;
-          }
-          // console.log(unitsBox);
-
-          // style the boxes, adjust pop up based on number of selected priorities
-          const firstPropName = modelName[firstDrop.value];
-          if (secondDrop.value == 'ns') {
-            map.finalUnitLayer = L.geoJSON(units, {
-              style: (sample) => {
-                const colorValue = unitColorScale((sample.properties.unit - 1) / (catNum - 1));
-                return {
-                  stroke: true,
-                  color: colorValue,
-                  weight: 23,
-                  opacity: 0.8,
-                  lineCap: 'butt',
-                };
-              },
-            }).bindTooltip((l) => { // final unit box tooltip options
-              return `<p class="unit-tooltip"><strong>Group:</strong> ${l.feature.properties.unit}</p>`;
-            }).bindPopup((l) => { // final unit box popup options
-              return `<h3 class="unit-pop-title">Unit: ${l.feature.properties.ID + 1}</h3>
-                      <p class="unit-finalscore"><strong>Group:</strong> ${l.feature.properties.unit}</p>
-                      <p class="unit-finalscore"><strong>Final Score:</strong> ${l.feature.properties.finalScore.toFixed(2)}</p>
-                      <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
-              `;
-            }).addTo(map);
-            map.colorLayer.bringToFront();
-          } else if (thirdDrop.value == 'ns') {
-            const secondPropName = modelName[secondDrop.value];
-            map.finalUnitLayer = L.geoJSON(units, {
-              style: (sample) => {
-                const colorValue = unitColorScale((sample.properties.unit - 1) / (catNum - 1));
-                return {
-                  stroke: true,
-                  color: colorValue,
-                  weight: 23,
-                  opacity: 0.8,
-                  lineCap: 'butt',
-                };
-              },
-            }).bindTooltip((l) => { // final unit box tooltip options
-              return `<p class="unit-tooltip"><strong>Group:</strong> ${l.feature.properties.unit}</p>`;
-            }).bindPopup((l) => { // final unit box popup options
-              return `<h3 class="unit-pop-title">Unit: ${l.feature.properties.ID + 1}</h3>
-                      <p class="unit-finalscore"><strong>Group:</strong> ${l.feature.properties.unit}</p>
-                      <p class="unit-finalscore"><strong>Final Score:</strong> ${l.feature.properties.finalScore.toFixed(2)}</p>
-                      <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
-                      <p class="unit-second-priority"><strong>${secondPropName}:</strong> ${l.feature.properties[secondProp].toFixed(2)}</p>
-              `;
-            }).addTo(map);
-            map.colorLayer.bringToFront();
-          } else {
-            const secondPropName = modelName[secondDrop.value];
-            const thirdPropName = modelName[thirdDrop.value];
-            map.finalUnitLayer = L.geoJSON(units, {
-              style: (sample) => {
-                const colorValue = unitColorScale((sample.properties.unit - 1) / (catNum - 1));
-                return {
-                  stroke: true,
-                  color: colorValue,
-                  weight: 23,
-                  opacity: 0.8,
-                  lineCap: 'butt',
-                };
-              },
-            }).bindTooltip((l) => { // final unit box tooltip options
-              return `<p class="unit-tooltip"><strong>Group:</strong> ${l.feature.properties.unit}</p>`;
-            }).bindPopup((l) => { // final unit box popup options
-              return `<h3 class="unit-pop-title">Unit: ${l.feature.properties.ID + 1}</h3>
-                      <p class="unit-finalscore"><strong>Group:</strong> ${l.feature.properties.unit}</p>
-                      <p class="unit-finalscore"><strong>Final Score:</strong> ${l.feature.properties.finalScore.toFixed(2)}</p>
-                      <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
-                      <p class="unit-second-priority"><strong>${secondPropName}:</strong> ${l.feature.properties[secondProp].toFixed(2)}</p>
-                      <p class="unit-second-priority"><strong>${thirdPropName}:</strong> ${l.feature.properties[thirdProp].toFixed(2)}</p>
-              `;
-            }).addTo(map);
-            map.colorLayer.bringToFront();
-          }
+  console.log(resolutionCollection);
 
 
-          // finish unit step and go to next step
-          finishGroupButton.addEventListener('click', () => {
-            fileTypeSelect.disabled = false;
-            downloadButton.disabled = false;
-          });
+  // process to the following step if user click next
+  finishResButton.addEventListener('click', () => {
+    startGroupRes(map, resolutionCollection, firstProp, secondProp, thirdProp);
+  });
+}
 
-          // download button handeler
-          downloadButton.addEventListener('click', () => {
-            handleDownload();
-          });
-
-          // handle download
-          // need to be an async function because in the shapefile download part shpwrite.zip generate a promise, and need await for that promise to be down (similar to fetch, also a promise)
-          async function handleDownload() {
-            // figure out downloading data type based on dropdown box value
-            const fileType = fileTypeSelect.value;
-            let blob; // for the browser download
-            let fileName; // have it here to be reassigned later for the filename based on selection
-            if (fileType == 'geojson') {
-              const stringUnit = JSON.stringify(units); // stringfy geojson feature collection
-              blob = new Blob([stringUnit], {type: 'application/json'});
-              fileName = 'unit.json';
-            } if (fileType == 'shapefile') {
-              // a GeoJSON bridge for features
-              // in the options can have blob as output type
-              blob = await shpwrite.zip(
-                units, // need geojson here
-                shpOptions,
-              );
-              console.log(blob);
-              fileName = 'unit.zip';
-            }
-            // how to download from blob object
-            const url = window.URL.createObjectURL(blob);
-            console.log(url);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            // the filename you want
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-          }
-        }
-      }
-    }
+// divide the slice into certain length
+// need to change units first because the default lineChunk unit is km
+function getResolution(coastalSliced) {
+  // read all the inputting values
+  const resolution = resolutionBox.value;
+  const unitType = unitDrop.value;
+  if (unitType == 'ft') {
+    const resolutionCal = resolution * 0.0003048; // ft to km
+    const resolutionCollection = turf.lineChunk(coastalSliced, resolutionCal); // unit here is km
+    return resolutionCollection;
+  } if (unitType == 'm') {
+    const resolutionCal = resolution / 1000; // m to km
+    const resolutionCollection = turf.lineChunk(coastalSliced, resolutionCal); // unit here is km
+    return resolutionCollection;
   }
 }
+
+
+
+
+
+// step for category grouping functions
+
+// prepare and call category grouping functions
+function startGroupRes(map, resolutionCollection, firstProp, secondProp, thirdProp) {
+  // enable step 3 box
+  categoryBox.disabled = false;
+  // prevent people from entering invalid number
+  unitInputRange(categoryBox);
+  // disable step 2 buttons
+  finishResButton.disabled = true;
+  generateResButton.disabled = true;
+  resolutionBox.disabled = true;
+  unitDrop.disabled = true;
+  for (const i of dropdownAll) {
+    i.disabled = true;
+  }
+
+  // handle inputs from form
+  generateGroupButton.addEventListener('click', () => {
+    if (categoryBox.value == '') {
+      alert('Please enter a value.');
+      return;
+    }
+    handleGroupRes(map, resolutionCollection, firstProp, secondProp, thirdProp);
+  });
+}
+
+
+function handleGroupRes(map, resolutionCollection, firstProp, secondProp, thirdProp) {
+  if (map.finalUnitLayer !== null) {
+    map.finalUnitLayer.clearLayers();
+  }
+  const catNum = parseInt(categoryBox.value);
+  console.log(catNum);
+
+  // add unit legend
+  legend2Style(map, unitColorScale, catNum);
+  // get arrays of resolution that supposed to be grouped
+  const resGroupArray = resToGroupArray(resolutionCollection, catNum);
+  console.log(resGroupArray);
+  // join line together as array
+  const featureCollectionArray = arrayOfGroupsToArrayOfLines(resGroupArray, firstProp, secondProp, thirdProp);
+  console.log(featureCollectionArray);
+  // get final feature collection
+  const units = turf.featureCollection(featureCollectionArray);
+  // display box
+  // const unitsBox = getResolutionBoxes(units, 0.5);
+
+
+  // need to add ID as unit numbering
+  for (let i = 0; i < units.features.length; i++) {
+    units.features[i].properties.ID = i;
+  }
+  // console.log(unitsBox);
+  console.log(units);
+
+  // style the units, adjust pop up based on number of selected priorities
+  const firstPropName = modelName[firstDrop.value];
+  if (secondDrop.value == 'ns') {
+    map.finalUnitLayer = L.geoJSON(units, {
+      style: (sample) => {
+        const colorValue = unitColorScale((sample.properties.unit - 1) / (catNum - 1));
+        return {
+          stroke: true,
+          color: colorValue,
+          weight: 23,
+          opacity: 0.8,
+          lineCap: 'butt',
+        };
+      },
+    }).bindTooltip((l) => { // final unit box tooltip options
+      return `<p class="unit-tooltip"><strong>Group:</strong> ${l.feature.properties.unit}</p>`;
+    }).bindPopup((l) => { // final unit box popup options
+      return `<h3 class="unit-pop-title">Unit: ${l.feature.properties.ID + 1}</h3>
+              <p class="unit-finalscore"><strong>Group:</strong> ${l.feature.properties.unit}</p>
+              <p class="unit-finalscore"><strong>Final Score:</strong> ${l.feature.properties.finalScore.toFixed(2)}</p>
+              <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
+      `;
+    }).addTo(map);
+    map.colorLayer.bringToFront();
+  } else if (thirdDrop.value == 'ns') {
+    const secondPropName = modelName[secondDrop.value];
+    map.finalUnitLayer = L.geoJSON(units, {
+      style: (sample) => {
+        const colorValue = unitColorScale((sample.properties.unit - 1) / (catNum - 1));
+        return {
+          stroke: true,
+          color: colorValue,
+          weight: 23,
+          opacity: 0.8,
+          lineCap: 'butt',
+        };
+      },
+    }).bindTooltip((l) => { // final unit box tooltip options
+      return `<p class="unit-tooltip"><strong>Group:</strong> ${l.feature.properties.unit}</p>`;
+    }).bindPopup((l) => { // final unit box popup options
+      return `<h3 class="unit-pop-title">Unit: ${l.feature.properties.ID + 1}</h3>
+              <p class="unit-finalscore"><strong>Group:</strong> ${l.feature.properties.unit}</p>
+              <p class="unit-finalscore"><strong>Final Score:</strong> ${l.feature.properties.finalScore.toFixed(2)}</p>
+              <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
+              <p class="unit-second-priority"><strong>${secondPropName}:</strong> ${l.feature.properties[secondProp].toFixed(2)}</p>
+      `;
+    }).addTo(map);
+    map.colorLayer.bringToFront();
+  } else {
+    const secondPropName = modelName[secondDrop.value];
+    const thirdPropName = modelName[thirdDrop.value];
+    map.finalUnitLayer = L.geoJSON(units, {
+      style: (sample) => {
+        const colorValue = unitColorScale((sample.properties.unit - 1) / (catNum - 1));
+        return {
+          stroke: true,
+          color: colorValue,
+          weight: 23,
+          opacity: 0.8,
+          lineCap: 'butt',
+        };
+      },
+    }).bindTooltip((l) => { // final unit box tooltip options
+      return `<p class="unit-tooltip"><strong>Group:</strong> ${l.feature.properties.unit}</p>`;
+    }).bindPopup((l) => { // final unit box popup options
+      return `<h3 class="unit-pop-title">Unit: ${l.feature.properties.ID + 1}</h3>
+              <p class="unit-finalscore"><strong>Group:</strong> ${l.feature.properties.unit}</p>
+              <p class="unit-finalscore"><strong>Final Score:</strong> ${l.feature.properties.finalScore.toFixed(2)}</p>
+              <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
+              <p class="unit-second-priority"><strong>${secondPropName}:</strong> ${l.feature.properties[secondProp].toFixed(2)}</p>
+              <p class="unit-second-priority"><strong>${thirdPropName}:</strong> ${l.feature.properties[thirdProp].toFixed(2)}</p>
+      `;
+    }).addTo(map);
+    map.colorLayer.bringToFront();
+  }
+
+
+  // finish unit step and go to next step
+  finishGroupButton.addEventListener('click', () => {
+    fileTypeSelect.disabled = false;
+    downloadButton.disabled = false;
+  });
+
+  // download button handeler
+  downloadButton.addEventListener('click', () => {
+    handleDownload(units);
+  });
+}
+
+
+// last step functions
+
+// handle download
+// need to be an async function because in the shapefile download part shpwrite.zip generate a promise, and need await for that promise to be down (similar to fetch, also a promise)
+async function handleDownload(units) {
+  // figure out downloading data type based on dropdown box value
+  const fileType = fileTypeSelect.value;
+  let blob; // for the browser download
+  let fileName; // have it here to be reassigned later for the filename based on selection
+  if (fileType == 'geojson') {
+    const stringUnit = JSON.stringify(units); // stringfy geojson feature collection
+    blob = new Blob([stringUnit], {type: 'application/json'});
+    fileName = 'unit.json';
+  } if (fileType == 'shapefile') {
+    // a GeoJSON bridge for features
+    // in the options can have blob as output type
+    blob = await shpwrite.zip(
+      units, // need geojson here
+      shpOptions,
+    );
+    console.log(blob);
+    fileName = 'unit.zip';
+  }
+  // how to download from blob object
+  const url = window.URL.createObjectURL(blob);
+  console.log(url);
+  const a = document.createElement('a');
+  a.style.display = 'none';
+  a.href = url;
+  // the filename you want
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(url);
+}
+
+
+
+
+
+
+
 
 // get end points from single lineString
 function getStartEndPointsFromLine(lineString) { // returns point's coordinate arrays

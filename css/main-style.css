@@ -255,6 +255,7 @@ footer {
     font-size: 12px;
     box-sizing: border-box;
     margin: 0;
+    margin-top: 7px;
 }
 
 #footnote {
@@ -267,20 +268,20 @@ footer {
 a {
     color: rgb(94, 121, 112);
     text-decoration: none;
-  }
-  
-  a:visited {
-    color: rgb(94, 121, 112);
-  }
-  
-  a:hover {
-    color: rgb(202, 92, 92);
-    font-weight: bold;
-  }
-  
-  a:active {
-    color: rgb(202, 92, 92);
-  }
+}
+
+a:visited {
+color: rgb(94, 121, 112);
+}
+
+a:hover {
+color: rgb(202, 92, 92);
+font-weight: bold;
+}
+
+a:active {
+color: rgb(202, 92, 92);
+}
 
 .inline-link {
     text-decoration: underline;

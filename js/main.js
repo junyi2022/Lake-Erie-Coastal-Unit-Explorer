@@ -45,6 +45,9 @@ const fishWildlifePoints = await fishWildlife.json();
 const wetlandPotential = await fetch('data/wetland-potential-points800.geojson');
 const wetlandPotentialPoints = await wetlandPotential.json();
 
+const communityExposure = await fetch('data/community-exposure-points800.geojson');
+const communityExposurePoints = await communityExposure.json();
+
 // reference layers
 
 window.censusTracts = censusTracts;
@@ -60,6 +63,7 @@ window.shorelineType = shorelineType;
 window.soilErosion = soilErosion;
 window.fishWildlifePoints = fishWildlifePoints;
 window.wetlandPotentialPoints = wetlandPotentialPoints;
+window.communityExposurePoints = communityExposurePoints;
 
 // map
 window.map = initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, sendimentBudget); // remember to add new layer her as well
@@ -73,4 +77,5 @@ export {
   soilErosion,
   fishWildlifePoints,
   wetlandPotentialPoints,
+  communityExposurePoints,
 };

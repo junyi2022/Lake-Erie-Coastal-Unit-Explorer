@@ -4,7 +4,7 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 import { getResolutionBoxes } from './cal.js';
 
 // because point cloud has too many features, it is better to import the data instead of using map layer as a middle step
-import { sendimentBudget, shorelineType, soilErosion, fishWildlifePoints, wetlandPotentialPoints } from './main.js';
+import { sendimentBudget, shorelineType, soilErosion, fishWildlifePoints, wetlandPotentialPoints, communityExposurePoints } from './main.js';
 
 
 // sediment loss model
@@ -44,9 +44,14 @@ function habitatProtectionModel(map, resolutionCollection) {
   calDataFromPoints(map, fishWildlifePoints, resolutionCollection, 0.15, calRasterIndex, 'wild_index', 'habitatProtection', 1);
 }
 
-// habitat protection model
+// wetland protection model
 function wetlandProtectionRestorationModel(map, resolutionCollection) {
   calDataFromPoints(map, wetlandPotentialPoints, resolutionCollection, 0.15, calRasterIndex, 'potential', 'wetlandProtectionRestoration', 1);
+}
+
+// social vulnerability model
+function socialVulnerabilityModel(map, resolutionCollection) {
+  calDataFromPoints(map, communityExposurePoints, resolutionCollection, 0.1, calRasterIndex, 'comEIndex', 'socialVulnerability', 1);
 }
 
 
@@ -307,5 +312,6 @@ export {
   erosionPotentialModel,
   habitatProtectionModel,
   wetlandProtectionRestorationModel,
+  socialVulnerabilityModel,
   average,
 };

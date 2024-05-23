@@ -124,6 +124,7 @@ function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, 
   map.addEventListener('overlayadd', () => {
     map.shorelineBaseLayer.bringToFront();
     map.sliceLayer.bringToFront();
+    map.colorLayer.bringToFront();
     map.dataBoundaryLayer.bringToFront();
   });
 

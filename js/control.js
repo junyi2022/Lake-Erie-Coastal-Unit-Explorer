@@ -1,3 +1,6 @@
+import { initializeSimilarAreaMap } from './map.js';
+import { censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, sendimentBudget } from './main.js';
+
 // handle menu bar dynamics
 
 // get all the buttons
@@ -20,6 +23,8 @@ const strategyLibraryDiv = document.querySelector('#strategy-library-body');
 const documentationDiv = document.querySelector('#documentation-body');
 
 const menuAll = [unitGeneratorDiv, similarAreaDiv, strategyFilterDiv, dataExplorerDiv, strategyLibraryDiv, documentationDiv];
+
+let hasNotClickedSimilarAreaButton = true;
 
 // create a function to handle menu bar situation
 
@@ -48,6 +53,12 @@ function handleMenuBar() {
     const select = similarAreaDiv;
     menuBlock.style.left = '130px';
     handleMenuDisplay(select);
+    // initialize map here when display is not none, map cannot show up correctly if it is initially hidden
+    // only need to initialize the map once
+    if (hasNotClickedSimilarAreaButton) {
+      window.map2 = initializeSimilarAreaMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, sendimentBudget);
+      hasNotClickedSimilarAreaButton = false;
+    }
   });
 
   strategyFilterButton.addEventListener('click', () => {

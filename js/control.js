@@ -30,7 +30,7 @@ function handleMenuDisplay(select) {
     }
   }
   // different div has different display method
-  if (select == unitGeneratorDiv || similarAreaDiv) { // when working on SF add this || strategyFilterDiv
+  if (select == unitGeneratorDiv || select == similarAreaDiv) { // when working on SF add this || strategyFilterDiv
     select.style.display = 'flex';
   } else {
     select.style.display = 'block';

@@ -1,6 +1,8 @@
 /* globals turf */
 
-import { handleAllCalculations } from './cal.js';
+import { handleAllCalculations, handleSimilarityCalculations } from './cal.js';
+
+// prepare data for maps
 
 // map basetiles
 const mapBoxTile = L.tileLayer('https://api.mapbox.com/styles/v1/junyiy/clpdjdrj7005r01qjb99zhdr5/tiles/{tileSize}/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoianVueWl5IiwiYSI6ImNsdWVxcHowcDBxbWUyam92MWx5aW40MnkifQ.QR9kni83fZBO-EFBXAaX7g', {
@@ -27,6 +29,65 @@ const esriWorldImagery2 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/re
   attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
 });
 
+
+// data layers style
+const boundaryStyle = {
+  stroke: true,
+  fill: false,
+  color: '#F0BAAB',
+  weight: 3,
+};
+
+const censusTractStyle = {
+  stroke: true,
+  fill: false,
+  color: '#919191',
+  dashArray: '2 2',
+  weight: 0.5,
+};
+
+const countyStyle = {
+  stroke: true,
+  fill: false,
+  color: '#919191',
+  dashArray: '2 2',
+  weight: 1,
+};
+
+const huc10Style = {
+  stroke: true,
+  fill: false,
+  color: '#AAB9F0',
+  weight: 1,
+};
+
+const huc12Style = {
+  stroke: true,
+  fill: false,
+  color: '#AAB9F0',
+  weight: 1,
+};
+
+const sendimentBudgetStyle = {
+  stroke: true,
+  fill: false,
+  color: '#8996F5',
+  weight: 1.5,
+};
+
+const shorelineBaseStyle = {
+  stroke: true,
+  color: '#EF8F5D',
+  weight: 1.8,
+};
+
+const sliceStyle = {
+  stroke: true,
+  fill: false,
+  color: '#BACC79',
+  weight: 2.5,
+};
+
 function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, sendimentBudget) {
   const map = L.map('map1', {zoomSnap: 0, layers: [mapBoxTile]}).setView([42.57, -79.22], 10); // zoomSnap 0 make the zoom level to real number
 
@@ -37,68 +98,26 @@ function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, 
 
   // add layers
   // if have a lot of layers, it is better to add layers as map's attributes
-  map.dataBoundaryLayer = L.geoJSON(dataBoundary,
-    { stroke: true,
-      fill: false,
-      color: '#F0BAAB',
-      weight: 3,
-    });
+  map.dataBoundaryLayer = L.geoJSON(dataBoundary, boundaryStyle);
   map.dataBoundaryLayer.addTo(map);
 
-  map.censusTractLayer = L.geoJSON(censusTracts,
-    { stroke: true,
-      fill: false,
-      color: '#919191',
-      dashArray: '2 2',
-      weight: 0.5,
-    });
+  map.censusTractLayer = L.geoJSON(censusTracts, censusTractStyle);
 
-  map.countyLayer = L.geoJSON(county,
-    { stroke: true,
-      fill: false,
-      color: '#919191',
-      dashArray: '2 2',
-      weight: 1,
-    });
+  map.countyLayer = L.geoJSON(county, countyStyle);
 
-  map.huc10Layer = L.geoJSON(huc10,
-    { stroke: true,
-      fill: false,
-      color: '#AAB9F0',
-      weight: 1,
-    });
+  map.huc10Layer = L.geoJSON(huc10, huc10Style);
 
-  map.huc12Layer = L.geoJSON(huc12,
-    { stroke: true,
-      fill: false,
-      color: '#AAB9F0',
-      weight: 1,
-    });
+  map.huc12Layer = L.geoJSON(huc12, huc12Style);
 
-  // layers for model
-
-  map.sedimentBudgetLayer = L.geoJSON(sendimentBudget,
-    { stroke: true,
-      fill: false,
-      color: '#8996F5',
-      weight: 1.5,
-    });
+  map.sedimentBudgetLayer = L.geoJSON(sendimentBudget, sendimentBudgetStyle);
 
   // coastline scope
 
   map.shorelineBaseLayer = L.geoJSON(shorelineBase,
-    { stroke: true,
-      color: '#EF8F5D',
-      weight: 1.8,
-    }).bringToFront();
+    shorelineBaseStyle).bringToFront();
   map.shorelineBaseLayer.addTo(map);
 
-  map.sliceLayer = L.geoJSON(null,
-    { stroke: true,
-      fill: false,
-      color: '#BACC79',
-      weight: 2.5,
-    });
+  map.sliceLayer = L.geoJSON(null, sliceStyle);
   map.sliceLayer.addTo(map);
 
   map.colorLayer = null;
@@ -170,58 +189,23 @@ function initializeSimilarAreaMap(censusTracts, dataBoundary, huc10, huc12, shor
 
   // add layers
   // if have a lot of layers, it is better to add layers as map's attributes
-  map2.dataBoundaryLayer = L.geoJSON(dataBoundary,
-    { stroke: true,
-      fill: false,
-      color: '#F0BAAB',
-      weight: 3,
-    });
+  map2.dataBoundaryLayer = L.geoJSON(dataBoundary, boundaryStyle);
   map2.dataBoundaryLayer.addTo(map2);
 
-  map2.censusTractLayer = L.geoJSON(censusTracts,
-    { stroke: true,
-      fill: false,
-      color: '#919191',
-      dashArray: '2 2',
-      weight: 0.5,
-    });
+  map2.censusTractLayer = L.geoJSON(censusTracts, censusTractStyle);
 
-  map2.countyLayer = L.geoJSON(county,
-    { stroke: true,
-      fill: false,
-      color: '#919191',
-      dashArray: '2 2',
-      weight: 1,
-    });
+  map2.countyLayer = L.geoJSON(county, countyStyle);
 
-  map2.huc10Layer = L.geoJSON(huc10,
-    { stroke: true,
-      fill: false,
-      color: '#AAB9F0',
-      weight: 1,
-    });
+  map2.huc10Layer = L.geoJSON(huc10, huc10Style);
 
-  map2.huc12Layer = L.geoJSON(huc12,
-    { stroke: true,
-      fill: false,
-      color: '#AAB9F0',
-      weight: 1,
-    });
+  map2.huc12Layer = L.geoJSON(huc12, huc12Style);
 
-  map2.sedimentBudgetLayer = L.geoJSON(sendimentBudget,
-    { stroke: true,
-      fill: false,
-      color: '#8996F5',
-      weight: 1.5,
-    });
+  map2.sedimentBudgetLayer = L.geoJSON(sendimentBudget, sendimentBudgetStyle);
 
   // coastline scope
 
   map2.shorelineBaseLayer = L.geoJSON(shorelineBase,
-    { stroke: true,
-      color: '#EF8F5D',
-      weight: 1.8,
-    }).bringToFront();
+    shorelineBaseStyle).bringToFront();
   map2.shorelineBaseLayer.addTo(map2);
 
   map2.colorLayer = null;
@@ -259,12 +243,22 @@ function initializeSimilarAreaMap(censusTracts, dataBoundary, huc10, huc12, shor
   // always put coastal layer on the top when adding new layers to the map2
   map2.addEventListener('overlayadd', () => {
     map2.shorelineBaseLayer.bringToFront();
-    map2.sliceLayer.bringToFront();
     if (map2.colorLayer !== null) {
       map2.colorLayer.bringToFront();
     }
     map2.dataBoundaryLayer.bringToFront();
   });
+
+  // read the original start and end points
+  const shorePoints = shorelineBase.features[0].geometry.coordinates;
+  const mid = shorePoints[Math.floor(shorePoints.length / 2)]; // might be .5, so get the integer part
+
+  // add a layer for markers
+  map2.markerLayer = L.layerGroup();
+  map2.markerLayer.addTo(map2);
+
+  // call the calculation part
+  handleSimilarityCalculations(mid, map2, shorelineBase);
 
   return map2;
 }

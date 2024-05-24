@@ -64,6 +64,8 @@ const shpOptions = {
   },
 };
 
+// unit generator inputs
+
 // get step 1 buttons
 const startButton = document.querySelector('.select-point');
 const finishButton = document.querySelector('.finish-point');
@@ -85,8 +87,13 @@ const finishGroupButton = document.querySelector('.finish-group');
 const downloadButton = document.querySelector('.download-unit');
 const fileTypeSelect = document.querySelector('.file-type');
 
+// similar finder inputs
+// get step 1 buttons
+const startButtonSim = document.querySelector('.select-point-sim');
+const finishButtonSim = document.querySelector('.finish-point-sim');
 
-// map.js will cal this function
+
+// map.js will cal this function for unit generator
 function handleAllCalculations(start, end, map, shorelineBase) {
   // get the turf string of coastal base for calculation
   const coastLine = turf.lineString(shorelineBase.features[0].geometry.coordinates);
@@ -97,6 +104,16 @@ function handleAllCalculations(start, end, map, shorelineBase) {
   });
 }
 
+// map.js will cal this function for similarity finder
+function handleSimilarityCalculations(mid, map2, shorelineBase) {
+  const coastLine = turf.lineString(shorelineBase.features[0].geometry.coordinates);
+
+  startButtonSim.addEventListener('click', () => {
+    handleSimilarityMapSelection(map2, mid, coastLine);
+  });
+}
+
+// subfunctions collection in the sequence of unit generator steps
 
 // step 1 functions
 
@@ -111,7 +128,7 @@ function handleMapSelection(map, start, end, coastLine) {
   }
 
   // draggable markers part
-  const [startMarker, endMarker] = initializeEndPoints(map, start, end);
+  const [startMarker, endMarker] = initializeMarkers(map, [start, end]);
 
   startMarker.addEventListener('dragend', () => {
     handleMarkerSnap(coastLine, startMarker);
@@ -130,22 +147,44 @@ function handleMapSelection(map, start, end, coastLine) {
   });
 }
 
+function handleSimilarityMapSelection(map2, mid, coastLine) {
+  // clear any existing features / reset
+  map2.flyToBounds(map2.zoomRefLayer.getBounds());
+  map2.markerLayer.clearLayers();
+
+  // draggable markers part
+  const [midMarker] = initializeMarkers(map2, [mid]); // will return an array, so need to destructure it
+
+  midMarker.addEventListener('dragend', () => {
+    handleMarkerSnap(coastLine, midMarker);
+  });
+
+  // next button part after user selected a point
+  // this button is set within the start button to make sure nothing will happen if people do not "start"
+  // finishButton.addEventListener('click', () => {
+  //   withSpinnerDo(() => {
+      
+  //   });
+  // });
+}
+
 
 // step 1 supporting functions
 
 // add start and end marker to the end of the shoreline
-function initializeEndPoints(map, start, end) {
-  // start and end are inputs from map.js
-  const startMarker = L.marker([start[1], start[0]], {
-    draggable: true,
-    icon: markerIcon,
-  }).addTo(map.markerLayer);
-  const endMarker = L.marker([end[1], end[0]], {
-    draggable: true,
-    icon: markerIcon,
-  }).addTo(map.markerLayer);
-  return [startMarker, endMarker];
+
+function initializeMarkers(map, points) { // can handle unknown number of points
+  // points is an array of [longitude, latitude] pairs
+  const markers = points.map((point) => {
+    const marker = L.marker([point[1], point[0]], {
+      draggable: true,
+      icon: markerIcon,
+    }).addTo(map.markerLayer);
+    return marker;
+  });
+  return markers;
 }
+
 
 // snap the maker to the nearest point on the coastal line after user drag markers
 function handleMarkerSnap(coastLine, marker) {
@@ -713,6 +752,7 @@ function getResolutionBoxes(Collection, num) {
 
 export {
   handleAllCalculations,
+  handleSimilarityCalculations,
   getResolutionBoxes,
 };
 

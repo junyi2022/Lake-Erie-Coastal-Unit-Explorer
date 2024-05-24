@@ -149,7 +149,7 @@ header {
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
-    width: 650px;
+    width: 780px;
     margin-left: 1rem;
 }
 
@@ -183,7 +183,7 @@ header {
 
 .container {
     display: none;
-    height: 88vh;
+    height: calc(100vh - 1.5rem - 45px - 3vh);
     overflow: auto;
     width: 100%;
 }

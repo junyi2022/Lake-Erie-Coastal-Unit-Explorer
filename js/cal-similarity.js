@@ -5,7 +5,7 @@ import { average, findClosestData } from './model.js';
 import { sedimentLossModel, sedimentGainModel, erosionPotentialModel, habitatProtectionModel, wetlandProtectionRestorationModel, socialVulnerabilityModel } from './model.js';
 import { legend1Style, legend2Style } from './map.js';
 import { handleDropdownDisplay, withSpinnerDo, displaySelectPointScoreOnRange, getParsed } from './logistics.js';
-import { modelFuncs, modelProps, modelName, colorScale, unitColorScale, markerIcon, shpOptions } from './cal.js';
+import { modelFuncs, modelProps, modelName, colorScale, unitColorScale, handleDownload, markerIcon, shpOptions } from './cal.js';
 import { initializeMarkers, handleMarkerSnap, getFtResolution, munipulateResCollection } from './cal.js';
 
 // similar finder inputs
@@ -27,9 +27,27 @@ const fromInputSim = document.querySelector('#fromInput');
 const toInputSim = document.querySelector('#toInput');
 const generateGroupButtonSim = document.querySelector('.generate-group-sim');
 const finishGroupButtonSim = document.querySelector('.finish-group-sim');
+// get step 4 stuff
+const downloadButtonSim = document.querySelector('.download-unit-sim');
+const fileTypeSelectSim = document.querySelector('.file-type-sim');
+
 
 // get reverse color scale
 const reversedUnitColorScale = (t) => unitColorScale(1 - t);
+
+// shapefile download setting
+const shpOptionsSim = {
+  folder: 'download_similarity_shp',
+  filename: 'similarity_result',
+  outputType: 'blob',
+  compression: 'DEFLATE',
+  types: {
+    // point: 'mypoints',
+    // polygon: 'mypolygons',
+    polyline: 'Coastline By Similarity',
+  },
+};
+
 
 // map.js will cal this function for similarity finder
 function handleSimilarityCalculations(mid, map2, shorelineBase) {
@@ -280,6 +298,17 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
     map2.colorLayer.bringToFront();
     map2.pickPointLayer.bringToFront();
   }
+
+  // finish unit step and go to next step
+  finishGroupButtonSim.addEventListener('click', () => {
+    fileTypeSelectSim.disabled = false;
+    downloadButtonSim.disabled = false;
+  });
+
+  // download button handeler
+  downloadButtonSim.addEventListener('click', () => {
+    handleDownload(simGeojson, fileTypeSelectSim, shpOptionsSim, 'similarity');
+  });
 }
 
 function selectSimToGeojson(resolutionCollection, from, to, pointScore) {

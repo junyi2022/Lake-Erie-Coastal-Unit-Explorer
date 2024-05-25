@@ -89,6 +89,12 @@
     z-index: 10000;
 }
 
+#step-5-pop {
+    bottom: 12vh;
+	left: 300px;
+    z-index: 10000;
+}
+
 /* style if invalid - checkValidarity */
 
 .validated input:invalid,

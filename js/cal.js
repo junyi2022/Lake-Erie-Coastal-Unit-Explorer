@@ -487,7 +487,7 @@ function handleGroupRes(map, resolutionCollection, firstProp, secondProp, thirdP
 
   // download button handeler
   downloadButton.addEventListener('click', () => {
-    handleDownload(units);
+    handleDownload(units, fileTypeSelect, shpOptions, 'unit');
   });
 }
 
@@ -617,7 +617,7 @@ function resToGroupArray(resolutionCollection, catNum) {
 
 // handle download
 // need to be an async function because in the shapefile download part shpwrite.zip generate a promise, and need await for that promise to be down (similar to fetch, also a promise)
-async function handleDownload(units) {
+async function handleDownload(units, fileTypeSelect, shpOptions, name) {
   // figure out downloading data type based on dropdown box value
   const fileType = fileTypeSelect.value;
   let blob; // for the browser download
@@ -625,7 +625,7 @@ async function handleDownload(units) {
   if (fileType == 'geojson') {
     const stringUnit = JSON.stringify(units); // stringfy geojson feature collection
     blob = new Blob([stringUnit], {type: 'application/json'});
-    fileName = 'unit.json';
+    fileName = `${name}.json`;
   } if (fileType == 'shapefile') {
     // a GeoJSON bridge for features
     // in the options can have blob as output type
@@ -634,7 +634,7 @@ async function handleDownload(units) {
       shpOptions,
     );
     console.log(blob);
-    fileName = 'unit.zip';
+    fileName = `${name}.zip`;
   }
   // how to download from blob object
   const url = window.URL.createObjectURL(blob);
@@ -744,6 +744,7 @@ export {
   getFtResolution,
   handleAllCalculations,
   getResolutionBoxes,
+  handleDownload,
 };
 
 

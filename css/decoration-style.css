@@ -99,7 +99,8 @@
 
 .sliders_control {
   position: relative;
-  min-height: 20px;
+  height: 20px;
+  margin-top: 30px;
 }
 
 .form_control {
@@ -165,4 +166,30 @@ input[type="range"] {
 #fromSlider {
   height: 0;
   z-index: 1;
+}
+
+.select-point-box {
+  border-right: 2px solid #eb9881;
+  width: 0;
+  height: 20px;
+  top: -27px;
+  position: relative;
+  transition: width 0.5s;
+  z-index: -1;
+}
+
+.select-point-box-label {
+  font-size: 12px;
+  position: relative;
+  top: -36px;
+  width: fit-content;
+  height: 16px;
+  padding: 2px 5px;
+  align-items: center;
+  border-radius: 5px;
+  background-color: #e4f0fb;
+}
+
+.select-point-box-text {
+  width: fit-content;
 }

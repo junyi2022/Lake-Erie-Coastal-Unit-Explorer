@@ -157,10 +157,31 @@ toSlider.oninput = () => controlToSlider(fromSlider, toSlider, toInput);
 fromInput.oninput = () => controlFromInput(fromSlider, fromInput, toInput, toSlider);
 toInput.oninput = () => controlToInput(toSlider, fromInput, toInput, toSlider);
 
+// handle selected point on range input
+
+const scoreMarker = document.querySelector('.select-point-box');
+const scoreLabel = document.querySelector('.select-point-box-label');
+
+function displaySelectPointScoreOnRange(score) {
+  scoreMarker.classList.remove('hidden');
+  // incorporate the width of the circle picker
+  scoreMarker.style.width = `calc((100% - 14px) * ${score} + 7px)`;
+
+  scoreLabel.innerHTML = `<div id="select-point-box-text" class="select-point-box-pop">Selected Point: ${score}</div>`;
+
+  // need to remove hidden class before get the width
+  scoreLabel.classList.remove('hidden');
+  scoreLabel.style.display = 'flex';
+  const scoreLabelWidth = scoreLabel.offsetWidth;
+  scoreLabel.style.left = `min(calc(100% - ${scoreLabelWidth + 1}px), calc((100% - 14px) * ${score} + 7px))`;
+}
+
+
 export {
   handleDropdownDisplay,
   showSpinner,
   hideSpinner,
   withSpinnerDo,
   unitInputRange,
+  displaySelectPointScoreOnRange,
 };

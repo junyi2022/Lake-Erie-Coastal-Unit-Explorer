@@ -283,31 +283,33 @@
                             </div>
 
                             <div class="substep">
-                                <h5 class="substep-title">Priority</h5>
-                                <div class="piority-list">
-                                    <div class="choice-options">
-                                        <p>First: </p>
-                                        <p>Second: </p>
-                                        <p>Third: </p>
-                                    </div>
-                                    <div class="choice-options">
-                                        <select class="priority-sim" id="first-priority-sim" disabled="true" required>
-                                            <option value="">--Please choose an option--</option>
-                                            <option value="sl">Sediment Loss</option>
-                                            <option value="sg">Sediment Gain</option>
-                                            <option value="ep">Erosion Potential</option>
-                                            <option value="hp">NFWF Habitat Protection</option>
-                                            <option value="wpr">NOAA Wetland Protection/Restoration</option>
-                                            <option value="sv">NFWF Social Vurnerability</option>
-                                        </select>
-                                        <select class="priority-sim" id="second-priority-sim" disabled="true" required>
+                                <form class="step-two-form-sim">
+                                    <h5 class="substep-title">Priority</h5>
+                                    <div class="piority-list">
+                                        <div class="choice-options">
+                                            <p>First: </p>
+                                            <p>Second: </p>
+                                            <p>Third: </p>
+                                        </div>
+                                        <div class="choice-options">
+                                            <select class="priority-sim" id="first-priority-sim" disabled="true" required>
+                                                <option value="">--Please choose an option--</option>
+                                                <option value="sl">Sediment Loss</option>
+                                                <option value="sg">Sediment Gain</option>
+                                                <option value="ep">Erosion Potential</option>
+                                                <option value="hp">NFWF Habitat Protection</option>
+                                                <option value="wpr">NOAA Wetland Protection/Restoration</option>
+                                                <option value="sv">NFWF Social Vurnerability</option>
+                                            </select>
+                                            <select class="priority-sim" id="second-priority-sim" disabled="true" required>
 
-                                        </select>
-                                        <select class="priority-sim" id="third-priority-sim" disabled="true" required>
+                                            </select>
+                                            <select class="priority-sim" id="third-priority-sim" disabled="true" required>
 
-                                        </select>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </form>
                         <p class="step-notes">Note: Will take a while to generate.</p>
@@ -334,17 +336,19 @@
                             
                             <div class="range_container">
                                 <div class="sliders_control">
-                                    <input id="fromSlider" type="range" value="0.1" min="0" max="1" step="0.01"/>
-                                    <input id="toSlider" type="range" value="0.4" min="0" max="1" step="0.01"/>
+                                    <input id="fromSlider" type="range" value="0.1" min="0" max="1" step="0.01" disabled="true"/>
+                                    <input id="toSlider" type="range" value="0.4" min="0" max="1" step="0.01" disabled="true"/>
+                                    <div class="select-point-box-label hidden"></div>
+                                    <div class="select-point-box hidden"></div>
                                 </div>
                                 <div class="form_control">
                                     <div class="form_control_container">
                                         <div class="form_control_container_time">Min</div>
-                                        <input class="form_control_container_time_input" type="number" id="fromInput" value="0.1" min="0" max="1" step="0.01"/>
+                                        <input class="form_control_container_time_input" type="number" id="fromInput" value="0.1" min="0" max="1" step="0.01" disabled="true"/>
                                     </div>
                                     <div class="form_control_container">
                                         <div class="form_control_container_time">Max</div>
-                                        <input class="form_control_container_time_input" type="number" id="toInput" value="0.4" min="0" max="1" step="0.01"/>
+                                        <input class="form_control_container_time_input" type="number" id="toInput" value="0.4" min="0" max="1" step="0.01" disabled="true"/>
                                     </div>
                                 </div>
                             </div>

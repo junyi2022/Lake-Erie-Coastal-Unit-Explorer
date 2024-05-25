@@ -4,7 +4,7 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 import { average, findClosestData } from './model.js';
 import { sedimentLossModel, sedimentGainModel, erosionPotentialModel, habitatProtectionModel, wetlandProtectionRestorationModel, socialVulnerabilityModel } from './model.js';
 import { legend1Style, legend2Style } from './map.js';
-import { handleDropdownDisplay, withSpinnerDo, unitInputRange } from './logistics.js';
+import { handleDropdownDisplay, withSpinnerDo, displaySelectPointScoreOnRange, unitInputRange } from './logistics.js';
 import { modelFuncs, modelProps, modelName, colorScale, unitColorScale, markerIcon, shpOptions } from './cal.js';
 import { initializeMarkers, handleMarkerSnap, getFtResolution, munipulateResCollection } from './cal.js';
 
@@ -13,7 +13,7 @@ import { initializeMarkers, handleMarkerSnap, getFtResolution, munipulateResColl
 const startButtonSim = document.querySelector('.select-point-sim');
 const finishButtonSim = document.querySelector('.finish-point-sim');
 // get step 2 input boxes
-const step2FormSim = document.querySelector('.step-two-form');
+const step2FormSim = document.querySelector('.step-two-form-sim');
 const firstDropSim = document.querySelector('#first-priority-sim');
 const secondDropSim = document.querySelector('#second-priority-sim');
 const thirdDropSim = document.querySelector('#third-priority-sim');
@@ -37,6 +37,12 @@ function handleSimilarityMapSelection(map2, mid, coastLine) {
   // clear any existing features / reset
   map2.flyToBounds(map2.zoomRefLayer.getBounds());
   map2.markerLayer.clearLayers();
+
+  // check all the boxes are filled
+  // process to the calculations when we have everything
+  if (step2FormSim.reportValidity() == false) {
+    return; // this just means stop
+  }
 
   // draggable markers part
   const [midMarker] = initializeMarkers(map2, [mid]); // will return an array, so need to destructure it
@@ -146,7 +152,7 @@ function handleSimCalculations(midPointSelect, step2Form, firstDrop, secondDrop,
 }
 
 function simGroupRes(map2, resolutionCollection, firstProp, secondProp, thirdProp, pointScore) {
-
+  displaySelectPointScoreOnRange(pointScore[0].finalValue.toFixed(2));
 }
 
 

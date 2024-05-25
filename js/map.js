@@ -1,6 +1,7 @@
 /* globals turf */
 
-import { handleAllCalculations, handleSimilarityCalculations } from './cal.js';
+import { handleAllCalculations } from './cal.js';
+import { handleSimilarityCalculations } from './cal-similarity.js';
 
 // prepare data for maps
 
@@ -86,6 +87,14 @@ const sliceStyle = {
   fill: false,
   color: '#BACC79',
   weight: 2.5,
+};
+
+const pickPointStyle = {
+  stroke: false,
+  fill: true,
+  fillColor: '#BACC79',
+  fillOpacity: 1,
+  radius: 8,
 };
 
 function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, sendimentBudget) {
@@ -207,6 +216,13 @@ function initializeSimilarAreaMap(censusTracts, dataBoundary, huc10, huc12, shor
   map2.shorelineBaseLayer = L.geoJSON(shorelineBase,
     shorelineBaseStyle).bringToFront();
   map2.shorelineBaseLayer.addTo(map2);
+
+  // need to change to circle marker
+  map2.pickPointLayer = L.geoJSON(null,
+    {style: pickPointStyle,
+      pointToLayer: (feature, latlng) => L.circleMarker(latlng),
+    });
+  map2.pickPointLayer.addTo(map2);
 
   map2.colorLayer = null;
   map2.finalUnitLayer = null;

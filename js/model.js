@@ -314,4 +314,5 @@ export {
   wetlandProtectionRestorationModel,
   socialVulnerabilityModel,
   average,
+  findClosestData,
 };

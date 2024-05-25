@@ -87,11 +87,6 @@ const finishGroupButton = document.querySelector('.finish-group');
 const downloadButton = document.querySelector('.download-unit');
 const fileTypeSelect = document.querySelector('.file-type');
 
-// similar finder inputs
-// get step 1 buttons
-const startButtonSim = document.querySelector('.select-point-sim');
-const finishButtonSim = document.querySelector('.finish-point-sim');
-
 
 // map.js will cal this function for unit generator
 function handleAllCalculations(start, end, map, shorelineBase) {
@@ -104,14 +99,6 @@ function handleAllCalculations(start, end, map, shorelineBase) {
   });
 }
 
-// map.js will cal this function for similarity finder
-function handleSimilarityCalculations(mid, map2, shorelineBase) {
-  const coastLine = turf.lineString(shorelineBase.features[0].geometry.coordinates);
-
-  startButtonSim.addEventListener('click', () => {
-    handleSimilarityMapSelection(map2, mid, coastLine);
-  });
-}
 
 // subfunctions collection in the sequence of unit generator steps
 
@@ -145,27 +132,6 @@ function handleMapSelection(map, start, end, coastLine) {
       doSomethingWithEndpoints(startMarker.getLatLng(), endMarker.getLatLng(), coastLine, map);
     });
   });
-}
-
-function handleSimilarityMapSelection(map2, mid, coastLine) {
-  // clear any existing features / reset
-  map2.flyToBounds(map2.zoomRefLayer.getBounds());
-  map2.markerLayer.clearLayers();
-
-  // draggable markers part
-  const [midMarker] = initializeMarkers(map2, [mid]); // will return an array, so need to destructure it
-
-  midMarker.addEventListener('dragend', () => {
-    handleMarkerSnap(coastLine, midMarker);
-  });
-
-  // next button part after user selected a point
-  // this button is set within the start button to make sure nothing will happen if people do not "start"
-  // finishButton.addEventListener('click', () => {
-  //   withSpinnerDo(() => {
-      
-  //   });
-  // });
 }
 
 
@@ -244,15 +210,16 @@ function doSomethingWithEndpoints(newStart, newEnd, coastLine, map) {
   // handle inputs from form
   generateResButton.addEventListener('click', () => {
     withSpinnerDo(() => {
-      handleCalculations(map, coastalSliced);
+      handleCalculations(step2Form, firstDrop, secondDrop, thirdDrop, map, coastalSliced);
     });
   });
 }
 
+
 // step for resolution calculation part
 
 // actual res calculations
-function handleCalculations(map, coastalSliced) {
+function handleCalculations(step2Form, firstDrop, secondDrop, thirdDrop, map, coastalSliced) {
   if (map.colorLayer !== null) {
     map.colorLayer.clearLayers();
   }
@@ -266,6 +233,39 @@ function handleCalculations(map, coastalSliced) {
   const resolutionCollection = getResolution(coastalSliced); // feature collection of a lot of linestrings
   console.log(resolutionCollection);
 
+  // handle all calculations within res collection
+  const [firstProp, secondProp, thirdProp] = munipulateResCollection(map, resolutionCollection, firstDrop, secondDrop, thirdDrop);
+
+  // add the resolution data to map and color that based on the final score of each coastline piece
+  map.colorLayer = L.geoJSON(resolutionCollection, {
+    style: (sample) => {
+      const colorValue = colorScale(sample.properties.finalValueNormal);
+      return {
+        stroke: true,
+        color: colorValue,
+        weight: 3,
+      };
+    },
+  }).addTo(map);
+
+  // add legend for the resolution box
+  map.legend.onAdd = (map) => {
+    return legend1Style(map, colorScale);
+  };
+  map.legend.addTo(map);
+
+  console.log(resolutionCollection);
+
+
+  // process to the following step if user click next
+  finishResButton.addEventListener('click', () => {
+    startGroupRes(map, resolutionCollection, firstProp, secondProp, thirdProp);
+  });
+}
+
+// step for resolution supporting functions
+
+function munipulateResCollection(map, resolutionCollection, firstDrop, secondDrop, thirdDrop) {
   // need to add ID to these line for identification later
   for (let i = 0; i < resolutionCollection.features.length; i++) {
     resolutionCollection.features[i].properties.ID = i;
@@ -318,35 +318,8 @@ function handleCalculations(map, coastalSliced) {
     coastline.properties.finalValueNormal = scaleFunc(coastline.properties.finalValue);
   }
 
-
-  // add the resolution data to map and color that based on the final score of each coastline piece
-  map.colorLayer = L.geoJSON(resolutionCollection, {
-    style: (sample) => {
-      const colorValue = colorScale(sample.properties.finalValueNormal);
-      return {
-        stroke: true,
-        color: colorValue,
-        weight: 3,
-      };
-    },
-  }).addTo(map);
-
-  // add legend for the resolution box
-  map.legend.onAdd = (map) => {
-    return legend1Style(map, colorScale);
-  };
-  map.legend.addTo(map);
-
-  console.log(resolutionCollection);
-
-
-  // process to the following step if user click next
-  finishResButton.addEventListener('click', () => {
-    startGroupRes(map, resolutionCollection, firstProp, secondProp, thirdProp);
-  });
+  return [firstProp, secondProp, thirdProp];
 }
-
-// step for resolution supporting functions
 
 // divide the slice into certain length
 // need to change units first because the default lineChunk unit is km
@@ -363,6 +336,13 @@ function getResolution(coastalSliced) {
     const resolutionCollection = turf.lineChunk(coastalSliced, resolutionCal); // unit here is km
     return resolutionCollection;
   }
+}
+
+function getFtResolution(line, num) { // num is ft
+  // use 3000ft res for all inputs
+  const resolutionCal = num * 0.0003048; // ft to km
+  const resolutionCollection = turf.lineChunk(line, resolutionCal); // unit here is km
+  return resolutionCollection;
 }
 
 
@@ -751,8 +731,18 @@ function getResolutionBoxes(Collection, num) {
 
 
 export {
+  modelFuncs,
+  modelProps,
+  modelName,
+  colorScale,
+  unitColorScale,
+  markerIcon,
+  shpOptions,
+  initializeMarkers,
+  handleMarkerSnap,
+  munipulateResCollection,
+  getFtResolution,
   handleAllCalculations,
-  handleSimilarityCalculations,
   getResolutionBoxes,
 };
 

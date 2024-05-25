@@ -225,7 +225,7 @@ function initializeSimilarAreaMap(censusTracts, dataBoundary, huc10, huc12, shor
   map2.pickPointLayer.addTo(map2);
 
   map2.colorLayer = null;
-  map2.finalUnitLayer = null;
+  map2.finalSimLayer = null;
 
   // initialize legend
   map2.legend = L.control({position: 'bottomright'});

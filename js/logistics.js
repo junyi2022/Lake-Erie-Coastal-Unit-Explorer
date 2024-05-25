@@ -183,5 +183,6 @@ export {
   hideSpinner,
   withSpinnerDo,
   unitInputRange,
+  getParsed,
   displaySelectPointScoreOnRange,
 };

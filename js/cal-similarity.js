@@ -1,11 +1,10 @@
-/* globals turf, shpwrite */
+/* globals turf */
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 
-import { average, findClosestData } from './model.js';
-import { sedimentLossModel, sedimentGainModel, erosionPotentialModel, habitatProtectionModel, wetlandProtectionRestorationModel, socialVulnerabilityModel } from './model.js';
-import { legend1Style, legend2Style } from './map.js';
+import { findClosestData } from './model.js';
+import { legend1Style, legend3Style } from './map.js';
 import { handleDropdownDisplay, withSpinnerDo, displaySelectPointScoreOnRange, getParsed } from './logistics.js';
-import { modelFuncs, modelProps, modelName, colorScale, unitColorScale, handleDownload, markerIcon, shpOptions } from './cal.js';
+import { modelName, colorScale, unitColorScale, handleDownload } from './cal.js';
 import { initializeMarkers, handleMarkerSnap, getFtResolution, munipulateResCollection } from './cal.js';
 
 // similar finder inputs
@@ -153,7 +152,7 @@ function handleSimCalculations(midPointSelect, step2Form, firstDrop, secondDrop,
 
   // add legend for the resolution box
   map2.legend.onAdd = (map2) => {
-    return legend1Style(map2, colorScale);
+    return legend1Style(map2, colorScale, 'legend-content-sim');
   };
   map2.legend.addTo(map2);
 
@@ -210,8 +209,11 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
   // get range input values
   const [from, to] = getParsed(fromSliderSim, toSliderSim);
 
-  const simGeojson = selectSimToGeojson(resolutionCollection, from, to, pointScore);
+  const [simGeojson, minSim, maxSim] = selectSimToGeojson(resolutionCollection, from, to, pointScore);
   console.log(simGeojson);
+
+  // add unit legend
+  legend3Style(map2, reversedUnitColorScale, minSim, maxSim);
 
   // add the res in the selected range to map and color that based on the normal final score of each coastline piece
   // adjust pop up based on number of selected priorities
@@ -338,9 +340,15 @@ function selectSimToGeojson(resolutionCollection, from, to, pointScore) {
     groupArray[i].properties.similarity = Math.abs(groupArray[i].properties.simRefScore - selectPointSimRefScore);
   }
 
+  // prepare similarity range for color later
+  const simArray = groupArray.map((f) => f.properties.similarity);
+  const minSim = Math.min(...simArray);
+  const maxSim = Math.max(...simArray);
+
   // create the geojson structure
   const geojsonCollection = {'type': 'FeatureCollection', 'features': groupArray};
-  return geojsonCollection;
+
+  return [geojsonCollection, minSim, maxSim];
 }
 
 

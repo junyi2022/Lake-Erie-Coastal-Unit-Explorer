@@ -90,10 +90,11 @@ const sliceStyle = {
 };
 
 const pickPointStyle = {
-  stroke: false,
+  stroke: true,
   fill: true,
-  fillColor: '#BACC79',
-  fillOpacity: 1,
+  color: '#EF8F5D',
+  fillColor: '#EF8F5D',
+  fillOpacity: 0,
   radius: 8,
 };
 
@@ -280,13 +281,15 @@ function initializeSimilarAreaMap(censusTracts, dataBoundary, huc10, huc12, shor
 }
 
 
-function legend1Style(map, colorScale) {
+// legend for resolution score
+
+function legend1Style(map, colorScale, divname) {
   const legendDiv = document.createElement('div'); // abstract html div tag
   legendDiv.classList.add('legend'); // div class
   legendDiv.innerHTML = '<h4 class="legendTitle">Legend</h4>'; // add html content
 
   const legendContent = document.createElement('div'); // abstract html div tag
-  legendContent.classList.add('legend-content'); // div class
+  legendContent.classList.add(divname); // div class
 
   const resColorLegendDiv = document.createElement('div');
   resColorLegendDiv.classList.add('res-legend');
@@ -303,6 +306,7 @@ function legend1Style(map, colorScale) {
   return legendDiv;
 }
 
+// legend for unit color
 
 function legend2Style(map, unitColorScale, numvalues) {
   const legendContent = document.querySelector('.legend-content');
@@ -337,9 +341,32 @@ function legend2Style(map, unitColorScale, numvalues) {
   legendContent.appendChild(unitColorLegendDiv);
 }
 
+// legend for similarity color
+
+function legend3Style(map, colorScale, min, max) {
+  const legendContent = document.querySelector('.legend-content-sim');
+
+  // when reset, need to remove the previous legend first
+  if (legendContent.querySelector('.similarity-legend') !== null) {
+    const oldLegend = legendContent.querySelector('.similarity-legend');
+    legendContent.removeChild(oldLegend);
+  }
+
+  // create a new div to hold similarity legend
+  const similarityColorLegendDiv = document.createElement('div');
+  similarityColorLegendDiv.classList.add('similarity-legend');
+  similarityColorLegendDiv.innerHTML = `
+    <strong><p>Similarity from Low to High</p></strong>
+    <div class="resColorBox" style="background: linear-gradient(-90deg, ${colorScale(min)}, ${colorScale(min + (max - min) / 4)}, ${colorScale(min + (max - min) / 2)}, ${colorScale(min + (max - min) * 3 / 4)}, ${colorScale(max)})"></div>
+  `;
+
+  legendContent.appendChild(similarityColorLegendDiv);
+}
+
 export {
   initializeMap,
   initializeSimilarAreaMap,
   legend1Style,
   legend2Style,
+  legend3Style,
 };

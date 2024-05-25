@@ -250,7 +250,7 @@ function handleCalculations(step2Form, firstDrop, secondDrop, thirdDrop, map, co
 
   // add legend for the resolution box
   map.legend.onAdd = (map) => {
-    return legend1Style(map, colorScale);
+    return legend1Style(map, colorScale, 'legend-content');
   };
   map.legend.addTo(map);
 

@@ -95,7 +95,7 @@ const pickPointStyle = {
   color: '#EF8F5D',
   fillColor: '#EF8F5D',
   fillOpacity: 0,
-  radius: 8,
+  radius: 10,
 };
 
 function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, sendimentBudget) {
@@ -356,7 +356,7 @@ function legend3Style(map, colorScale, min, max) {
   const similarityColorLegendDiv = document.createElement('div');
   similarityColorLegendDiv.classList.add('similarity-legend');
   similarityColorLegendDiv.innerHTML = `
-    <strong><p>Similarity from Low to High</p></strong>
+    <strong><p>Similarity to Selection from Low to High</p></strong>
     <div class="resColorBox" style="background: linear-gradient(-90deg, ${colorScale(min)}, ${colorScale(min + (max - min) / 4)}, ${colorScale(min + (max - min) / 2)}, ${colorScale(min + (max - min) * 3 / 4)}, ${colorScale(max)})"></div>
   `;
 

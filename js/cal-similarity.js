@@ -159,13 +159,10 @@ function handleSimCalculations(midPointSelect, step2Form, firstDrop, secondDrop,
   };
   map2.legend.addTo(map2);
 
-  console.log(resolutionCollection);
-
   // find final score for the selected point
   // findClosestData only takes polygon/line, not point, so need to buffer the point
   const bufferedPoint = turf.buffer(midPointSelect, 0.1);
   const pointScore = findClosestData(resolutionCollection, bufferedPoint);
-  console.log(pointScore);
 
   map2.pickPointLayer.bringToFront()
     .bindTooltip((l) => { // final unit box tooltip options
@@ -215,6 +212,12 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
 
   // get range input values
   const [from, to] = getParsed(fromSliderSim, toSliderSim);
+
+  // check if the range is valid
+  if (pointScore[0].finalValueNormal < from || pointScore[0].finalValueNormal > to) {
+    alert('Please make sure the range includes the selected point\'s score.');
+    return;
+  }
 
   const [simGeojson, minSim, maxSim] = selectSimToGeojson(resolutionCollection, from, to, pointScore);
   console.log(simGeojson);
@@ -344,9 +347,7 @@ function selectSimToGeojson(resolutionCollection, from, to, pointScore) {
   }
 
   // prepare similarity range for color later
-  const simArray = groupArray.map((f) => f.properties.similarity);
-  const minSim = Math.min(...simArray);
-  const maxSim = Math.max(...simArray);
+  const [minSim, maxSim] = getMinMaxFromFeatureArray(groupArray, 'similarity');
 
   // create the geojson structure
   const geojsonCollection = {'type': 'FeatureCollection', 'features': groupArray};

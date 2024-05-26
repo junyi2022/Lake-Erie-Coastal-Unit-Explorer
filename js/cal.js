@@ -36,11 +36,11 @@ const modelName = {
 
 // color scale for the resolution
 // more info at: https://d3js.org/d3-interpolate/color#interpolateRgb
-const colorScale = d3.interpolateRgbBasis(['rgb(140, 152, 255)', 'rgb(154, 220, 255)', 'rgb(211, 250, 192)', 'rgb(255, 214, 169)', 'rgb(255, 155, 144)']);
+const colorScale = d3.interpolateRgbBasis(['rgb(140, 152, 255)', 'rgb(154, 220, 255)', 'rgb(186, 249, 183)', 'rgb(255, 211, 153)', 'rgb(255, 155, 144)']);
 window.colorScale = colorScale;
 
 // color scale for the unit
-const unitColorScale = d3.interpolateRgbBasis(['rgb(140, 152, 255)', 'rgb(154, 220, 255)', 'rgb(211, 250, 192)', 'rgb(255, 214, 169)', 'rgb(255, 155, 144)']);
+const unitColorScale = d3.interpolateRgbBasis(['rgb(140, 152, 255)', 'rgb(154, 220, 255)', 'rgb(186, 249, 183)', 'rgb(255, 211, 153)', 'rgb(255, 155, 144)']);
 window.unitColorScale = unitColorScale;
 
 // marker icon

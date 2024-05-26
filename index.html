@@ -385,7 +385,7 @@
                             <span id="step-5-pop"><p>This step will download the generated similar area and save it as either geojson or shapefile.</p></span>
                         </div>
                         <div class="substep">
-                            <h5 class="substep-title">Download Units</h5>
+                            <h5 class="substep-title">Download Similarity Data</h5>
                             <select class="file-type-sim" disabled="true">
                                 <option value="geojson">geojson</option>
                                 <option value="shapefile">shapefile</option>
@@ -404,9 +404,274 @@
                 <p><strong>Overview:</strong> This sector will enable users to "filter" the coastline and get the ideal location for a certain strategy they want to build, which does the opposite work of the unit generator. The unit generator will give suggestions for the coastal engineering strategy in a certain area, but the strategy filter will return areas that are suitable for a certain coastal engineering strategy.</p>
             </div>
 
-            <div id="data-explorer-body" class="container draft">
-                <h2>Data Explorer (Stay tuned!)</h2>
-                <p><strong>Overview:</strong> This sector will present all the GIS data used in the whole site, either the unit generator or the strategy filter, and the source for each of them.</p>
+            <div id="data-explorer-body" class="container">
+                <div class="toc">
+                    <ul class="section table-of-contents">
+                        <li><a href="#data-explorer-top" onclick="smoothScroll('data-explorer-top')"><em>Go to top</em></a></li>
+                        <li>
+                            <a href="#de-biology" onclick="smoothScroll('de-biology')">Biology Data</a>
+                            <ul class="table-of-contents">
+                                <li><a href="#de-wetland-potential" onclick="smoothScroll('de-wetland-potential')">Wetland Potential</a></li>
+                                <li><a href="#de-wildlife-index" onclick="smoothScroll('de-wildlife-index')">Fish and Wildlife Index</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#de-demographics" onclick="smoothScroll('de-demographics')">Demographic Data</a>
+                            <ul class="table-of-contents">
+                                <li><a href="#de-census-tracts" onclick="smoothScroll('de-census-tracts')">Census Tracts</a></li>
+                                <li><a href="#de-county" onclick="smoothScroll('de-county')">County Boundary</a></li>
+                                <li><a href="#de-community-exposure-index" onclick="smoothScroll('de-community-exposure-index')">Community Exposure Index</a></li>
+                                
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#de-geography" onclick="smoothScroll('de-geography')">Geography Data</a>
+                            <ul class="table-of-contents">
+                                <li><a href="#de-shoreline-type" onclick="smoothScroll('de-shoreline-type')">Shorelines Classification</a></li>
+                                <li><a href="#de-soil-erosion" onclick="smoothScroll('de-soil-erosion')">Soil Erosion Factors</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#de-hydrology" onclick="smoothScroll('de-hydrology')">Hydrology Data</a>
+                            <ul class="table-of-contents">
+                                <li><a href="#de-shoreline" onclick="smoothScroll('de-shoreline')">NYS Shoreline</a></li>
+                                <li><a href="#de-huc10" onclick="smoothScroll('de-huc10')">HUC 10 Digit</a></li>
+                                <li><a href="#de-huc12" onclick="smoothScroll('de-huc12')">HUC 12 Digit</a></li>
+                                <li><a href="#de-sediment-budget" onclick="smoothScroll('de-sediment-budget')">Sediment Budget</a></li>
+                                
+                            </ul>
+                        </li>
+                                
+                    </ul>
+                </div>
+
+                <div class="doc">
+                    
+                    <h1 id="data-explorer-top" class="section scrollspy">Data Explorer</h1>
+
+                    <h2 id="de-data-source" class="section scrollspy">Data Sources</h2>
+                    <h3 id="de-categories" class="section scrollspy">Data Categories</h3>
+                    <p>The data sources in this section are organized by the type of data they provide. There are currentlt 4 types of categories: biology, demographics, geography, and hydrology.</p>
+
+                    <h3 id="de-biology" class="section scrollspy">Biology  Data</h3>
+    
+                    <h4 id="de-wetland-potential" class="section scrollspy">Wetland Potential</h4>
+                    <ul>
+                        <li>
+                            <h5>Souce:</h5> Office for Coastal Management, 2024: NOAA C-CAP National Wetland Potential, <a href="https://www.fisheries.noaa.gov/inport/item/48357" class="inline-link" target="_blank">https://www.fisheries.noaa.gov/inport/item/48357</a>.
+                        </li>
+                        <li>
+                            <h5>Format:</h5> Raster / Tiff
+                        </li>
+                        <li>
+                            <h5>Date:</h5> 2020-10-30
+                        </li>
+                        <li>
+                            <h5>Description from Data Owner:</h5> The probability rating which covers landcover mapping provides a continuum of wetness from dry to water. The layer is not a wetland classification but provides the wetland likelihood at a specific location. The rating was developed through a modelling process combining multiple GIS and remote sensing data sets including soil characteristics, elevation, existing wetland inventories, hydrographical extents and satellite imagery.
+                        </li>
+                        <li>
+                            <h5>Usage:</h5> This data is used in the NOAA Wetland Potential Model as one of the selection priorities.
+                        </li>
+                    </ul>
+
+                    <h4 id="de-wildlife-index" class="section scrollspy">Fish and Wildlife Index</h4>
+                    <ul>
+                        <li>
+                            <h5>Souce:</h5> The National Fish and Wildlife Foundation (NFWF): The Coastal Resilience Evaluation and Siting Tool (CREST), <a href="https://resilientcoasts.org/Home" class="inline-link" target="_blank">https://resilientcoasts.org/Home</a>.
+                        </li>
+                        <li>
+                            <h5>Format:</h5> Raster / Tiff
+                        </li>
+                        <li>
+                            <h5>Date:</h5> 2023-05-04
+                        </li>
+                        <li>
+                            <h5>Description from Data Owner:</h5> The Fish and Wildlife Index identifies areas on the landscape where species and their habitats are located, helping to understand areas where implementing nature-based solutions are likely to benefit federal- or state-designated species of concern. In continental U.S (CONUS), a Terrestrial and Aquatic Index are combined based principally on rarity-weighted richness. Importantly, in CONUS, the Aquatic Index includes both freshwater and marine species, but focuses almost exclusively on very shallow, nearshore areas.
+                        </li>
+                        <li>
+                            <h5>Usage:</h5> This data is used in the NFWF Habitat Protection Model as one of the selection priorities.
+                        </li>
+                    </ul>
+
+                    <h3 id="de-demographics" class="section scrollspy">Demographic Data</h3>
+
+                    <h4 id="de-census-tracts" class="section scrollspy">Census Tracts</h4>
+                    <ul>
+                        <li>
+                            <h5>Souce:</h5> US Census Bureau, Geography Division: TIGER/Line® Shapefiles, <a href="https://www.census.gov/cgi-bin/geo/shapefiles/index.php" class="inline-link" target="_blank">https://www.census.gov/cgi-bin/geo/shapefiles/index.php</a>.
+                        </li>
+                        <li>
+                            <h5>Format:</h5> Shapefile
+                        </li>
+                        <li>
+                            <h5>Date:</h5> 2023
+                        </li>
+                        <li>
+                            <h5>Description from Data Owner:</h5> The core TIGER/Line Files and Shapefiles do not include demographic data, but they do contain geographic entity codes (GEOIDs) that can be linked to the Census Bureau's demographic data.
+                        </li>
+                        <li>
+                            <h5>Usage:</h5> This data is used as a reference layer in the map interface for orientation.
+                        </li>
+                    </ul>
+
+                    <h4 id="de-county" class="section scrollspy">County Boundary</h4>
+                    <ul>
+                        <li>
+                            <h5>Souce:</h5> US Census Bureau, Geography Division: TIGER/Line® Shapefiles, <a href="https://www.census.gov/cgi-bin/geo/shapefiles/index.php" class="inline-link" target="_blank">https://www.census.gov/cgi-bin/geo/shapefiles/index.php</a>.
+                        </li>
+                        <li>
+                            <h5>Format:</h5> Shapefile
+                        </li>
+                        <li>
+                            <h5>Date:</h5> 2023
+                        </li>
+                        <li>
+                            <h5>Description from Data Owner:</h5> The core TIGER/Line Files and Shapefiles do not include demographic data, but they do contain geographic entity codes (GEOIDs) that can be linked to the Census Bureau's demographic data.
+                        </li>
+                        <li>
+                            <h5>Usage:</h5> This data is used as a reference layer in the map interface for orientation.
+                        </li>
+                    </ul>
+    
+                    <h4 id="de-community-exposure-index" class="section scrollspy">Community Exposure Index</h4>
+                    <ul>
+                        <li>
+                            <h5>Souce:</h5> The National Fish and Wildlife Foundation (NFWF): The Coastal Resilience Evaluation and Siting Tool (CREST), <a href="https://resilientcoasts.org/Home" class="inline-link" target="_blank">https://resilientcoasts.org/Home</a>.
+                        </li>
+                        <li>
+                            <h5>Format:</h5> Raster / Tiff
+                        </li>
+                        <li>
+                            <h5>Date:</h5> 2023-05-04
+                        </li>
+                        <li>
+                            <h5>Description from Data Owner:</h5> The Community Exposure Index explores the relationship between potential flooding threats and the presence of community assets by combining two composite indices: the Threat Index and the Community Asset Index. The Threat Index utilizes landscape characteristics and flood-related data. The Community Asset Index helps to understand where critical infrastructure, facilities, and population are concentrated on the landscape. Together, these indices combine to identify areas where community assets overlap with flood threats, also known as exposure. While individual data inputs vary regionally, the Regional Coastal Resilience Assessments utilize standardized methods to calculate the Community Exposure Index.
+                        </li>
+                        <li>
+                            <h5>Usage:</h5> This data is used in the NFWF Social Vulnerability Model as one of the selection priorities.
+                        </li>
+                    </ul>
+
+                    <h3 id="de-geography" class="section scrollspy">Geography Data</h3>
+
+                    <h4 id="de-shoreline-type" class="section scrollspy">Hardened Shorelines Classification</h4>
+                    <ul>
+                        <li>
+                            <h5>Souce:</h5> Office for Coastal Management, 2024: Great Lakes Hardened Shorelines Classification 2019, <a href="https://www.fisheries.noaa.gov/inport/item/59439" class="inline-link" target="_blank">https://www.fisheries.noaa.gov/inport/item/59439</a>.
+                        </li>
+                        <li>
+                            <h5>Format:</h5> Shapefile
+                        </li>
+                        <li>
+                            <h5>Date:</h5> 2020
+                        </li>
+                        <li>
+                            <h5>Description from Data Owner:</h5> The database consists of a single polyline feature class with segmented and classified by shoreline type. Each shoreline segment was initially determined to be either artificial or natural, then further classified by structure or natural feature type and the quality of its condition. The data were created by digitizing shoreline using NAIP imagery from 2014 through 2017, then compared with oblique imagery to determine structure condition and quality. This dataset creation was funded through the Great Lakes Restoration Initiative.
+                        </li>
+                        <li>
+                            <h5>Usage:</h5> This data is used in the Erosion Potential Model as one of the selection priorities.
+                        </li>
+                    </ul>
+    
+                    <h4 id="de-soil-erosion" class="section scrollspy">Soil Erosion Factors</h4>
+                    <ul>
+                        <li>
+                            <h5>Souce:</h5> Soil Survey Staff, Natural Resources Conservation Service, United States Department of Agriculture. Web Soil Survey. Available online at the following link: <a href="http://websoilsurvey.sc.egov.usda.gov/" class="inline-link" target="_blank">http://websoilsurvey.sc.egov.usda.gov/</a>.
+                        </li>
+                        <li>
+                            <h5>Format:</h5> Shapefile
+                        </li>
+                        <li>
+                            <h5>Date:</h5> 2024
+                        </li>
+                        <li>
+                            <h5>Description from Data Owner:</h5> Erosion factor K indicates the susceptibility of a soil to sheet and rill erosion by water. Factor K is one of six factors used in the Universal Soil Loss Equation (USLE) and the Revised Universal Soil Loss Equation (RUSLE) to predict the average annual rate of soil loss by sheet and rill erosion in tons per acre per year. The estimates are based primarily on percentage of silt, sand, and organic matter and on soil structure and saturated hydraulic conductivity (Ksat). Values of K range from 0.02 to 0.69. Other factors being equal, the higher the value, the more susceptible the soil is to sheet and rill erosion by water. "Erosion factor Kw (whole soil)" indicates the erodibility of the whole soil. The estimates are modified by the presence of rock fragments.
+                        </li>
+                        <li>
+                            <h5>Usage:</h5> This data is used in the Erosion Potential Model as one of the selection priorities.
+                        </li>
+                    </ul>
+
+                    <h3 id="de-hydrology" class="section scrollspy">Hydrology Data</h3>
+    
+                    <h4 id="de-shoreline" class="section scrollspy">NYS Shoreline</h4>
+                    <ul>
+                        <li>
+                            <h5>Souce:</h5> NYS GIS Clearinghouse: NYS Civil Boundaries, <a href="https://data.gis.ny.gov/maps/074d3456e5664f5e85d0fb251d05cc5b/about" class="inline-link" target="_blank">https://data.gis.ny.gov/maps/074d3456e5664f5e85d0fb251d05cc5b/about</a>.
+                        </li>
+                        <li>
+                            <h5>Format:</h5> Shapefile
+                        </li>
+                        <li>
+                            <h5>Date:</h5> 2024
+                        </li>
+                        <li>
+                            <h5>Description from Data Owner:</h5> This feature service has polygon layers for the following boundary types: State, Counties, Cites, Towns, Cities and Towns combined, Villages, and Indian Territories. In addition, there are separate shoreline layers for the State layer and the County layer. Boundaries are at 1:24,000-scale positional accuracy except for the shoreline in State Shoreline and Counties Shoreline which is being adjusted to 1:24,000-scale positional accuracy as part of ongoing work. 
+                        </li>
+                        <li>
+                            <h5>Usage:</h5> This data is used as the base of area of interest for all calculations.
+                        </li>
+                    </ul>
+
+                    <h4 id="de-huc10" class="section scrollspy">HUC 10 Digit</h4>
+                    <ul>
+                        <li>
+                            <h5>Souce:</h5> ArcGIS Online:  <a href="https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/Watershed_Boundary_Dataset_HUC_10s/FeatureServer/0" class="inline-link" target="_blank">Watershed Boundary Dataset HUC 10s - HU10</a>.
+                        </li>
+                        <li>
+                            <h5>Format:</h5> Shapefile
+                        </li>
+                        <li>
+                            <h5>Date:</h5> 2023
+                        </li>
+                        <li>
+                            <h5>Usage:</h5> This data is used as a reference layer in the map interface for orientation.
+                        </li>
+                    </ul>
+
+                    <h4 id="de-huc12" class="section scrollspy">HUC 12 Digit</h4>
+                    <ul>
+                        <li>
+                            <h5>Souce:</h5> USGS: National Hydrography Dataset Plus High Resolution National Release 1 FileGDB, <a href="https://www.usgs.gov/national-hydrography/access-national-hydrography-products" class="inline-link" target="_blank">https://www.usgs.gov/national-hydrography/access-national-hydrography-products</a>.
+                        </li>
+                        <li>
+                            <h5>Format:</h5> Shapefile
+                        </li>
+                        <li>
+                            <h5>Date:</h5> 2024
+                        </li>
+                        <li>
+                            <h5>Description from Data Owner:</h5> The NHDPlus HR is a geospatial dataset depicting the flow of water across the Nation's landscapes and through the stream network. The NHDPlus HR was built using the National Hydrography Dataset High Resolution data at 1:24,000 scale or more detailed, the 10 meter 3D Elevation Program data, and the nationally complete Watershed Boundary Dataset. 
+                        </li>
+                        <li>
+                            <h5>Usage:</h5> This data is used as a reference layer in the map interface for orientation.
+                        </li>
+                    </ul>
+
+                    <h4 id="de-sediment-budget" class="section scrollspy">Sediment Budget</h4>
+                    <ul>
+                        <li>
+                            <h5>Souce:</h5> US Army Corps of Engineers: Sediment Budgets for Lake Erie and Lake Ontario, <a href="https://usace.maps.arcgis.com/apps/MapSeries/index.html?appid=34476ea8c07a4111841d28a5d960cb02" class="inline-link" target="_blank">https://usace.maps.arcgis.com/apps/MapSeries/index.html?appid=34476ea8c07a4111841d28a5d960cb02</a>.
+                        </li>
+                        <li>
+                            <h5>Format:</h5> Shapefile
+                        </li>
+                        <li>
+                            <h5>Date:</h5> 2020
+                        </li>
+                        <li>
+                            <h5>Description from Data Owner:</h5> Sediment budget is a measure of sediment (usually sand) “sources” (inputs), “sinks” (outputs), and net change within a specified “control volume” (a cell or series of connecting cells) over a given period of time. It is a fundamental design tool for projects concerned with sediment transport, deposition, and erosion.
+                        </li>
+                        <li>
+                            <h5>Usage:</h5> This data is used in the Sediment Loss, Sediment Gain, and Erosion Potential Model as one of the selection priorities. It is also available as a reference layer in the map interface for orientation.
+                        </li>
+                    </ul>
+                    
+                </div>
+
             </div>
 
             <div id="strategy-library-body" class="container draft">
@@ -811,7 +1076,7 @@
 
         <footer>
             <p id="footnote">
-                <strong>University of Pennsylvania</strong> <a href="https://emlabupenn.com/" target="_blank"><strong>EMLab</strong></a> Last update: Apirl 2024.
+                <strong>University of Pennsylvania</strong> <a href="https://emlabupenn.com/" target="_blank"><strong>EMLab</strong></a> Last update: May 2024.
             </p>
 
         </footer>

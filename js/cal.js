@@ -110,12 +110,14 @@ function handleMapSelection(map, start, end, coastLine) {
   // clear any existing features / reset
   map.flyToBounds(map.zoomRefLayer.getBounds());
   map.markerLayer.clearLayers();
+
   if (map.sliceLayer !== null) {
     map.sliceLayer.clearLayers();
   }
 
   // draggable markers part
-  const [startMarker, endMarker] = initializeMarkers(map, [start, end]);
+  const startMarker = initializePoints(map, start);
+  const endMarker = initializePoints(map, end);
 
   startMarker.addEventListener('dragend', () => {
     handleMarkerSnap(coastLine, startMarker);
@@ -129,6 +131,8 @@ function handleMapSelection(map, start, end, coastLine) {
   // this button is set within the start button to make sure nothing will happen if people do not "start"
   finishButton.addEventListener('click', () => {
     withSpinnerDo(() => {
+      // for some reasons, the marker layer will have more than 2 markers when rerun the first step, so need to get only two points here
+      const [startMarker, endMarker] = map.markerLayer.getLayers();
       doSomethingWithEndpoints(startMarker.getLatLng(), endMarker.getLatLng(), coastLine, map);
     });
   });
@@ -138,22 +142,20 @@ function handleMapSelection(map, start, end, coastLine) {
 // step 1 supporting functions
 
 // add start and end marker to the end of the shoreline
-
-function initializeMarkers(map, points) { // can handle unknown number of points
-  // points is an array of [longitude, latitude] pairs
-  const markers = points.map((point) => {
-    const marker = L.marker([point[1], point[0]], {
-      draggable: true,
-      icon: markerIcon,
-    }).addTo(map.markerLayer);
-    return marker;
-  });
-  return markers;
+function initializePoints(map, point) {
+  const pointMarker = L.marker([point[1], point[0]], {
+    draggable: true,
+    icon: markerIcon,
+  }).addTo(map.markerLayer);
+  return pointMarker;
 }
 
+function reinitializePoints(marker, point) {
+  marker.setLatLng([point.geometry.coordinates[1], point.geometry.coordinates[0]]);
+}
 
 // snap the maker to the nearest point on the coastal line after user drag markers
-function handleMarkerSnap(coastLine, marker) {
+function handleMarkerSnap(coastLine, marker, map) {
   const newPoint = marker.getLatLng(); // get the coordinates of the final marker
 
   const newPointTurf = turf.point([newPoint.lng, newPoint.lat]); // turf coordinates are the opposite of leaflet
@@ -304,12 +306,7 @@ function munipulateResCollection(map, resolutionCollection, firstDrop, secondDro
     }
   }
 
-  // The final value now may be skewed, need to normalize it to make sure it will be between 0 and 1
-  const finalValueArray = resolutionCollection.features.map((f) => f.properties.finalValue); // map will return an array of all the properties.finalValue
-
-  // calculate the min max of the values
-  const min = Math.min(...finalValueArray); // ...flatten the array because min/max doesn't take array
-  const max = Math.max(...finalValueArray);
+  const [min, max] = getMinMaxFromFeatureArray(resolutionCollection.features, 'finalValue');
 
   // here use power scale
   const scaleFunc = d3.scalePow([min, max], [0, 1]).exponent(1); // need to map to 0 to 1 because the later color scale only take numbers between 0 and 1
@@ -319,6 +316,18 @@ function munipulateResCollection(map, resolutionCollection, firstDrop, secondDro
   }
 
   return [firstProp, secondProp, thirdProp];
+}
+
+// get min max from feature array
+function getMinMaxFromFeatureArray(featureArray, prop) {
+  // The final value now may be skewed, need to normalize it to make sure it will be between 0 and 1
+  const finalValueArray = featureArray.map((f) => f.properties[prop]); // map will return an array of all the properties.finalValue
+
+  // calculate the min max of the values
+  const min = Math.min(...finalValueArray); // ...flatten the array because min/max doesn't take array
+  const max = Math.max(...finalValueArray);
+
+  return [min, max];
 }
 
 // divide the slice into certain length
@@ -738,12 +747,14 @@ export {
   unitColorScale,
   markerIcon,
   shpOptions,
-  initializeMarkers,
+  initializePoints,
+  reinitializePoints,
   handleMarkerSnap,
   munipulateResCollection,
   getFtResolution,
   handleAllCalculations,
   getResolutionBoxes,
+  getMinMaxFromFeatureArray,
   handleDownload,
 };
 

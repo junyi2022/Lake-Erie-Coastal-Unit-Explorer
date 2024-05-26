@@ -68,7 +68,7 @@
 
 #step-1-pop {
     bottom: 80vh;
-	left: 280px;
+	left: 300px;
     z-index: 10000;
 }
 
@@ -79,6 +79,7 @@
 }
 
 #step-3-pop {
+    bottom: 30vh;
 	left: 250px;
     z-index: 10000;
 }

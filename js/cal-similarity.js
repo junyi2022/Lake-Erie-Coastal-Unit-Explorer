@@ -4,8 +4,8 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 import { findClosestData } from './model.js';
 import { legend1Style, legend3Style } from './map.js';
 import { handleDropdownDisplay, withSpinnerDo, displaySelectPointScoreOnRange, getParsed } from './logistics.js';
-import { modelName, colorScale, unitColorScale, handleDownload } from './cal.js';
-import { initializeMarkers, handleMarkerSnap, getFtResolution, munipulateResCollection } from './cal.js';
+import { modelName, colorScale, unitColorScale, getMinMaxFromFeatureArray, handleDownload } from './cal.js';
+import { initializePoints, handleMarkerSnap, getFtResolution, munipulateResCollection } from './cal.js';
 
 // similar finder inputs
 // get step 1 buttons
@@ -63,32 +63,32 @@ function handleSimilarityMapSelection(map2, mid, coastLine) {
   // clear any existing features / reset
   map2.flyToBounds(map2.zoomRefLayer.getBounds());
   map2.markerLayer.clearLayers();
-
-  // check all the boxes are filled
-  // process to the calculations when we have everything
-  if (step2FormSim.reportValidity() == false) {
-    return; // this just means stop
-  }
+  map2.pickPointLayer.clearLayers();
 
   // draggable markers part
-  const [midMarker] = initializeMarkers(map2, [mid]); // will return an array, so need to destructure it
+  const midMarker = initializePoints(map2, mid);
 
   midMarker.addEventListener('dragend', () => {
-    handleMarkerSnap(coastLine, midMarker);
+    handleMarkerSnap(coastLine, midMarker, map2);
   });
 
   // next button part after user selected a point
   // this button is set within the start button to make sure nothing will happen if people do not "start"
   finishButtonSim.addEventListener('click', () => {
     withSpinnerDo(() => {
-      calResForSimilarity(midMarker.getLatLng(), coastLine, map2);
+      const [midMarker] = map2.markerLayer.getLayers();
+      // for some reasons there will be more than one marker if rerun this step, only the final one will be valid
+      if (midMarker !== void 0) { // void 0 is the same as undefined
+        calResForSimilarity(midMarker.getLatLng(), coastLine, map2);
+      }
     });
   });
 }
 
-// function for similarity finder
-// handle start and end marker points after user moved them
+// handle marker point after user moved them
 function calResForSimilarity(newMid, coastLine, map2) {
+  // zoom to the whole coastline
+  map2.fitBounds(map2.zoomRefLayer.getBounds());
   // disable step 1 buttons
   startButtonSim.disabled = true;
   finishButtonSim.disabled = true;
@@ -123,13 +123,16 @@ function calResForSimilarity(newMid, coastLine, map2) {
 
 // actual res calculations
 function handleSimCalculations(midPointSelect, step2Form, firstDrop, secondDrop, thirdDrop, map2, coastalLine) {
+  // zoom to the whole coastline
+  map2.fitBounds(map2.zoomRefLayer.getBounds());
+
   if (map2.colorLayer !== null) {
     map2.colorLayer.clearLayers();
   }
 
   // check all the boxes are filled
   // process to the calculations when we have everything
-  if (step2Form.reportValidity() == false) {
+  if (step2FormSim.reportValidity() == false) {
     return; // this just means stop
   }
 
@@ -177,6 +180,7 @@ function handleSimCalculations(midPointSelect, step2Form, firstDrop, secondDrop,
   });
 }
 
+// prepare for filtering
 function simGroupRes(map2, resolutionCollection, firstProp, secondProp, thirdProp, pointScore) {
   // enable step 3 box
   fromSliderSim.disabled = false;
@@ -200,7 +204,10 @@ function simGroupRes(map2, resolutionCollection, firstProp, secondProp, thirdPro
   });
 }
 
+// filter by range
 function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, thirdProp, pointScore) {
+  // zoom to the whole coastline
+  map2.fitBounds(map2.zoomRefLayer.getBounds());
   // clear any existing features / reset
   if (map2.finalSimLayer !== null) {
     map2.finalSimLayer.clearLayers();
@@ -227,7 +234,7 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
         return {
           stroke: true,
           color: colorValue,
-          weight: 15,
+          weight: 23,
           opacity: 0.9,
           lineCap: 'butt',
         };
@@ -253,7 +260,7 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
         return {
           stroke: true,
           color: colorValue,
-          weight: 15,
+          weight: 23,
           opacity: 0.9,
           lineCap: 'butt',
         };
@@ -281,7 +288,7 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
         return {
           stroke: true,
           color: colorValue,
-          weight: 15,
+          weight: 23,
           opacity: 0.9,
           lineCap: 'butt',
         };
@@ -313,6 +320,7 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
   });
 }
 
+// use input range to get the final geojson
 function selectSimToGeojson(resolutionCollection, from, to, pointScore) {
   // pick the res in the selected range
   const groupArray = [];
@@ -324,12 +332,7 @@ function selectSimToGeojson(resolutionCollection, from, to, pointScore) {
   }
 
   // Calculate the similarity value based on normal final value, need to normalize it to make sure it will be between 0 and 1
-  const simFinalValueArray = groupArray.map((f) => f.properties.finalValueNormal);
-
-  // calculate the min max of the values
-  const minFinal = Math.min(...simFinalValueArray); // ...flatten the array because min/max doesn't take array
-  const maxFinal = Math.max(...simFinalValueArray);
-
+  const [minFinal, maxFinal] = getMinMaxFromFeatureArray(groupArray, 'finalValueNormal');
   // here use power scale
   const scaleFunc = d3.scalePow([minFinal, maxFinal], [0, 1]).exponent(1);
   const selectPointSimRefScore = scaleFunc(pointScore[0].finalValueNormal);

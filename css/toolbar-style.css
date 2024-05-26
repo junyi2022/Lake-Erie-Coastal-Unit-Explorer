@@ -1,5 +1,6 @@
 .substep-title {
     margin-bottom: 15px;
+    margin-top: 0;
 }
 
 .piority-list {
@@ -67,7 +68,7 @@
 
 #step-1-pop {
     bottom: 80vh;
-	left: 280px;
+	left: 300px;
     z-index: 10000;
 }
 
@@ -78,12 +79,19 @@
 }
 
 #step-3-pop {
+    bottom: 30vh;
 	left: 250px;
     z-index: 10000;
 }
 
 #step-4-pop {
     bottom: 22vh;
+	left: 300px;
+    z-index: 10000;
+}
+
+#step-5-pop {
+    bottom: 12vh;
 	left: 300px;
     z-index: 10000;
 }

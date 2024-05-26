@@ -65,13 +65,15 @@ window.fishWildlifePoints = fishWildlifePoints;
 window.wetlandPotentialPoints = wetlandPotentialPoints;
 window.communityExposurePoints = communityExposurePoints;
 
-// map
+// map for unit generator
+// Other maps shouldn't be called here since they are not shown up at the beginning and have display = none
 window.map = initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, sendimentBudget); // remember to add new layer her as well
 
 // menu bar
 handleMenuBar();
 
 export {
+  censusTracts, dataBoundary, huc10, huc12, shorelineBase, county,
   sendimentBudget,
   shorelineType,
   soilErosion,

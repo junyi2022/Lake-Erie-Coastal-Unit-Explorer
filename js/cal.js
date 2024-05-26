@@ -64,6 +64,8 @@ const shpOptions = {
   },
 };
 
+// unit generator inputs
+
 // get step 1 buttons
 const startButton = document.querySelector('.select-point');
 const finishButton = document.querySelector('.finish-point');
@@ -86,7 +88,7 @@ const downloadButton = document.querySelector('.download-unit');
 const fileTypeSelect = document.querySelector('.file-type');
 
 
-// map.js will cal this function
+// map.js will cal this function for unit generator
 function handleAllCalculations(start, end, map, shorelineBase) {
   // get the turf string of coastal base for calculation
   const coastLine = turf.lineString(shorelineBase.features[0].geometry.coordinates);
@@ -98,6 +100,8 @@ function handleAllCalculations(start, end, map, shorelineBase) {
 }
 
 
+// subfunctions collection in the sequence of unit generator steps
+
 // step 1 functions
 
 // step 1 botton manipulation part
@@ -106,12 +110,14 @@ function handleMapSelection(map, start, end, coastLine) {
   // clear any existing features / reset
   map.flyToBounds(map.zoomRefLayer.getBounds());
   map.markerLayer.clearLayers();
+
   if (map.sliceLayer !== null) {
     map.sliceLayer.clearLayers();
   }
 
   // draggable markers part
-  const [startMarker, endMarker] = initializeEndPoints(map, start, end);
+  const startMarker = initializePoints(map, start);
+  const endMarker = initializePoints(map, end);
 
   startMarker.addEventListener('dragend', () => {
     handleMarkerSnap(coastLine, startMarker);
@@ -125,6 +131,8 @@ function handleMapSelection(map, start, end, coastLine) {
   // this button is set within the start button to make sure nothing will happen if people do not "start"
   finishButton.addEventListener('click', () => {
     withSpinnerDo(() => {
+      // for some reasons, the marker layer will have more than 2 markers when rerun the first step, so need to get only two points here
+      const [startMarker, endMarker] = map.markerLayer.getLayers();
       doSomethingWithEndpoints(startMarker.getLatLng(), endMarker.getLatLng(), coastLine, map);
     });
   });
@@ -134,21 +142,20 @@ function handleMapSelection(map, start, end, coastLine) {
 // step 1 supporting functions
 
 // add start and end marker to the end of the shoreline
-function initializeEndPoints(map, start, end) {
-  // start and end are inputs from map.js
-  const startMarker = L.marker([start[1], start[0]], {
+function initializePoints(map, point) {
+  const pointMarker = L.marker([point[1], point[0]], {
     draggable: true,
     icon: markerIcon,
   }).addTo(map.markerLayer);
-  const endMarker = L.marker([end[1], end[0]], {
-    draggable: true,
-    icon: markerIcon,
-  }).addTo(map.markerLayer);
-  return [startMarker, endMarker];
+  return pointMarker;
+}
+
+function reinitializePoints(marker, point) {
+  marker.setLatLng([point.geometry.coordinates[1], point.geometry.coordinates[0]]);
 }
 
 // snap the maker to the nearest point on the coastal line after user drag markers
-function handleMarkerSnap(coastLine, marker) {
+function handleMarkerSnap(coastLine, marker, map) {
   const newPoint = marker.getLatLng(); // get the coordinates of the final marker
 
   const newPointTurf = turf.point([newPoint.lng, newPoint.lat]); // turf coordinates are the opposite of leaflet
@@ -205,15 +212,16 @@ function doSomethingWithEndpoints(newStart, newEnd, coastLine, map) {
   // handle inputs from form
   generateResButton.addEventListener('click', () => {
     withSpinnerDo(() => {
-      handleCalculations(map, coastalSliced);
+      handleCalculations(step2Form, firstDrop, secondDrop, thirdDrop, map, coastalSliced);
     });
   });
 }
 
+
 // step for resolution calculation part
 
 // actual res calculations
-function handleCalculations(map, coastalSliced) {
+function handleCalculations(step2Form, firstDrop, secondDrop, thirdDrop, map, coastalSliced) {
   if (map.colorLayer !== null) {
     map.colorLayer.clearLayers();
   }
@@ -227,6 +235,39 @@ function handleCalculations(map, coastalSliced) {
   const resolutionCollection = getResolution(coastalSliced); // feature collection of a lot of linestrings
   console.log(resolutionCollection);
 
+  // handle all calculations within res collection
+  const [firstProp, secondProp, thirdProp] = munipulateResCollection(map, resolutionCollection, firstDrop, secondDrop, thirdDrop);
+
+  // add the resolution data to map and color that based on the final score of each coastline piece
+  map.colorLayer = L.geoJSON(resolutionCollection, {
+    style: (sample) => {
+      const colorValue = colorScale(sample.properties.finalValueNormal);
+      return {
+        stroke: true,
+        color: colorValue,
+        weight: 3,
+      };
+    },
+  }).addTo(map);
+
+  // add legend for the resolution box
+  map.legend.onAdd = (map) => {
+    return legend1Style(map, colorScale, 'legend-content');
+  };
+  map.legend.addTo(map);
+
+  console.log(resolutionCollection);
+
+
+  // process to the following step if user click next
+  finishResButton.addEventListener('click', () => {
+    startGroupRes(map, resolutionCollection, firstProp, secondProp, thirdProp);
+  });
+}
+
+// step for resolution supporting functions
+
+function munipulateResCollection(map, resolutionCollection, firstDrop, secondDrop, thirdDrop) {
   // need to add ID to these line for identification later
   for (let i = 0; i < resolutionCollection.features.length; i++) {
     resolutionCollection.features[i].properties.ID = i;
@@ -265,12 +306,7 @@ function handleCalculations(map, coastalSliced) {
     }
   }
 
-  // The final value now may be skewed, need to normalize it to make sure it will be between 0 and 1
-  const finalValueArray = resolutionCollection.features.map((f) => f.properties.finalValue); // map will return an array of all the properties.finalValue
-
-  // calculate the min max of the values
-  const min = Math.min(...finalValueArray); // ...flatten the array because min/max doesn't take array
-  const max = Math.max(...finalValueArray);
+  const [min, max] = getMinMaxFromFeatureArray(resolutionCollection.features, 'finalValue');
 
   // here use power scale
   const scaleFunc = d3.scalePow([min, max], [0, 1]).exponent(1); // need to map to 0 to 1 because the later color scale only take numbers between 0 and 1
@@ -279,35 +315,20 @@ function handleCalculations(map, coastalSliced) {
     coastline.properties.finalValueNormal = scaleFunc(coastline.properties.finalValue);
   }
 
-
-  // add the resolution data to map and color that based on the final score of each coastline piece
-  map.colorLayer = L.geoJSON(resolutionCollection, {
-    style: (sample) => {
-      const colorValue = colorScale(sample.properties.finalValueNormal);
-      return {
-        stroke: true,
-        color: colorValue,
-        weight: 3,
-      };
-    },
-  }).addTo(map);
-
-  // add legend for the resolution box
-  map.legend.onAdd = (map) => {
-    return legend1Style(map, colorScale);
-  };
-  map.legend.addTo(map);
-
-  console.log(resolutionCollection);
-
-
-  // process to the following step if user click next
-  finishResButton.addEventListener('click', () => {
-    startGroupRes(map, resolutionCollection, firstProp, secondProp, thirdProp);
-  });
+  return [firstProp, secondProp, thirdProp];
 }
 
-// step for resolution supporting functions
+// get min max from feature array
+function getMinMaxFromFeatureArray(featureArray, prop) {
+  // The final value now may be skewed, need to normalize it to make sure it will be between 0 and 1
+  const finalValueArray = featureArray.map((f) => f.properties[prop]); // map will return an array of all the properties.finalValue
+
+  // calculate the min max of the values
+  const min = Math.min(...finalValueArray); // ...flatten the array because min/max doesn't take array
+  const max = Math.max(...finalValueArray);
+
+  return [min, max];
+}
 
 // divide the slice into certain length
 // need to change units first because the default lineChunk unit is km
@@ -324,6 +345,13 @@ function getResolution(coastalSliced) {
     const resolutionCollection = turf.lineChunk(coastalSliced, resolutionCal); // unit here is km
     return resolutionCollection;
   }
+}
+
+function getFtResolution(line, num) { // num is ft
+  // use 3000ft res for all inputs
+  const resolutionCal = num * 0.0003048; // ft to km
+  const resolutionCollection = turf.lineChunk(line, resolutionCal); // unit here is km
+  return resolutionCollection;
 }
 
 
@@ -468,7 +496,7 @@ function handleGroupRes(map, resolutionCollection, firstProp, secondProp, thirdP
 
   // download button handeler
   downloadButton.addEventListener('click', () => {
-    handleDownload(units);
+    handleDownload(units, fileTypeSelect, shpOptions, 'unit');
   });
 }
 
@@ -598,7 +626,7 @@ function resToGroupArray(resolutionCollection, catNum) {
 
 // handle download
 // need to be an async function because in the shapefile download part shpwrite.zip generate a promise, and need await for that promise to be down (similar to fetch, also a promise)
-async function handleDownload(units) {
+async function handleDownload(units, fileTypeSelect, shpOptions, name) {
   // figure out downloading data type based on dropdown box value
   const fileType = fileTypeSelect.value;
   let blob; // for the browser download
@@ -606,7 +634,7 @@ async function handleDownload(units) {
   if (fileType == 'geojson') {
     const stringUnit = JSON.stringify(units); // stringfy geojson feature collection
     blob = new Blob([stringUnit], {type: 'application/json'});
-    fileName = 'unit.json';
+    fileName = `${name}.json`;
   } if (fileType == 'shapefile') {
     // a GeoJSON bridge for features
     // in the options can have blob as output type
@@ -615,7 +643,7 @@ async function handleDownload(units) {
       shpOptions,
     );
     console.log(blob);
-    fileName = 'unit.zip';
+    fileName = `${name}.zip`;
   }
   // how to download from blob object
   const url = window.URL.createObjectURL(blob);
@@ -712,8 +740,22 @@ function getResolutionBoxes(Collection, num) {
 
 
 export {
+  modelFuncs,
+  modelProps,
+  modelName,
+  colorScale,
+  unitColorScale,
+  markerIcon,
+  shpOptions,
+  initializePoints,
+  reinitializePoints,
+  handleMarkerSnap,
+  munipulateResCollection,
+  getFtResolution,
   handleAllCalculations,
   getResolutionBoxes,
+  getMinMaxFromFeatureArray,
+  handleDownload,
 };
 
 

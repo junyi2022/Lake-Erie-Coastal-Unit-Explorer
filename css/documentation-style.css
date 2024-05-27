@@ -33,10 +33,11 @@
 
 .doc {
     height: 100%;
+    max-width: 1200px;
     display:flex;
     box-sizing: border-box;
     flex-direction: column;
-    margin-left: 350px;
+    margin-left: 380px;
     margin-right: 8%;
 }
 
@@ -96,3 +97,19 @@ code {
     width: 200px;
 }
 
+/* data explorer style */
+
+.de-data-title-group {
+    display:flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    align-items: center;
+}
+
+.mark {
+    background-color: rgba(233, 246, 237, 0.8);
+    box-sizing: border-box;
+    padding: 2px 5px;
+    border-radius: 10px;
+    margin-left: 15px;
+}

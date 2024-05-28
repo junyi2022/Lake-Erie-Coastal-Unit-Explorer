@@ -34,6 +34,15 @@ const fileTypeSelectSim = document.querySelector('.file-type-sim');
 // get reverse color scale
 const reversedUnitColorScale = (t) => unitColorScale(1 - t);
 
+// range color style
+const rangeColorStyle = {
+  stroke: true,
+  color: '#FFCF4D',
+  weight: 20,
+  opacity: 0.8,
+  lineCap: 'butt',
+};
+
 // shapefile download setting
 const shpOptionsSim = {
   folder: 'download_similarity_shp',
@@ -229,20 +238,7 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
   // adjust pop up based on number of selected priorities
   const firstPropName = modelName[firstDropSim.value];
   if (secondDropSim.value == 'ns') {
-    map2.finalSimLayer = L.geoJSON(simGeojson, {
-      style: (sample) => {
-        // get the absolute value to map the difference of similarity
-        const calSimilarity = sample.properties.similarity;
-        const colorValue = reversedUnitColorScale(calSimilarity);
-        return {
-          stroke: true,
-          color: colorValue,
-          weight: 23,
-          opacity: 0.9,
-          lineCap: 'butt',
-        };
-      },
-    }).bindTooltip((l) => { // final unit box tooltip options
+    map2.finalSimLayer = L.geoJSON(simGeojson, rangeColorStyle).bindTooltip((l) => { // final unit box tooltip options
       return `<p class="unit-tooltip"><strong>Similarity:</strong> ${(1 - l.feature.properties.similarity).toFixed(2)}</p>`;
     }).bindPopup((l) => { // final unit box popup options
       return `<h3 class="unit-pop-title">ID: ${l.feature.properties.ID + 1}</h3>
@@ -255,20 +251,7 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
     map2.pickPointLayer.bringToFront();
   } else if (thirdDropSim.value == 'ns') {
     const secondPropName = modelName[secondDropSim.value];
-    map2.finalSimLayer = L.geoJSON(simGeojson, {
-      style: (sample) => {
-        // get the absolute value to map the difference of similarity
-        const calSimilarity = sample.properties.similarity;
-        const colorValue = reversedUnitColorScale(calSimilarity);
-        return {
-          stroke: true,
-          color: colorValue,
-          weight: 23,
-          opacity: 0.9,
-          lineCap: 'butt',
-        };
-      },
-    }).bindTooltip((l) => { // final unit box tooltip options
+    map2.finalSimLayer = L.geoJSON(simGeojson, rangeColorStyle).bindTooltip((l) => { // final unit box tooltip options
       return `<p class="unit-tooltip"><strong>Similarity:</strong> ${(1 - l.feature.properties.similarity).toFixed(2)}</p>`;
     }).bindPopup((l) => { // final unit box popup options
       return `<h3 class="unit-pop-title">ID: ${l.feature.properties.ID + 1}</h3>
@@ -283,20 +266,7 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
   } else {
     const secondPropName = modelName[secondDropSim.value];
     const thirdPropName = modelName[thirdDropSim.value];
-    map2.finalSimLayer = L.geoJSON(simGeojson, {
-      style: (sample) => {
-        // get the absolute value to map the difference of similarity
-        const calSimilarity = sample.properties.similarity;
-        const colorValue = reversedUnitColorScale(calSimilarity);
-        return {
-          stroke: true,
-          color: colorValue,
-          weight: 23,
-          opacity: 0.9,
-          lineCap: 'butt',
-        };
-      },
-    }).bindTooltip((l) => { // final unit box tooltip options
+    map2.finalSimLayer = L.geoJSON(simGeojson, rangeColorStyle).bindTooltip((l) => { // final unit box tooltip options
       return `<p class="unit-tooltip"><strong>Similarity:</strong> ${(1 - l.feature.properties.similarity).toFixed(2)}</p>`;
     }).bindPopup((l) => { // final unit box popup options
       return `<h3 class="unit-pop-title">ID: ${l.feature.properties.ID + 1}</h3>

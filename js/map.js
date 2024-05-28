@@ -356,8 +356,11 @@ function legend3Style(map, colorScale, min, max) {
   const similarityColorLegendDiv = document.createElement('div');
   similarityColorLegendDiv.classList.add('similarity-legend');
   similarityColorLegendDiv.innerHTML = `
-    <strong><p>Similarity to Selection from Low to High</p></strong>
-    <div class="resColorBox" style="background: linear-gradient(-90deg, ${colorScale(min)}, ${colorScale(min + (max - min) / 4)}, ${colorScale(min + (max - min) / 2)}, ${colorScale(min + (max - min) * 3 / 4)}, ${colorScale(max)})"></div>
+    <strong><p>Similarity</p></strong>
+    <div class="colorTextPair">
+    <div class="catColorBox" style="background-color: rgba(255,207,77,0.8)"></div>
+    <p class="catText">Coastline within Selected Range</p>
+    </div>
   `;
 
   legendContent.appendChild(similarityColorLegendDiv);

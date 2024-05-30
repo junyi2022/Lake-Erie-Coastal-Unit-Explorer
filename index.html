@@ -330,7 +330,7 @@
 
                     <section class="step">
                         <div class="step-explain">
-                            <h4 class="unit-generator">Step 3: Find Similar Area</h4>
+                            <h4 class="unit-generator">Step 3: Find similar area</h4>
                             <svg class="info-tag" width="25px" height="25px" viewBox="0 -0.5 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -695,6 +695,14 @@
                         </li>
 
                         <li>
+                            <a href="#similarity-finder-explanation" onclick="smoothScroll('similarity-finder-explanation')">Similarity Finder Explanation</a>
+                            <ul class="table-of-contents">
+                                <li><a href="#sf-purpose-goal" onclick="smoothScroll('sf-purpose-goal')">Purpose and Goal</a></li>
+                                <li><a href="#sf-steps-explanation" onclick="smoothScroll('sf-steps-explanation')">Steps Explanation</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
                             <a href="#model-explain" onclick="smoothScroll('model-explain')">Criteria Models Explanation</a>
                             <ul class="table-of-contents">
                                 <li><a href="#sediment-loss" onclick="smoothScroll('sediment-loss')">Sediment Loss Model</a></li>
@@ -714,13 +722,14 @@
                     <h1 id="documentation" class="section scrollspy">Documentation</h1>
 
                     <h2 id="unit-generator-explanation" class="section scrollspy">Unit Generator Explanation</h2>
+
                     <h3 id="purpose-goal" class="section scrollspy">Purpose and Goal</h3>
-                    <p>Operational coastal units are seen as a relatively untested and novel approach to coastal analysis that could hold particular potential in decision-making processes that require considering both local conditions and regional transferability. At its most simplistic, the operational coastal unit method assumes that there is value in defining new boundaries for where particular strategies are or are not applicable based on the contextual conditions found in specific places. And perhaps most importantly, that these new boundaries need not respond to existing administrative jurisdictions. Underpinning this idea are two overarching goals, balanced with one another.</p>
+                    <p class="p-dock">Operational coastal units are seen as a relatively untested and novel approach to coastal analysis that could hold particular potential in decision-making processes that require considering both local conditions and regional transferability. At its most simplistic, the operational coastal unit method assumes that there is value in defining new boundaries for where particular strategies are or are not applicable based on the contextual conditions found in specific places. And perhaps most importantly, that these new boundaries need not respond to existing administrative jurisdictions. Underpinning this idea are two overarching goals, balanced with one another.</p>
                     <ol>
                         <li><p>That local conditions and context are important culturally and ecologically. Decision-making regarding the shoreline should take into consideration the cultural values and knowledge that exist and have evolved in those specific areas. Additionally, the ecological context of any given location should be considered as important and special as opposed to generalized into a larger and more abstract idea of 'ecology'. In these ways, local conditions can be both acknowledged and formative in the decision-making processes to encourage the development of more sensitive and contextual outcomes. Put simply, the more local, the better.</p></li>
                         <li><p>That transferability is to some degree essential to the practicality of any formal coastal management decision. This does not mean that transferability is what is desired, but only that it is what is necessary to get projects funded and completed. In this way, projects should aim to be as contextually specific as possible while only being as transferable as necessary. However, in the correct circumstances, transferability could provide the opportunity for ideas to spread within areas of similar contextual conditions which does offer both cost savings and project innovation.</p></li>
                     </ol>
-                    <p>With these two balanced goals in mind, this project aims to establish a method for creating coastal units that are particular and appropriate for a given task. This specific project asks to look at the application of the operational coastal units in coastal management decisions that involve strategic sediment management and adaptability as a defining feature, although many other objectives could also be met with the coastal unit methods and efforts have been made to develop a more robust unit structure to accommodate some of these alternative objectives.</p>
+                    <p class="p-dock">With these two balanced goals in mind, this project aims to establish a method for creating coastal units that are particular and appropriate for a given task. This specific project asks to look at the application of the operational coastal units in coastal management decisions that involve strategic sediment management and adaptability as a defining feature, although many other objectives could also be met with the coastal unit methods and efforts have been made to develop a more robust unit structure to accommodate some of these alternative objectives.</p>
 
                     <h3 id="steps-explanation" class="section scrollspy">Steps Explanation</h3>
     
@@ -738,7 +747,7 @@
                                 </li>
                                 <li>
                                     <em><p>Priority:</p></em>
-                                    <P>List of criteria that will be used to weight the calculations. These are the topics of interest to the user that assemble different data sets together to be applied to the cells created in the previous step. For example: If “coastal erosion” and “habitat creation” are selected, datasets will be assembled to create operational coastal units that prioritize coastal erosion first and habitat creation second. The outcome of this process is the application of a rating for each segment from 0-1, based on how it applies to the selected priorities. More details on what datasets are used for what priority are included below.</P>
+                                    <P>List of criteria that will be used to weight the calculations. These are the topics of interest to the user that assemble different data sets together to be applied to the cells created in the previous step. For example: If “Erosion Potential” and “NFWF Habitat Protection” are selected, datasets will be assembled to create operational coastal units that prioritize coastal erosion first and habitat creation second. The outcome of this process is the application of a rating for each segment from 0-1, based on how it applies to the selected priorities. More details on what datasets are used for what priority are included below.</P>
                                 </li>
                                 <li>
                                     <em><p>Group:</p></em>
@@ -818,7 +827,7 @@
                             <ol>
                                 <li>Pick the scoring criteria that you are interested in. In the dropdown box next to <code>First</code>, select the criterion that you care the most. The score for each resolution will be weighted based on the priority list you choose.</li>
                                 <li>After you fill in all the input boxes, click the <code>Generate/Reset</code> button to preview the result, which will display the score for each resolution in a color gradient. You can click the <code>Generate/Reset</code> for multiple times to change inputs (you can also change the resolution in step 2 at this point).</li>
-                                <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 3, which will unlock the input boxes in step 3.</li>
+                                <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 4, which will unlock the input boxes in step 4.</li>
                             </ol>
                         </li>
                         <li>
@@ -833,17 +842,17 @@
     
                     <h4 id="divide-step3" class="section scrollspy">Step 4: Group into Final Units</h4>
                     <ul>
-                        <li><h5>Purpose:</h5> This step will group the resolution with similar scores from step 2 into different <code>groups</code> and display the final units through a box around each unit.</li>
+                        <li><h5>Purpose:</h5> This step will group the resolution with similar scores from step 3 into different <code>groups</code> and display the final units through a box around each unit.</li>
                         <li>
                             <h5>Method:</h5> 
                             <ol>
                                 <li>In the input box below the <code>Number of groups</code>, type the number of groups (as numbers) you want to have for the final result. Multiple final units may be in the same group. The group stands for the number of group types that you want to have for the final result. </li>
                                 <li>Next, click the <code>Generate/Reset</code> button to preview the result, which will display the final units generated from the number of groups you specified above by circling them in boxes. When hover over each box, a pop-up will show the group type of that unit, and when you click each box, a panel will display more detailed information about each unit. You can click the <code>Generate/Reset</code> for multiple times.</li>
-                                <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 4, which will unlock the input boxes in step 4.</li>
+                                <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 5, which will unlock the input boxes in step 5.</li>
                             </ol>
                         </li>
                         <li><h5>Input Description:</h5><code>Number of groups</code>: The number of unit types you want to have for the final units based on the score of the resolution. Resolutions with similar final scores will be grouped together to form the final unit. Each group may belong to multiple units. It is also possible that one or multiple group types are not connected to any units.</li>
-                        <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 2.</li>
+                        <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 5.</li>
                     </ul>
 
                     <h4 id="divide-step4" class="section scrollspy">Step 5: Download</h4>
@@ -857,15 +866,110 @@
                             </ol>
                         </li>
                     </ul>
+
+                    <h2 id="similarity-finder-explanation" class="section scrollspy">Similarity Finder Explanation</h2>
+
+                    <h3 id="sf-purpose-goal" class="section scrollspy">Purpose and Goal</h3>
+                    <p class="p-dock">This component functions as a supplementary tool for the unit generator, enhancing its capabilities and broadening its application. Instead of selecting an area of interest and receiving a collection of units based on their priorities, this new tool allows users to identify similar areas along the entire coastline based on their priorities on a point of interest. By analyzing various geographical and environmental parameters, the tool can highlight regions with comparable characteristics.</p>
+                    
+                    <p class="p-dock">This project aims to leverage the calculation algorithms embedded within the unit generator to assist users in identifying areas with similar conditions. Coastal management professionals can use the results from this tool to draw parallels between different regions, enabling them to apply successful strategies from one area to another with similar conditions. This not only improves the efficiency of coastal management efforts but also helps in the sustainable development and preservation of coastal regions. </p>
+
+                    <h3 id="sf-steps-explanation" class="section scrollspy">Steps Explanation</h3>
     
-                    <h3 id="model-explain" class="section scrollspy">Criteria Models Explanation</h3>
-                    <h4 id="model-resolution" class="section scrollspy">General</h4>
+                    <h4 id="sf-general" class="section scrollspy">General</h4>
+                    <ul>
+                        <li>
+                            <h5>How to use the buttons in each step:</h5> At the initial state, all the input boxes and buttons are locked except the <code>Start/Reset</code> button in step one. To start finding similar areas, click the <code>Start/Reset</code> button. For all the other buttons, they should be clicked in sequence. That is to say, after finishing choosing or dragging the inputs, click the <code>Generate/Reset</code> button to preview the result, and if the result looks good, click the <code>Next</code> button in each step to unlock the input boxes and buttons in the following step.
+                        </li>
+                        <li>
+                            <h5>Vocabulary:</h5>
+                            <ul>
+                                <li>
+                                    <em><p>Priority:</p></em>
+                                    <P>List of criteria that will be used to weight the calculations. These are the topics of interest to the user that assemble different data sets together to be applied to the whole coastal area. For example: If “Erosion Potential” and “NFWF Habitat Protection” are selected, datasets will be assembled to prioritize erosion potential score first and habitat protection score second. The outcome of this process is the application of a rating for each segment from 0-1, based on how it applies to the selected priorities. More details on what datasets are used for what priority are included below.</P>
+                                </li>
+                                <li>
+                                    <em><p>Similarity:</p></em>
+                                    <P>The similarity value displays an area's similarity to the selected point based on the selected priorities. It measures the abosulute difference of the final score, which means an area 0.1 above or below the selected point's final score will have the same similarity value.</P>
+                                </li>
+                            </ul>
+                        </li>
+                        
+                    </ul>
+    
+                    <h4 id="sf-step-by-step" class="section scrollspy">Step by Step Instructions</h4>
+    
+                    <h4 id="sf-divide-step1" class="section scrollspy">Step 1: Choose point location</h4>
+                    <ul>
+                        <li><h5>Purpose:</h5> This step will help pick a point along the Lake Erie shoreline of New York State, which will be the base of the calculations in the following steps.</li>
+                        <li>
+                            <h5>Method:</h5> 
+                            <ol>
+                                <li>Click the <code>Start/Reset</code> button to start. After clicking it, you will see one pins appear at the middle of the coastal line.</li>
+                                <li>Drag the pin to a point of interest along the coastline. The pin will automatically snap to the location of the coastline. You can drag and redrag for multiple times until you are satisfied with the result.</li> 
+                                <li>After you drag the pin to the desired location, click the <code>Next</code> button to move to step 2, which will unlock the input boxes in step 2.</li>
+                            </ol>
+                        </li>
+                        <li><h5>Input Description:</h5> There are no input boxes in this step: interact with the map to choose your point.</li>
+                        <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 2.</li>
+                    </ul>
+
+                    <h4 id="sf-divide-step2" class="section scrollspy">Step 2: Choose priority</h4>
+                    <ul>
+                        <li><h5>Purpose:</h5> This step will do the scoring of every 4000 ft lengeth along the whole coastline based on the criteria you choose in the <code>Priority</code> dropdown box and color each 4000 ft chunk by its final score.</li>
+                        <li>
+                            <h5>Method:</h5> 
+                            <ol>
+                                <li>Pick the scoring criteria that you are interested in. In the dropdown box next to <code>First</code>, select the criterion that you care the most. The score for each 4000 ft chunk will be weighted based on the priority list you choose.</li>
+                                <li>After you fill in all the input boxes, click the <code>Generate/Reset</code> button to preview the result, which will display the score for each 4000 ft chunk in a color gradient. You can click the <code>Generate/Reset</code> for multiple times to change inputs.</li>
+                                <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 3, which will unlock the input boxes in step 3 and display the final score of your selected area on the range.</li>
+                            </ol>
+                        </li>
+                        <li>
+                            <h5>Input Description:</h5>
+                            <ul>
+                                <li><code>Priority</code>: In this part, you will specify the criteria you want to use to determine the similarity between your selected point and the whole coastline. The score calculation for each criterion behind the scenes is linked to a certain calculation of GIS layers related to that criteria, called the "criteria model". See the "Criteria Models Explanation" below for details about each calculation.</li>
+                            </ul>
+                        </li>
+                        <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 3.</li>
+                        <li><h5>Warning:</h5> Because of the limitation of the original GIS layers, some GIS layers may not cover the whole coastline of Lake Erie. In that case, the final result of this tool may not be precise. See the "Criteria Models Explanation" below for details.</li>
+                    </ul>
+    
+                    <h4 id="sf-divide-step3" class="section scrollspy">Step 3: Find similar area</h4>
+                    <ul>
+                        <li><h5>Purpose:</h5> This step will filter the final scores of all the 4000 ft chunks along the shoreline and highlight the ones with a final score that sits within your selected range. The range bar can be dragged to change the location of the circle buttons or you can click the arrows below the bar for more precise manipulation.</li>
+                        <li>
+                            <h5>Method:</h5> 
+                            <ol>
+                                <li>In the range bar below the <code>Range of search</code>, specify the minimum and maximum values you want for the final similarity dataset. This range of search includes both boundary values, and the range should include the final score of your selected point.</li>
+                                <li>Next, click the <code>Generate/Reset</code> button to preview the result, which will highlight all the 4000 ft chunks that have a final score within your selected range. When hover over each chunk, a pop-up will show the similarity between this chunk and your selected point, and when you click each chunk, a panel will display more detailed information. You can click the <code>Generate/Reset</code> for multiple times.</li>
+                                <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 4, which will unlock the input boxes in step 4.</li>
+                            </ol>
+                        </li>
+                        <li><h5>Input Description:</h5><code>Range of search</code>: The minimum and maximum values you want to have for the similarity dataset. Both boundary values are included in the range</li>
+                        <li><h5>Important:</h5> Remember to click the <code>Next</code> button to move to step 4.</li>
+                    </ul>
+
+                    <h4 id="sf-divide-step4" class="section scrollspy">Step 4: Download</h4>
+                    <ul>
+                        <li><h5>Purpose:</h5> This step will let you download your result generated from the previous steps and use it elsewhere.</li>
+                        <li>
+                            <h5>Method:</h5> 
+                            <ol>
+                                <li>In the input box below the <code>Download Units</code>, choose the type of file that you want to generate. Currently, this step accepts geoJSON and shapefile.</li>
+                                <li>Next, click the <code>Download</code> button and a pop-up window will allow you the select the saving location.</li>
+                            </ol>
+                        </li>
+                    </ul>
+    
+                    <h2 id="model-explain" class="section scrollspy">Criteria Models Explanation</h2>
+                    <h3 id="model-resolution" class="section scrollspy">General</h3>
                     <ul>
                         <li><h5>What's the weight for each priority:</h5> First priority 50%, second priority 30%, third priority 20%.</li>
                         <li><h5>How to assign value from GIS layer to each resolution:</h5> The resolution line will be offset for a certain distance (default is 200 meters) in both directions to create a bounding box. The values in each GIS layer will be assigned to the resolution if they overlap with the bounding box of the resolution line. If more than one value overlaps with the bounding box, the values will be averaged. If no value overlaps with the bounding box, the value for the resolution will be the value of the nearest GIS object.</li>
                     </ul>
     
-                    <h4 id="sediment-loss" class="section scrollspy">Sediment Loss Model</h4>
+                    <h3 id="sediment-loss" class="section scrollspy">Sediment Loss Model</h3>
                     <ul>
                         <li><h5>Description:</h5> This model focuses on the actual sediment loss amount along the shoreline. Higher score means higher amount of sediment loss.</li>
                         <li>
@@ -908,7 +1012,7 @@
                         <li><h5>Warning:</h5>The sediment budget layer does not have values for the area near Buffalo City. If the selected coastline includes those areas, the result may not be precise.</li>
                     </ul>
     
-                    <h4 id="sediment-gain" class="section scrollspy">Sediment Gain Model</h4>
+                    <h3 id="sediment-gain" class="section scrollspy">Sediment Gain Model</h3>
                     <ul>
                         <li><h5>Description:</h5> This model focuses on the actual sediment gain amount along the shoreline. Higher score means higher amount of sediment gain.</li>
                         <li>
@@ -947,7 +1051,7 @@
                         <li><h5>Warning:</h5>The sediment budget layer does not have values for the area near Buffalo City. If the selected coastline includes those areas, the result may not be precise.</li>
                     </ul>
 
-                    <h4 id="erosion-potential" class="section scrollspy">Erosion Potential Model</h4>
+                    <h3 id="erosion-potential" class="section scrollspy">Erosion Potential Model</h3>
                     <ul>
                         <li><h5>Description:</h5> This model focuses on the erosion potential of the coastal edge. Higher score means higher erosion potential.</li>
                         <li>
@@ -985,7 +1089,7 @@
                         <li><h5>Warning:</h5>The sediment budget layer does not have values (retreat rate) for the area near Buffalo City. Besides, the soil K factor also has many null values near Buffalo City. If the selected coastline includes those areas, the result may not be precise.</li>
                     </ul>
 
-                    <h4 id="habitat-protection" class="section scrollspy">NFWF Habitat Protection Model</h4>
+                    <h3 id="habitat-protection" class="section scrollspy">NFWF Habitat Protection Model</h3>
                     <ul>
                         <li><h5>Description:</h5> This model identifies critical habitat and protected areas for terrestrial and aquatic species of conservation concern. Higher scores represent areas that are important for numerous species of concern, where implementing a restoration project would likely provide the greatest benefit to wildlife. </li>
                         <li>
@@ -1012,7 +1116,7 @@
                         
                     </ul>
 
-                    <h4 id="wetland-protection" class="section scrollspy">NOAA Wetland Protection/Restoration Model</h4>
+                    <h3 id="wetland-protection" class="section scrollspy">NOAA Wetland Protection/Restoration Model</h3>
                     <ul>
                         <li><h5>Description:</h5> This model highlights the potential for land to be a wetland in order to identify areas for restoration. The model does not represent the current landcover condition of wetlands, but rather the likelihood that a wetland would occur at a specific location given its soil characteristics, elevation, and existing landcover. Higher values represent a high likelihood of wetland, and low values represent areas where wetland establishment is very unlikely.  </li>
                         <li>
@@ -1046,7 +1150,7 @@
                         
                     </ul>
 
-                    <h4 id="community-exposure" class="section scrollspy">NFWF Community Exposure Model</h4>
+                    <h3 id="community-exposure" class="section scrollspy">NFWF Community Exposure Model</h3>
                     <ul>
                         <li><h5>Description:</h5> This model identifies the spatial distribution of the potential exposure of community's assets to flooding threats by using the Threat Index and Community Asset Index. It focuses on incorporating flood-related threats due to the lake level variation in the Great Lakes Area, which is differnt from the saltwater coastal regionss. Higher scores represent areas with higher prevalence of threats and higher presence of community assets. </li>
                         <li>

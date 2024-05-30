@@ -189,7 +189,7 @@
                                             <option value="ep">Erosion Potential</option>
                                             <option value="hp">NFWF Habitat Protection</option>
                                             <option value="wpr">NOAA Wetland Protection/Restoration</option>
-                                            <option value="sv">NFWF Social Vurnerability</option>
+                                            <option value="sv">NFWF Community Exposure</option>
                                         </select>
                                         <select class="priority" id="second-priority" disabled="true" required>
 
@@ -310,7 +310,7 @@
                                                 <option value="ep">Erosion Potential</option>
                                                 <option value="hp">NFWF Habitat Protection</option>
                                                 <option value="wpr">NOAA Wetland Protection/Restoration</option>
-                                                <option value="sv">NFWF Social Vurnerability</option>
+                                                <option value="sv">NFWF Community Exposure</option>
                                             </select>
                                             <select class="priority-sim" id="second-priority-sim" disabled="true" required>
 
@@ -702,6 +702,7 @@
                                 <li><a href="#erosion-potential" onclick="smoothScroll('erosion-potential')">Erosion Potential Model</a></li>
                                 <li><a href="#habitat-protection" onclick="smoothScroll('habitat-protection')">NFWF Habitat Protection Model</a></li>
                                 <li><a href="#wetland-protection" onclick="smoothScroll('wetland-protection')">NOAA Wetland Protection Model</a></li>
+                                <li><a href="#community-exposure" onclick="smoothScroll('community-exposure')">NFWF Community Exposure Model</a></li>
                             </ul>
                         </li>
                                 
@@ -1045,13 +1046,33 @@
                         
                     </ul>
 
+                    <h4 id="community-exposure" class="section scrollspy">NFWF Community Exposure Model</h4>
+                    <ul>
+                        <li><h5>Description:</h5> This model identifies critical habitat and protected areas for terrestrial and aquatic species of conservation concern. Higher scores represent areas that are important for numerous species of concern, where implementing a restoration project would likely provide the greatest benefit to wildlife. </li>
+                        <li>
+                            <h5>GIS Data:</h5> 
+                            <ol>
+                                <li>
+                                    <strong>Community Exposure Index:</strong> 
+                                    <P>This model is based on the Fish and Wildlife Index developed by the National Fish and Wildlife Foundation. This index is the sum of the terrestrial and aquatic indexes, also developed by the NFWF, plus protected areas.</P>
+                                    <p>The terrestrial index identifies terrestrial wildlife species of greatest conservation need from state wildlife action plans, federally listed species, and GLIFWC harvest regulations. It then identifies suitable habitat for each species and sums them by taxonomic group, using the following datasets: USGS GAP Analysis, Critical Habitat, Important Bird Areas & Key Biodiversity Areas, and Coastal Bluffs and Dunes. </p>
+                                    <p>Using similar methodology, the aquatic index identifies species of concern in riverine and lacustrine habitats from the same three sources as the terrestrial index. It then identifies areas of suitable habitat for each species using the following datasets: Species Habitat Distribution, Critical Habitat, Spawning and Reef Locations, and the Great Lakes Eastern Brook Trout Conservation Portfolio. </p>
+                                    <p>Protected areas included in the model were sourced from the USGS Gap Analysis Project, Protected Areas Database of the United States (PAD-US) 2.1: U.S. Geological Survey data release, NOAA National Marine Sanctuaries, and ProtectedSeas. </p>
+                                </li>
+                            </ol>
+                        </li>
+                        <li>
+                            <h5>Calculating Algorithm:</h5>
+                            <ol>
+                                <li>
+                                    <P>Detailed methodology for calculating the Fish and Wildlife Index, including a complete list of species included in the analysis, input data sources, and geoprocessing steps, can be found in the following report: </P>
+                                    <p>Dobson, J.G., Johnson, I.P., Orlando, J.L., Lussier, B.C., and Byler, K.A. (2023) U.S. <lm>Great Lakes Coastal Resilience Assessment</lm> (Appendix A.3-5, F-G). UNC Asheville National Environmental Modeling and Analysis Center, Asheville, NC. Prepared for the National Fish and Wildlife Foundation. </p>
+                                </li>
+                            </ol>
+                        </li>
+                        
+                    </ul>
 
-                    <!-- <h2>Strategy Filter Steps Explanation</h2>
-                    <h3>Steps Explanation</h3>
-                    <h4>Step 1</h4>
-                    <h4>Step 2</h4>
-                    <h4>Step 3</h4>
-                    <h4>Step 4</h4> -->
                     
                 </div>
                 

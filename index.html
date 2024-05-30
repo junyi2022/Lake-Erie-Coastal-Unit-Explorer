@@ -1048,16 +1048,16 @@
 
                     <h4 id="community-exposure" class="section scrollspy">NFWF Community Exposure Model</h4>
                     <ul>
-                        <li><h5>Description:</h5> This model identifies critical habitat and protected areas for terrestrial and aquatic species of conservation concern. Higher scores represent areas that are important for numerous species of concern, where implementing a restoration project would likely provide the greatest benefit to wildlife. </li>
+                        <li><h5>Description:</h5> This model identifies the spatial distribution of the potential exposure of community's assets to flooding threats by using the Threat Index and Community Asset Index. It focuses on incorporating flood-related threats due to the lake level variation in the Great Lakes Area, which is differnt from the saltwater coastal regionss. Higher scores represent areas with higher prevalence of threats and higher presence of community assets. </li>
                         <li>
                             <h5>GIS Data:</h5> 
                             <ol>
                                 <li>
                                     <strong>Community Exposure Index:</strong> 
-                                    <P>This model is based on the Fish and Wildlife Index developed by the National Fish and Wildlife Foundation. This index is the sum of the terrestrial and aquatic indexes, also developed by the NFWF, plus protected areas.</P>
-                                    <p>The terrestrial index identifies terrestrial wildlife species of greatest conservation need from state wildlife action plans, federally listed species, and GLIFWC harvest regulations. It then identifies suitable habitat for each species and sums them by taxonomic group, using the following datasets: USGS GAP Analysis, Critical Habitat, Important Bird Areas & Key Biodiversity Areas, and Coastal Bluffs and Dunes. </p>
-                                    <p>Using similar methodology, the aquatic index identifies species of concern in riverine and lacustrine habitats from the same three sources as the terrestrial index. It then identifies areas of suitable habitat for each species using the following datasets: Species Habitat Distribution, Critical Habitat, Spawning and Reef Locations, and the Great Lakes Eastern Brook Trout Conservation Portfolio. </p>
-                                    <p>Protected areas included in the model were sourced from the USGS Gap Analysis Project, Protected Areas Database of the United States (PAD-US) 2.1: U.S. Geological Survey data release, NOAA National Marine Sanctuaries, and ProtectedSeas. </p>
+                                    <P>This model is based on the Community Exposure Index developed by the National Fish and Wildlife Foundation. This index is the multiplication of the Threat Index and Community Asset Index.</P>
+                                    <p>The threat index includes threats of costal flood, erosion, and severe strom hazards. It ranks the input from low to high and reclassifies the ranked result into 10 classes using percentile distribution. It includes datasets such as FEMA National Flood Hazard, USDA-NRCS gSSURGO and gNATSGO, USGS National Elevation Dataset, NOAA Lidar Digital Elevation Model data and C-CAP land cover, EPA EnviroAtlas, etc.. </p>
+                                    <p>Using similar methodology, the community asset index quantify the number of asset present and incldes data such as population density, social bulnerability, critical facilities, and critical infrastructure. </p>
+                                    <p>The multiplication of the two indexes above can display the exposure, which is the relationship between potential threats and the presence of community asset  </p>
                                 </li>
                             </ol>
                         </li>
@@ -1065,7 +1065,7 @@
                             <h5>Calculating Algorithm:</h5>
                             <ol>
                                 <li>
-                                    <P>Detailed methodology for calculating the Fish and Wildlife Index, including a complete list of species included in the analysis, input data sources, and geoprocessing steps, can be found in the following report: </P>
+                                    <P>Detailed methodology for calculating the Community Exposure Index, including a complete list of input data sources and geoprocessing steps can be found in the following report: </P>
                                     <p>Dobson, J.G., Johnson, I.P., Orlando, J.L., Lussier, B.C., and Byler, K.A. (2023) U.S. <lm>Great Lakes Coastal Resilience Assessment</lm> (Appendix A.3-5, F-G). UNC Asheville National Environmental Modeling and Analysis Center, Asheville, NC. Prepared for the National Fish and Wildlife Foundation. </p>
                                 </li>
                             </ol>

@@ -2,7 +2,7 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 
 import { average } from './model.js';
-import { sedimentLossModel, sedimentGainModel, erosionPotentialModel, habitatProtectionModel, wetlandProtectionRestorationModel, socialVulnerabilityModel } from './model.js';
+import { sedimentLossModel, sedimentGainModel, erosionPotentialModel, habitatProtectionModel, wetlandProtectionRestorationModel, socialVulnerabilityModel, invasiveSpeciesModel } from './model.js';
 import { legend1Style, legend2Style } from './map.js';
 import { handleDropdownDisplay, withSpinnerDo, unitInputRange } from './logistics.js';
 
@@ -14,6 +14,7 @@ const modelFuncs = {
   'hp': habitatProtectionModel,
   'wpr': wetlandProtectionRestorationModel,
   'sv': socialVulnerabilityModel,
+  'is': invasiveSpeciesModel,
 };
 
 const modelProps = {
@@ -234,6 +235,9 @@ function handleCalculations(step2Form, firstDrop, secondDrop, thirdDrop, map, co
 
   const resolutionCollection = getResolution(coastalSliced); // feature collection of a lot of linestrings
   console.log(resolutionCollection);
+
+  // remeber to remove this later
+  invasiveSpeciesModel(map, resolutionCollection);
 
   // handle all calculations within res collection
   const [firstProp, secondProp, thirdProp] = munipulateResCollection(map, resolutionCollection, firstDrop, secondDrop, thirdDrop);

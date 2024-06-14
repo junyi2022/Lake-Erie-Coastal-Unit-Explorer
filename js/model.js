@@ -4,8 +4,16 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 import { getResolutionBoxes } from './cal.js';
 
 // because point cloud has too many features, it is better to import the data instead of using map layer as a middle step
-import { sendimentBudget, shorelineType, soilErosion, fishWildlifePoints, wetlandPotentialPoints, communityExposurePoints } from './main.js';
+import { sendimentBudget, shorelineType, soilErosion, fishWildlifePoints, wetlandPotentialPoints, communityExposurePoints, endangeredSpecies, invasiveSpecies } from './main.js';
 
+const invasiveMethod = [ // buffer unit is km
+  {'species': 'Neogobius melanostomus', 'buffer': 0.2},
+  {'species': 'Myriophyllum spicatum', 'buffer': 0.1},
+  {'species': 'Lythrum salicaria', 'buffer': 0.1},
+  {'species': 'Dreissena polymorpha', 'buffer': 1},
+  {'species': 'Cyprinus carpio', 'buffer': 1.5},
+  {'species': 'Phragmites australis', 'buffer': 0.1},
+];
 
 // sediment loss model
 function sedimentLossModel(map, resolutionCollection) {
@@ -52,6 +60,11 @@ function wetlandProtectionRestorationModel(map, resolutionCollection) {
 // social vulnerability model
 function socialVulnerabilityModel(map, resolutionCollection) {
   calDataFromPoints(map, communityExposurePoints, resolutionCollection, 0.1, calRasterIndex, 'comEIndex', 'socialVulnerability', 1);
+}
+
+// invasive species model
+function invasiveSpeciesModel(map, resolutionCollection) {
+  speciesPointToBufferPolygon(invasiveSpecies, invasiveMethod);
 }
 
 
@@ -305,6 +318,19 @@ function findClosestData(whichData, coastline) {
   return prop;
 }
 
+// species point to buffer polygon array
+
+function speciesPointToBufferPolygon(speciesPoint, method) {
+  const speciesBuffer = speciesPoint.features.map((p) => {
+    for (const option of method) {
+      if (p.properties.species === option.species) {
+        return turf.buffer(p, option.buffer, {units: 'kilometers'});
+      }
+    }
+  });
+  console.log(speciesBuffer);
+  return speciesBuffer;
+}
 
 export {
   sedimentLossModel,
@@ -313,6 +339,7 @@ export {
   habitatProtectionModel,
   wetlandProtectionRestorationModel,
   socialVulnerabilityModel,
+  invasiveSpeciesModel,
   average,
   findClosestData,
 };

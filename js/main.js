@@ -48,10 +48,10 @@ const wetlandPotentialPoints = await wetlandPotential.json();
 const communityExposure = await fetch('data/community-exposure-points800.geojson');
 const communityExposurePoints = await communityExposure.json();
 
-const GBIFendangeredSpecies = await fetch('data/endangered-species-points800.geojson');
+const GBIFendangeredSpecies = await fetch('data/GBIF-endanger.geojson');
 const endangeredSpecies = await GBIFendangeredSpecies.json();
 
-const GBIFinvasiveSpecies = await fetch('data/endangered-species-points800.geojson');
+const GBIFinvasiveSpecies = await fetch('data/GBIF-invasive.geojson');
 const invasiveSpecies = await GBIFinvasiveSpecies.json();
 
 // reference layers
@@ -88,4 +88,6 @@ export {
   fishWildlifePoints,
   wetlandPotentialPoints,
   communityExposurePoints,
+  endangeredSpecies,
+  invasiveSpecies,
 };

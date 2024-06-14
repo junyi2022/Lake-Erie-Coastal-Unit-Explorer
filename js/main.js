@@ -48,6 +48,12 @@ const wetlandPotentialPoints = await wetlandPotential.json();
 const communityExposure = await fetch('data/community-exposure-points800.geojson');
 const communityExposurePoints = await communityExposure.json();
 
+const GBIFendangeredSpecies = await fetch('data/endangered-species-points800.geojson');
+const endangeredSpecies = await GBIFendangeredSpecies.json();
+
+const GBIFinvasiveSpecies = await fetch('data/endangered-species-points800.geojson');
+const invasiveSpecies = await GBIFinvasiveSpecies.json();
+
 // reference layers
 
 window.censusTracts = censusTracts;
@@ -64,6 +70,8 @@ window.soilErosion = soilErosion;
 window.fishWildlifePoints = fishWildlifePoints;
 window.wetlandPotentialPoints = wetlandPotentialPoints;
 window.communityExposurePoints = communityExposurePoints;
+window.endangeredSpecies = endangeredSpecies;
+window.invasiveSpecies = invasiveSpecies;
 
 // map for unit generator
 // Other maps shouldn't be called here since they are not shown up at the beginning and have display = none

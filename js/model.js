@@ -15,6 +15,25 @@ const invasiveMethod = [ // buffer unit is km
   {'species': 'Phragmites australis', 'buffer': 0.1},
 ];
 
+const endangeredMethod = [ // buffer unit is km
+  {'species': 'Acipenser fulvescens', 'buffer': 10},
+  {'species': 'Castanea dentata', 'buffer': 0.1},
+  {'species': 'Fraxinus americana', 'buffer': 0.1},
+  {'species': 'Fraxinus nigra', 'buffer': 0.1},
+  {'species': 'Fraxinus pennsylvanica', 'buffer': 0.1},
+  {'species': 'Fraxinus profunda', 'buffer': 0.1},
+  {'species': 'Juglans cinerea', 'buffer': 0.1},
+  {'species': 'Oryctolagus cuniculus', 'buffer': 2},
+  {'species': 'Ulmus americana', 'buffer': 0.1},
+  {'species': 'Acipenser brevirostrum', 'buffer': 10},
+  {'species': 'Aquila chrysaetos', 'buffer': 20},
+  {'species': 'Asio flammeus', 'buffer': 15},
+  {'species': 'Charadrius melodus', 'buffer': 1},
+  {'species': 'Chlidonias niger', 'buffer': 1.5},
+  {'species': 'Falco peregrinus', 'buffer': 2.5},
+  {'species': 'Lanius ludovicianus', 'buffer': 1},
+];
+
 // sediment loss model
 function sedimentLossModel(map, resolutionCollection) {
   // get different boxes for different data layers
@@ -49,7 +68,15 @@ function erosionPotentialModel(map, resolutionCollection) {
 
 // habitat protection model
 function habitatProtectionModel(map, resolutionCollection) {
-  calDataFromPoints(map, fishWildlifePoints, resolutionCollection, 0.15, calRasterIndex, 'wild_index', 'habitatProtection', 1);
+  // fish and wildlife index from NFWF
+  calDataFromPoints(map, fishWildlifePoints, resolutionCollection, 0.15, calRasterIndex, 'wild_index', 'fishWildlifeIndex', 1);
+  // endangered species
+  const endangeredSpeciesBufferArray = speciesPointToBufferPolygon(endangeredSpecies, endangeredMethod);
+  speciesDiversityFromPolygonArray(endangeredSpeciesBufferArray, resolutionCollection, 0.15, 'endangeredDiversity', 1);
+  // weight all the layers
+  for (const coastline of resolutionCollection.features) {
+    coastline.properties.normalhabitatProtection = coastline.properties.normalfishWildlifeIndex * 0.7 + coastline.properties.normalendangeredDiversity * 0.3;
+  }
 }
 
 // wetland protection model

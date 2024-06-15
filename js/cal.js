@@ -2,7 +2,7 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 
 import { average } from './model.js';
-import { sedimentLossModel, sedimentGainModel, erosionPotentialModel, habitatProtectionModel, wetlandProtectionRestorationModel, socialVulnerabilityModel } from './model.js';
+import { sedimentLossModel, sedimentGainModel, erosionPotentialModel, habitatProtectionModel, wetlandProtectionRestorationModel, socialVulnerabilityModel, invasiveSpeciesModel } from './model.js';
 import { legend1Style, legend2Style } from './map.js';
 import { handleDropdownDisplay, withSpinnerDo, unitInputRange } from './logistics.js';
 
@@ -11,6 +11,7 @@ const modelFuncs = {
   'sl': sedimentLossModel,
   'sg': sedimentGainModel,
   'ep': erosionPotentialModel,
+  'is': invasiveSpeciesModel,
   'hp': habitatProtectionModel,
   'wpr': wetlandProtectionRestorationModel,
   'sv': socialVulnerabilityModel,
@@ -20,6 +21,7 @@ const modelProps = {
   'sl': 'normalsedimentLoss',
   'sg': 'normalsedimentGain',
   'ep': 'normalerosionPotential',
+  'is': 'normalinvasiveDiversity',
   'hp': 'normalhabitatProtection',
   'wpr': 'normalwetlandProtectionRestoration',
   'sv': 'normalsocialVulnerability',
@@ -29,6 +31,7 @@ const modelName = {
   'sl': 'Normalized Sediment Loss',
   'sg': 'Normalized Sediment Gain',
   'ep': 'Normalized Erosion Potential',
+  'is': 'Normalized Invasive Species Control',
   'hp': 'Normalized Habitat Protection',
   'wpr': 'Normalized Wetland Protection/Restoration',
   'sv': 'Normalized Social Vulnerability',
@@ -233,6 +236,7 @@ function handleCalculations(step2Form, firstDrop, secondDrop, thirdDrop, map, co
   }
 
   const resolutionCollection = getResolution(coastalSliced); // feature collection of a lot of linestrings
+
   console.log(resolutionCollection);
 
   // handle all calculations within res collection
@@ -255,9 +259,6 @@ function handleCalculations(step2Form, firstDrop, secondDrop, thirdDrop, map, co
     return legend1Style(map, colorScale, 'legend-content');
   };
   map.legend.addTo(map);
-
-  console.log(resolutionCollection);
-
 
   // process to the following step if user click next
   finishResButton.addEventListener('click', () => {
@@ -391,16 +392,15 @@ function handleGroupRes(map, resolutionCollection, firstProp, secondProp, thirdP
     map.finalUnitLayer.clearLayers();
   }
   const catNum = parseInt(categoryBox.value);
-  console.log(catNum);
 
   // add unit legend
   legend2Style(map, unitColorScale, catNum);
   // get arrays of resolution that supposed to be grouped
   const resGroupArray = resToGroupArray(resolutionCollection, catNum);
-  console.log(resGroupArray);
+
   // join line together as array
   const featureCollectionArray = arrayOfGroupsToArrayOfLines(resGroupArray, firstProp, secondProp, thirdProp);
-  console.log(featureCollectionArray);
+
   // get final feature collection
   const units = turf.featureCollection(featureCollectionArray);
 

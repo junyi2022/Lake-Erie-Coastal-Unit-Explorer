@@ -336,7 +336,6 @@ function legend2Style(map, unitColorScale, numvalues) {
 
   html += '</div>'; // Close the wrapper
   unitColorLegendDiv.innerHTML = html;
-  console.log(unitColorLegendDiv);
 
   legendContent.appendChild(unitColorLegendDiv);
 }

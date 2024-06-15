@@ -4,8 +4,35 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 import { getResolutionBoxes } from './cal.js';
 
 // because point cloud has too many features, it is better to import the data instead of using map layer as a middle step
-import { sendimentBudget, shorelineType, soilErosion, fishWildlifePoints, wetlandPotentialPoints, communityExposurePoints } from './main.js';
+import { sendimentBudget, shorelineType, soilErosion, fishWildlifePoints, wetlandPotentialPoints, communityExposurePoints, endangeredSpecies, invasiveSpecies } from './main.js';
 
+const invasiveMethod = [ // buffer unit is km
+  {'species': 'Neogobius melanostomus', 'buffer': 0.2},
+  {'species': 'Myriophyllum spicatum', 'buffer': 0.1},
+  {'species': 'Lythrum salicaria', 'buffer': 0.1},
+  {'species': 'Dreissena polymorpha', 'buffer': 1},
+  {'species': 'Cyprinus carpio', 'buffer': 1.5},
+  {'species': 'Phragmites australis', 'buffer': 0.1},
+];
+
+const endangeredMethod = [ // buffer unit is km
+  {'species': 'Acipenser fulvescens', 'buffer': 10},
+  {'species': 'Castanea dentata', 'buffer': 0.1},
+  {'species': 'Fraxinus americana', 'buffer': 0.1},
+  {'species': 'Fraxinus nigra', 'buffer': 0.1},
+  {'species': 'Fraxinus pennsylvanica', 'buffer': 0.1},
+  {'species': 'Fraxinus profunda', 'buffer': 0.1},
+  {'species': 'Juglans cinerea', 'buffer': 0.1},
+  {'species': 'Oryctolagus cuniculus', 'buffer': 2},
+  {'species': 'Ulmus americana', 'buffer': 0.1},
+  {'species': 'Acipenser brevirostrum', 'buffer': 10},
+  {'species': 'Aquila chrysaetos', 'buffer': 20},
+  {'species': 'Asio flammeus', 'buffer': 15},
+  {'species': 'Charadrius melodus', 'buffer': 1},
+  {'species': 'Chlidonias niger', 'buffer': 1.5},
+  {'species': 'Falco peregrinus', 'buffer': 2.5},
+  {'species': 'Lanius ludovicianus', 'buffer': 1},
+];
 
 // sediment loss model
 function sedimentLossModel(map, resolutionCollection) {
@@ -41,7 +68,15 @@ function erosionPotentialModel(map, resolutionCollection) {
 
 // habitat protection model
 function habitatProtectionModel(map, resolutionCollection) {
-  calDataFromPoints(map, fishWildlifePoints, resolutionCollection, 0.15, calRasterIndex, 'wild_index', 'habitatProtection', 1);
+  // fish and wildlife index from NFWF
+  calDataFromPoints(map, fishWildlifePoints, resolutionCollection, 0.15, calRasterIndex, 'wild_index', 'fishWildlifeIndex', 1);
+  // endangered species
+  const endangeredSpeciesBufferArray = speciesPointToBufferPolygon(endangeredSpecies, endangeredMethod);
+  speciesDiversityFromPolygonArray(endangeredSpeciesBufferArray, resolutionCollection, 0.15, 'endangeredDiversity', 1);
+  // weight all the layers
+  for (const coastline of resolutionCollection.features) {
+    coastline.properties.normalhabitatProtection = coastline.properties.normalfishWildlifeIndex * 0.7 + coastline.properties.normalendangeredDiversity * 0.3;
+  }
 }
 
 // wetland protection model
@@ -52,6 +87,12 @@ function wetlandProtectionRestorationModel(map, resolutionCollection) {
 // social vulnerability model
 function socialVulnerabilityModel(map, resolutionCollection) {
   calDataFromPoints(map, communityExposurePoints, resolutionCollection, 0.1, calRasterIndex, 'comEIndex', 'socialVulnerability', 1);
+}
+
+// invasive species model
+function invasiveSpeciesModel(map, resolutionCollection) {
+  const invasiveSpeciesBufferArray = speciesPointToBufferPolygon(invasiveSpecies, invasiveMethod);
+  speciesDiversityFromPolygonArray(invasiveSpeciesBufferArray, resolutionCollection, 0.15, 'invasiveDiversity', 1);
 }
 
 
@@ -305,6 +346,70 @@ function findClosestData(whichData, coastline) {
   return prop;
 }
 
+// species point to buffer polygon array
+
+function speciesPointToBufferPolygon(speciesPoint, method) {
+  const speciesBuffer = speciesPoint.features.map((p) => {
+    for (const option of method) {
+      if (p.properties.species === option.species) {
+        return turf.buffer(p, option.buffer, {units: 'kilometers'});
+      }
+    }
+  });
+  // remove undefined
+  const validBuffer = speciesBuffer.filter((b) => b != void 0);
+  return validBuffer;
+}
+
+// species diversity from polygon array
+
+function speciesDiversityFromPolygonArray(speciesBuffer, resolutionCollection, num, pname, scaleFactor) {
+  const layerResolutionBoxes = getResolutionBoxes(resolutionCollection, num);
+
+  // calculate diversity through overlap of boxes and buffer
+  // loop through each coast line
+  for (const coastline of resolutionCollection.features) {
+    // get the box of each coastline
+    const box = findBoxFromLine(coastline, layerResolutionBoxes);
+
+    // count diversity of each line through box overlap
+    const diversityArray = [];
+    for (let i = 0; i < speciesBuffer.length; i++) {
+      const intersection = turf.intersect(box, speciesBuffer[i]); // will be null if no overlap
+      if (intersection != null) {
+        const species = speciesBuffer[i].properties.species;
+        if (!diversityArray.includes(species)) {
+          diversityArray.push(species);
+        }
+      }
+    }
+
+    // count diversity
+    const diversity = diversityArray.length;
+
+    // add the cal result to coastline properties
+    coastline.properties[pname] = diversity;
+  }
+
+  // need to normalize the values
+
+  // get an array of all the values of the coastline piece of this model calculation
+  const propertiesValueArray = resolutionCollection.features.map((f) => f.properties[pname]);
+
+  // calculate the min max of the values
+  const min = Math.min(...propertiesValueArray);
+  const max = Math.max(...propertiesValueArray);
+
+  // use a D3 scale to normalize this data
+  // scale factor is the thing to control the shape of the reprojection
+  const scaleFunc = d3.scalePow([min, max], [0, 1]).exponent(scaleFactor); // need to map to 0 to 1 because the later color scale only take numbers between 0 and 1
+  // add the normalized value to each coastline properties
+  for (const coastline of resolutionCollection.features) {
+    const normalResult = scaleFunc(coastline.properties[pname]);
+    const newPropName = 'normal'+ pname;
+    coastline.properties[newPropName] = normalResult;
+  }
+}
 
 export {
   sedimentLossModel,
@@ -313,6 +418,7 @@ export {
   habitatProtectionModel,
   wetlandProtectionRestorationModel,
   socialVulnerabilityModel,
+  invasiveSpeciesModel,
   average,
   findClosestData,
 };

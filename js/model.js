@@ -347,7 +347,6 @@ function speciesDiversityFromPolygonArray(speciesBuffer, resolutionCollection, n
 
     // count diversity of each line through box overlap
     const diversityArray = [];
-    console.log(speciesBuffer.length);
     for (let i = 0; i < speciesBuffer.length; i++) {
       const intersection = turf.intersect(box, speciesBuffer[i]); // will be null if no overlap
       if (intersection != null) {

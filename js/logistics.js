@@ -6,7 +6,7 @@ const dropdownOptions = [
   {'label': 'Sediment Gain', 'value': 'sg'},
   {'label': 'Erosion Potential', 'value': 'ep'},
   {'label': 'Invasive Species Control', 'value': 'is'},
-  {'label': 'NFWF Habitat Protection', 'value': 'hp'},
+  {'label': 'Habitat Protection', 'value': 'hp'},
   {'label': 'NOAA Wetland Protection/Restoration', 'value': 'wpr'},
   {'label': 'NFWF Community Exposure', 'value': 'sv'},
 ];

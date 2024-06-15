@@ -4,6 +4,8 @@ body {
     padding: 0;
     /* border-box doesn't include margin, only padding */
     margin: 0;
+    height: 100vh;
+    overflow: hidden;
 }
 
 p {
@@ -202,6 +204,9 @@ header {
 }
 
 /* main part style*/
+main {
+    height: calc(100vh - 1.5rem - 45px - 3vh);
+}
 
 /* unit generator */
 

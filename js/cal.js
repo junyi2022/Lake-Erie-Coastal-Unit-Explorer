@@ -234,10 +234,10 @@ function handleCalculations(step2Form, firstDrop, secondDrop, thirdDrop, map, co
   }
 
   const resolutionCollection = getResolution(coastalSliced); // feature collection of a lot of linestrings
-  console.log(resolutionCollection);
 
   // remeber to remove this later
   invasiveSpeciesModel(map, resolutionCollection);
+  console.log(resolutionCollection);
 
   // handle all calculations within res collection
   const [firstProp, secondProp, thirdProp] = munipulateResCollection(map, resolutionCollection, firstDrop, secondDrop, thirdDrop);

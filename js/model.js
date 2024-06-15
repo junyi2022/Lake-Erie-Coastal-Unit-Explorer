@@ -64,7 +64,8 @@ function socialVulnerabilityModel(map, resolutionCollection) {
 
 // invasive species model
 function invasiveSpeciesModel(map, resolutionCollection) {
-  speciesPointToBufferPolygon(invasiveSpecies, invasiveMethod);
+  const invasiveSpeciesBufferArray = speciesPointToBufferPolygon(invasiveSpecies, invasiveMethod);
+  speciesDiversityFromPolygonArray(invasiveSpeciesBufferArray, resolutionCollection, 0.15, 'invasiveDiversity', 1);
 }
 
 
@@ -328,8 +329,60 @@ function speciesPointToBufferPolygon(speciesPoint, method) {
       }
     }
   });
-  console.log(speciesBuffer);
-  return speciesBuffer;
+  // remove undefined
+  const validBuffer = speciesBuffer.filter((b) => b != void 0);
+  return validBuffer;
+}
+
+// species diversity from polygon array
+
+function speciesDiversityFromPolygonArray(speciesBuffer, resolutionCollection, num, pname, scaleFactor) {
+  const layerResolutionBoxes = getResolutionBoxes(resolutionCollection, num);
+
+  // calculate diversity through overlap of boxes and buffer
+  // loop through each coast line
+  for (const coastline of resolutionCollection.features) {
+    // get the box of each coastline
+    const box = findBoxFromLine(coastline, layerResolutionBoxes);
+
+    // count diversity of each line through box overlap
+    const diversityArray = [];
+    console.log(speciesBuffer.length);
+    for (let i = 0; i < speciesBuffer.length; i++) {
+      const intersection = turf.intersect(box, speciesBuffer[i]); // will be null if no overlap
+      if (intersection != null) {
+        const species = speciesBuffer[i].properties.species;
+        if (!diversityArray.includes(species)) {
+          diversityArray.push(species);
+        }
+      }
+    }
+
+    // count diversity
+    const diversity = diversityArray.length;
+
+    // add the cal result to coastline properties
+    coastline.properties[pname] = diversity;
+  }
+
+  // need to normalize the values
+
+  // get an array of all the values of the coastline piece of this model calculation
+  const propertiesValueArray = resolutionCollection.features.map((f) => f.properties[pname]);
+
+  // calculate the min max of the values
+  const min = Math.min(...propertiesValueArray);
+  const max = Math.max(...propertiesValueArray);
+
+  // use a D3 scale to normalize this data
+  // scale factor is the thing to control the shape of the reprojection
+  const scaleFunc = d3.scalePow([min, max], [0, 1]).exponent(scaleFactor); // need to map to 0 to 1 because the later color scale only take numbers between 0 and 1
+  // add the normalized value to each coastline properties
+  for (const coastline of resolutionCollection.features) {
+    const normalResult = scaleFunc(coastline.properties[pname]);
+    const newPropName = 'normal'+ pname;
+    coastline.properties[newPropName] = normalResult;
+  }
 }
 
 export {

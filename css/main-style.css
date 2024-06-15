@@ -2,10 +2,8 @@
 html,
 body {
     padding: 0;
-    /* border-box doesn't include margin, only padding */
     margin: 0;
-    height: 100vh;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 p {
@@ -147,7 +145,9 @@ header {
 .menu-background {
     height: 45px;
     background-color: rgba(242, 249, 255, 0.9);
-    margin-top: 1.5rem;
+    position: relative;
+    top: 1.5rem;
+    z-index: 9999;
 }
 
 .menu {
@@ -179,7 +179,7 @@ header {
 .menu-block {
     height: 45px;
     width: 130px;
-    background-color: rgb(91 167 237);
+    background-color: #e4f0fb;
     position: absolute;
     left: 0;
     border-radius: 12px;
@@ -206,6 +206,8 @@ header {
 /* main part style*/
 main {
     height: calc(100vh - 1.5rem - 45px - 3vh);
+    position: relative;
+    top: calc(1.5rem);
 }
 
 /* unit generator */
@@ -247,6 +249,8 @@ footer {
     font-size: 12px;
     box-sizing: border-box;
     margin: 0;
+    position: relative;
+    top: 1.5rem;
 }
 
 #footnote {

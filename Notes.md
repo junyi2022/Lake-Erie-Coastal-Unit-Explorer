@@ -96,5 +96,6 @@ function resetAllStyles(map) {
   const leadText = document.getElementById('chart-text'); // important: this should be after setleadlevel
   leadText.parentNode.classList.add('hidden'); // add a hidden label to "remove", style hidden in CSS
   // leadText.parentNode.removeChild(leadText);
+  map.legend.remove();
 }
 ```

@@ -82,6 +82,7 @@ const unitDrop = document.querySelector('.unit');
 const dropdownAll = document.getElementsByClassName('priority'); // all dropdown boxes
 const generateResButton = document.querySelector('.generate-resolution');
 const finishResButton = document.querySelector('.finish-resolution');
+const returnGenerateResButton = document.querySelector('.return-generate-resolution');
 // get step 3 stuff
 const categoryBox = document.querySelector('.category');
 const generateGroupButton = document.querySelector('.generate-group');
@@ -365,6 +366,8 @@ function getFtResolution(line, num) { // num is ft
 function startGroupRes(map, resolutionCollection, firstProp, secondProp, thirdProp) {
   // enable step 3 box
   categoryBox.disabled = false;
+  generateGroupButton.disabled = false;
+  finishGroupButton.disabled = false;
   // prevent people from entering invalid number
   unitInputRange(categoryBox);
   // disable step 2 buttons
@@ -375,6 +378,9 @@ function startGroupRes(map, resolutionCollection, firstProp, secondProp, thirdPr
   for (const i of dropdownAll) {
     i.disabled = true;
   }
+
+  // handle return button
+  returnToGenerateRes(map);
 
   // handle inputs from form
   generateGroupButton.addEventListener('click', () => {
@@ -754,6 +760,33 @@ function returnToGenerateGroup() {
   });
 }
 
+function returnToGenerateRes(map) {
+  returnGenerateResButton.addEventListener('click', () => {
+    // disable group unit buttons
+    categoryBox.value = '';
+    categoryBox.disabled = true;
+    generateGroupButton.disabled = true;
+    finishGroupButton.disabled = true;
+    // enable res buttons
+    resolutionBox.disabled = false;
+    unitDrop.disabled = false;
+    for (const i of dropdownAll) {
+      i.disabled = false;
+    }
+    generateResButton.disabled = false;
+    finishResButton.disabled = false;
+    // map cleanup
+    if (map.finalUnitLayer !== null) {
+      map.finalUnitLayer.clearLayers();
+    }
+    // remove unit legend
+    const legendContent = document.querySelector('.legend-content');
+    if (legendContent.querySelector('.unit-legend') !== null) {
+      const oldLegend = legendContent.querySelector('.unit-legend');
+      legendContent.removeChild(oldLegend);
+    }
+  });
+}
 
 export {
   modelFuncs,

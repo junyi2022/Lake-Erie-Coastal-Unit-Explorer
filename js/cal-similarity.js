@@ -19,6 +19,7 @@ const thirdDropSim = document.querySelector('#third-priority-sim');
 const dropdownAllSim = document.getElementsByClassName('priority-sim'); // all dropdown boxes
 const generateResButtonSim = document.querySelector('.generate-resolution-sim');
 const finishResButtonSim = document.querySelector('.finish-resolution-sim');
+const returnGenerateResButtonSim = document.querySelector('.return-generate-resolution-sim');
 // get step 3 buttons
 const fromSliderSim = document.querySelector('#fromSlider');
 const toSliderSim = document.querySelector('#toSlider');
@@ -194,6 +195,8 @@ function simGroupRes(map2, resolutionCollection, firstProp, secondProp, thirdPro
   toSliderSim.disabled = false;
   fromInputSim.disabled = false;
   toInputSim.disabled = false;
+  generateGroupButtonSim.disabled = false;
+  finishGroupButtonSim.disabled = false;
 
   // disable step 2 buttons
   finishResButtonSim.disabled = true;
@@ -204,6 +207,9 @@ function simGroupRes(map2, resolutionCollection, firstProp, secondProp, thirdPro
 
   // add selected point's score to range bar
   displaySelectPointScoreOnRange(pointScore[0].finalValueNormal.toFixed(2));
+
+  // handle return to priority step
+  returnToGenerateResSim(map2);
 
   // handle range input
   generateGroupButtonSim.addEventListener('click', () => {
@@ -220,11 +226,18 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
     map2.finalSimLayer.clearLayers();
   }
 
+  // For some reasons, the selected point's score is not updated in a timely manner, so here get the score from the label on the slider.
+  // If use the pointScore[0].finalValueNormal, it will be the score of the last selected point and send the alert below twice and automatically fixed itself.
+  const divElement = document.getElementById('select-point-box-text');
+  const textContent = divElement.textContent;
+  const scoreValue = textContent.replace('Selected Point: ', '').trim();
+  const scoreValueNum = Number(scoreValue);
+
   // get range input values
   const [from, to] = getParsed(fromSliderSim, toSliderSim);
 
   // check if the range is valid
-  if (pointScore[0].finalValueNormal < from || pointScore[0].finalValueNormal > to) {
+  if (scoreValueNum < from || scoreValueNum > to) {
     alert('Please make sure the range includes the selected point\'s score.');
     return;
   }
@@ -342,6 +355,41 @@ function returnToSliderGroup() {
     toSliderSim.disabled = false;
     fromInputSim.disabled = false;
     toInputSim.disabled = false;
+  });
+}
+
+function returnToGenerateResSim(map2) {
+  returnGenerateResButtonSim.addEventListener('click', () => {
+    // enable dropdown boxes
+    generateResButtonSim.disabled = false;
+    finishResButtonSim.disabled = false;
+    for (const i of dropdownAllSim) {
+      i.disabled = false;
+    }
+    // disable slider buttons
+    fromSliderSim.disabled = true;
+    toSliderSim.disabled = true;
+    fromInputSim.disabled = true;
+    toInputSim.disabled = true;
+    generateGroupButtonSim.disabled = true;
+    finishGroupButtonSim .disabled = true;
+    // map cleanup
+    map2.fitBounds(map2.zoomRefLayer.getBounds());
+    if (map2.finalSimLayer !== null) {
+      map2.finalSimLayer.clearLayers();
+    }
+    // remove similarity area legend
+    const legendContent = document.querySelector('.legend-content-sim');
+    if (legendContent.querySelector('.similarity-legend') !== null) {
+      const oldLegend = legendContent.querySelector('.similarity-legend');
+      legendContent.removeChild(oldLegend);
+    }
+    // remove marker on slider
+    const scoreMarker = document.querySelector('.select-point-box');
+    const scoreLabel = document.querySelector('.select-point-box-label');
+    scoreMarker.classList.add('hidden');
+    scoreLabel.style.removeProperty('display');
+    scoreLabel.classList.add('hidden');
   });
 }
 

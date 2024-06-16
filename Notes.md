@@ -81,5 +81,20 @@ python3 -m http.server
     function smoothScroll(targetId) {
         document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
     }
-    </script>
-    ```
+</script>
+```
+
+# Different clear methods
+
+```javascript
+function resetAllStyles(map) {
+  map.fitBounds(map.zoomRefLayer.getBounds());
+  phillyParkLayer.resetStyle();
+  currentLocationLayer.clearLayers();
+  routeLayer.clearLayers();
+  setLeadLevel(400);
+  const leadText = document.getElementById('chart-text'); // important: this should be after setleadlevel
+  leadText.parentNode.classList.add('hidden'); // add a hidden label to "remove", style hidden in CSS
+  // leadText.parentNode.removeChild(leadText);
+}
+```

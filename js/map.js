@@ -136,6 +136,13 @@ function initializeMap(censusTracts, dataBoundary, huc10, huc12, shorelineBase, 
   // initialize legend
   map.legend = L.control({position: 'bottomright'});
 
+  // add back button
+  const backView = L.control({position: 'topleft'});
+  backView.onAdd = (map) => {
+    return backButtonStyle(map);
+  };
+  backView.addTo(map);
+
   // layer control
   map.countyLayer.addTo(map); // need to add it to map in order to have this layer show up when initialize
 
@@ -230,6 +237,13 @@ function initializeSimilarAreaMap(censusTracts, dataBoundary, huc10, huc12, shor
 
   // initialize legend
   map2.legend = L.control({position: 'bottomright'});
+
+  // add back button
+  const backView = L.control({position: 'topleft'});
+  backView.onAdd = (map2) => {
+    return backButtonStyle(map2);
+  };
+  backView.addTo(map2);
 
   // layer control
   map2.countyLayer.addTo(map2); // need to add it to map2 in order to have this layer show up when initialize
@@ -363,6 +377,23 @@ function legend3Style(map, colorScale, min, max) {
   `;
 
   legendContent.appendChild(similarityColorLegendDiv);
+}
+
+// back button
+function backButtonStyle(map) {
+  const backDiv = document.createElement('div');
+  backDiv.classList.add('back-button'); // div class
+  backDiv.title = 'Back'; // this will be shown when cursor hover over the button
+  backDiv.innerHTML = `<svg id="back" width="23px" height="18px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#3d3d3d" stroke="#3d3d3d" stroke-width="33.792"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#474747" d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"></path><path fill="#474747" d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"></path></g></svg>`;
+
+  backDiv.addEventListener('click', () => {
+    resetAllStyles(map);
+  });
+  return backDiv;
+}
+
+function resetAllStyles(map) {
+  map.fitBounds(map.zoomRefLayer.getBounds());
 }
 
 export {

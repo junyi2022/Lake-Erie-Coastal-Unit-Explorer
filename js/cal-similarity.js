@@ -26,6 +26,7 @@ const fromInputSim = document.querySelector('#fromInput');
 const toInputSim = document.querySelector('#toInput');
 const generateGroupButtonSim = document.querySelector('.generate-group-sim');
 const finishGroupButtonSim = document.querySelector('.finish-group-sim');
+const returnGenerateGroupButtonSim = document.querySelector('.return-generate-group-sim');
 // get step 4 stuff
 const downloadButtonSim = document.querySelector('.download-unit-sim');
 const fileTypeSelectSim = document.querySelector('.file-type-sim');
@@ -285,6 +286,11 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
   finishGroupButtonSim.addEventListener('click', () => {
     fileTypeSelectSim.disabled = false;
     downloadButtonSim.disabled = false;
+    fromSliderSim.disabled = true;
+    toSliderSim.disabled = true;
+    fromInputSim.disabled = true;
+    toInputSim.disabled = true;
+    returnToSliderGroup();
   });
 
   // download button handeler
@@ -325,6 +331,19 @@ function selectSimToGeojson(resolutionCollection, from, to, pointScore) {
   return [geojsonCollection, minSim, maxSim];
 }
 
+
+// Collection of return manipulation
+
+function returnToSliderGroup() {
+  returnGenerateGroupButtonSim.addEventListener('click', () => {
+    fileTypeSelectSim.disabled = true;
+    downloadButtonSim.disabled = true;
+    fromSliderSim.disabled = false;
+    toSliderSim.disabled = false;
+    fromInputSim.disabled = false;
+    toInputSim.disabled = false;
+  });
+}
 
 export {
   handleSimilarityCalculations,

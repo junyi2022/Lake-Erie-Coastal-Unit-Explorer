@@ -847,6 +847,7 @@ export {
   getResolutionBoxes,
   getMinMaxFromFeatureArray,
   handleDownload,
+  clearDynamicDropdown,
 };
 
 

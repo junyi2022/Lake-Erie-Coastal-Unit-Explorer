@@ -4,13 +4,14 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 import { findClosestData } from './model.js';
 import { legend1Style, legend3Style } from './map.js';
 import { handleDropdownDisplay, withSpinnerDo, displaySelectPointScoreOnRange, getParsed } from './logistics.js';
-import { modelName, colorScale, unitColorScale, getMinMaxFromFeatureArray, handleDownload } from './cal.js';
+import { modelName, colorScale, unitColorScale, getMinMaxFromFeatureArray, handleDownload, clearDynamicDropdown } from './cal.js';
 import { initializePoints, handleMarkerSnap, getFtResolution, munipulateResCollection } from './cal.js';
 
 // similar finder inputs
 // get step 1 buttons
 const startButtonSim = document.querySelector('.select-point-sim');
 const finishButtonSim = document.querySelector('.finish-point-sim');
+const returnStartButtonSim = document.querySelector('.return-select-point-sim');
 // get step 2 input boxes
 const step2FormSim = document.querySelector('.step-two-form-sim');
 const firstDropSim = document.querySelector('#first-priority-sim');
@@ -109,6 +110,10 @@ function calResForSimilarity(newMid, coastLine, map2) {
   const midPointSelect = turf.point([newMid.lng, newMid.lat]);
   map2.pickPointLayer.addData(midPointSelect);
 
+  // enable step 2 buttons
+  generateResButtonSim.disabled = false;
+  finishResButtonSim.disabled = false;
+
   // handle setp 2 dropdown options
   firstDropSim.disabled = false;
   firstDropSim.addEventListener('change', () => {
@@ -123,6 +128,9 @@ function calResForSimilarity(newMid, coastLine, map2) {
     handleDropdownDisplay(thirdDropSim, [firstDropSimChoice, secondDropSimChoice]);
     thirdDropSim.disabled = false;
   });
+
+  // handle return button
+  returnToStartSim(map2, coastLine);
 
   // handle inputs from form
   generateResButtonSim.addEventListener('click', () => {
@@ -390,6 +398,39 @@ function returnToGenerateResSim(map2) {
     scoreMarker.classList.add('hidden');
     scoreLabel.style.removeProperty('display');
     scoreLabel.classList.add('hidden');
+  });
+}
+
+function returnToStartSim(map2, coastLine) {
+  returnStartButtonSim.addEventListener('click', () => {
+    // enable step 1 buttons
+    startButtonSim.disabled = false;
+    finishButtonSim.disabled = false;
+    // disable step 2 buttons
+    generateResButtonSim.disabled = true;
+    finishResButtonSim.disabled = true;
+    firstDropSim.value = '';
+    // clear dynamic dropdown
+    clearDynamicDropdown('#second-priority-sim');
+    clearDynamicDropdown('#third-priority-sim');
+    for (const i of dropdownAllSim) {
+      i.disabled = true;
+    }
+    // map cleanup
+    map2.fitBounds(map2.zoomRefLayer.getBounds());
+    const currentPoint = map2.pickPointLayer.toGeoJSON();
+    console.log(currentPoint);
+    map2.pickPointLayer.clearLayers();
+    if (map2.colorLayer !== null) {
+      map2.colorLayer.clearLayers();
+    }
+    // change the selected point back to marker pin
+    // need to read point location from pickPointLayer
+    const updatedMarker = initializePoints(map2, currentPoint.features[0].geometry.coordinates);
+    updatedMarker.addEventListener('dragend', () => {
+      handleMarkerSnap(coastLine, updatedMarker, map2);
+    });
+    map2.legend.remove();
   });
 }
 

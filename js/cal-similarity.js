@@ -130,7 +130,11 @@ function calResForSimilarity(newMid, coastLine, map2) {
   });
 
   // handle return button
-  returnToStartSim(map2, coastLine);
+  returnStartButtonSim.addEventListener('click', () => {
+    returnToSliderGroup();
+    returnToGenerateResSim(map2);
+    returnToStartSim(map2, coastLine);
+  });
 
   // handle inputs from form
   generateResButtonSim.addEventListener('click', () => {
@@ -217,7 +221,10 @@ function simGroupRes(map2, resolutionCollection, firstProp, secondProp, thirdPro
   displaySelectPointScoreOnRange(pointScore[0].finalValueNormal.toFixed(2));
 
   // handle return to priority step
-  returnToGenerateResSim(map2);
+  returnGenerateResButtonSim.addEventListener('click', () => {
+    returnToSliderGroup();
+    returnToGenerateResSim(map2);
+  });
 
   // handle range input
   generateGroupButtonSim.addEventListener('click', () => {
@@ -311,7 +318,9 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
     toSliderSim.disabled = true;
     fromInputSim.disabled = true;
     toInputSim.disabled = true;
-    returnToSliderGroup();
+    returnGenerateGroupButtonSim.addEventListener('click', () => {
+      returnToSliderGroup();
+    });
   });
 
   // download button handeler
@@ -356,82 +365,78 @@ function selectSimToGeojson(resolutionCollection, from, to, pointScore) {
 // Collection of return manipulation
 
 function returnToSliderGroup() {
-  returnGenerateGroupButtonSim.addEventListener('click', () => {
-    fileTypeSelectSim.disabled = true;
-    downloadButtonSim.disabled = true;
-    fromSliderSim.disabled = false;
-    toSliderSim.disabled = false;
-    fromInputSim.disabled = false;
-    toInputSim.disabled = false;
-  });
+  fileTypeSelectSim.disabled = true;
+  downloadButtonSim.disabled = true;
+  fromSliderSim.disabled = false;
+  toSliderSim.disabled = false;
+  fromInputSim.disabled = false;
+  toInputSim.disabled = false;
 }
 
 function returnToGenerateResSim(map2) {
-  returnGenerateResButtonSim.addEventListener('click', () => {
-    // enable dropdown boxes
-    generateResButtonSim.disabled = false;
-    finishResButtonSim.disabled = false;
-    for (const i of dropdownAllSim) {
-      i.disabled = false;
-    }
-    // disable slider buttons
-    fromSliderSim.disabled = true;
-    toSliderSim.disabled = true;
-    fromInputSim.disabled = true;
-    toInputSim.disabled = true;
-    generateGroupButtonSim.disabled = true;
-    finishGroupButtonSim .disabled = true;
-    // map cleanup
-    map2.fitBounds(map2.zoomRefLayer.getBounds());
-    if (map2.finalSimLayer !== null) {
-      map2.finalSimLayer.clearLayers();
-    }
-    // remove similarity area legend
-    const legendContent = document.querySelector('.legend-content-sim');
-    if (legendContent.querySelector('.similarity-legend') !== null) {
-      const oldLegend = legendContent.querySelector('.similarity-legend');
-      legendContent.removeChild(oldLegend);
-    }
-    // remove marker on slider
-    const scoreMarker = document.querySelector('.select-point-box');
-    const scoreLabel = document.querySelector('.select-point-box-label');
-    scoreMarker.classList.add('hidden');
-    scoreLabel.style.removeProperty('display');
-    scoreLabel.classList.add('hidden');
-  });
+  // enable dropdown boxes
+  generateResButtonSim.disabled = false;
+  finishResButtonSim.disabled = false;
+  for (const i of dropdownAllSim) {
+    i.disabled = false;
+  }
+  // disable slider buttons
+  fromSliderSim.value = 0.1;
+  toSliderSim.value = 0.4;
+  fromSliderSim.disabled = true;
+  toSliderSim.disabled = true;
+  fromInputSim.disabled = true;
+  toInputSim.disabled = true;
+  generateGroupButtonSim.disabled = true;
+  finishGroupButtonSim .disabled = true;
+  // map cleanup
+  map2.fitBounds(map2.zoomRefLayer.getBounds());
+  if (map2.finalSimLayer !== null) {
+    map2.finalSimLayer.clearLayers();
+  }
+  // remove similarity area legend
+  const legendContent = document.querySelector('.legend-content-sim');
+  if (legendContent.querySelector('.similarity-legend') !== null) {
+    const oldLegend = legendContent.querySelector('.similarity-legend');
+    legendContent.removeChild(oldLegend);
+  }
+  // remove marker on slider
+  const scoreMarker = document.querySelector('.select-point-box');
+  const scoreLabel = document.querySelector('.select-point-box-label');
+  scoreMarker.classList.add('hidden');
+  scoreLabel.style.removeProperty('display');
+  scoreLabel.classList.add('hidden');
 }
 
 function returnToStartSim(map2, coastLine) {
-  returnStartButtonSim.addEventListener('click', () => {
-    // enable step 1 buttons
-    startButtonSim.disabled = false;
-    finishButtonSim.disabled = false;
-    // disable step 2 buttons
-    generateResButtonSim.disabled = true;
-    finishResButtonSim.disabled = true;
-    firstDropSim.value = '';
-    // clear dynamic dropdown
-    clearDynamicDropdown('#second-priority-sim');
-    clearDynamicDropdown('#third-priority-sim');
-    for (const i of dropdownAllSim) {
-      i.disabled = true;
-    }
-    // map cleanup
-    map2.fitBounds(map2.zoomRefLayer.getBounds());
-    const currentPoint = map2.pickPointLayer.toGeoJSON();
-    console.log(currentPoint);
-    map2.pickPointLayer.clearLayers();
-    if (map2.colorLayer !== null) {
-      map2.colorLayer.clearLayers();
-    }
-    // change the selected point back to marker pin
-    // need to read point location from pickPointLayer
-    const updatedMarker = initializePoints(map2, currentPoint.features[0].geometry.coordinates);
-    updatedMarker.addEventListener('dragend', () => {
-      handleMarkerSnap(coastLine, updatedMarker, map2);
-    });
-    map2.legend.remove();
+  // enable step 1 buttons
+  startButtonSim.disabled = false;
+  finishButtonSim.disabled = false;
+  // disable step 2 buttons
+  generateResButtonSim.disabled = true;
+  finishResButtonSim.disabled = true;
+  firstDropSim.value = '';
+  // clear dynamic dropdown
+  clearDynamicDropdown('#second-priority-sim');
+  clearDynamicDropdown('#third-priority-sim');
+  for (const i of dropdownAllSim) {
+    i.disabled = true;
+  }
+  // map cleanup
+  map2.fitBounds(map2.zoomRefLayer.getBounds());
+  const currentPoint = map2.pickPointLayer.toGeoJSON();
+  console.log(currentPoint);
+  map2.pickPointLayer.clearLayers();
+  if (map2.colorLayer !== null) {
+    map2.colorLayer.clearLayers();
+  }
+  // change the selected point back to marker pin
+  // need to read point location from pickPointLayer
+  const updatedMarker = initializePoints(map2, currentPoint.features[0].geometry.coordinates);
+  updatedMarker.addEventListener('dragend', () => {
+    handleMarkerSnap(coastLine, updatedMarker, map2);
   });
+  map2.legend.remove();
 }
 
 export {

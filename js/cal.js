@@ -218,7 +218,11 @@ function doSomethingWithEndpoints(newStart, newEnd, coastLine, map) {
   map.flyToBounds([[minLat, minLon], [maxLat, maxLon]]);
 
   // handle return button
-  returnToStart(map);
+  returnStartButton.addEventListener('click', () => {
+    returnToGenerateGroup();
+    returnToGenerateRes(map);
+    returnToStart(map);
+  });
 
   // handle inputs from form
   generateResButton.addEventListener('click', () => {
@@ -386,7 +390,10 @@ function startGroupRes(map, resolutionCollection, firstProp, secondProp, thirdPr
   }
 
   // handle return button
-  returnToGenerateRes(map);
+  returnGenerateResButton.addEventListener('click', () => {
+    returnToGenerateGroup();
+    returnToGenerateRes(map);
+  });
 
   // handle inputs from form
   generateGroupButton.addEventListener('click', () => {
@@ -507,7 +514,9 @@ function handleGroupRes(map, resolutionCollection, firstProp, secondProp, thirdP
     downloadButton.disabled = false;
     categoryBox.disabled = true;
     generateGroupButton.disabled = true;
-    returnToGenerateGroup();
+    returnGenerateGroupButton.addEventListener('click', () => {
+      returnToGenerateGroup();
+    });
   });
 
   // download button handeler
@@ -758,68 +767,62 @@ function getResolutionBoxes(Collection, num) {
 // collection of return manipulations
 
 function returnToGenerateGroup() {
-  returnGenerateGroupButton.addEventListener('click', () => {
-    categoryBox.disabled = false;
-    generateGroupButton.disabled = false;
-    fileTypeSelect.disabled = true;
-    downloadButton.disabled = true;
-  });
+  categoryBox.disabled = false;
+  generateGroupButton.disabled = false;
+  fileTypeSelect.disabled = true;
+  downloadButton.disabled = true;
 }
 
 function returnToGenerateRes(map) {
-  returnGenerateResButton.addEventListener('click', () => {
-    // disable group unit buttons
-    categoryBox.value = '';
-    categoryBox.disabled = true;
-    generateGroupButton.disabled = true;
-    finishGroupButton.disabled = true;
-    // enable res buttons
-    resolutionBox.disabled = false;
-    unitDrop.disabled = false;
-    for (const i of dropdownAll) {
-      i.disabled = false;
-    }
-    generateResButton.disabled = false;
-    finishResButton.disabled = false;
-    // map cleanup
-    if (map.finalUnitLayer !== null) {
-      map.finalUnitLayer.clearLayers();
-    }
-    // remove unit legend
-    const legendContent = document.querySelector('.legend-content');
-    if (legendContent.querySelector('.unit-legend') !== null) {
-      const oldLegend = legendContent.querySelector('.unit-legend');
-      legendContent.removeChild(oldLegend);
-    }
-  });
+  // disable group unit buttons
+  categoryBox.value = '';
+  categoryBox.disabled = true;
+  generateGroupButton.disabled = true;
+  finishGroupButton.disabled = true;
+  // enable res buttons
+  resolutionBox.disabled = false;
+  unitDrop.disabled = false;
+  for (const i of dropdownAll) {
+    i.disabled = false;
+  }
+  generateResButton.disabled = false;
+  finishResButton.disabled = false;
+  // map cleanup
+  if (map.finalUnitLayer !== null) {
+    map.finalUnitLayer.clearLayers();
+  }
+  // remove unit legend
+  const legendContent = document.querySelector('.legend-content');
+  if (legendContent.querySelector('.unit-legend') !== null) {
+    const oldLegend = legendContent.querySelector('.unit-legend');
+    legendContent.removeChild(oldLegend);
+  }
 }
 
 function returnToStart(map) {
-  returnStartButton.addEventListener('click', () => {
-    // enable the start buttons
-    startButton.disabled = false;
-    finishButton.disabled = false;
-    // clear the map
-    map.flyToBounds(map.zoomRefLayer.getBounds());
-    map.sliceLayer.clearLayers();
-    if (map.colorLayer !== null) {
-      map.colorLayer.clearLayers();
-    }
-    map.legend.remove();
-    // disable the res buttons
-    resolutionBox.value = '';
-    resolutionBox.disabled = true;
-    unitDrop.disabled = true;
-    firstDrop.value = '';
-    // clear dynamic dropdown
-    clearDynamicDropdown('#second-priority');
-    clearDynamicDropdown('#third-priority');
-    for (const i of dropdownAll) {
-      i.disabled = true;
-    }
-    generateResButton.disabled = true;
-    finishResButton.disabled = true;
-  });
+  // enable the start buttons
+  startButton.disabled = false;
+  finishButton.disabled = false;
+  // clear the map
+  map.flyToBounds(map.zoomRefLayer.getBounds());
+  map.sliceLayer.clearLayers();
+  if (map.colorLayer !== null) {
+    map.colorLayer.clearLayers();
+  }
+  map.legend.remove();
+  // disable the res buttons
+  resolutionBox.value = '';
+  resolutionBox.disabled = true;
+  unitDrop.disabled = true;
+  firstDrop.value = '';
+  // clear dynamic dropdown
+  clearDynamicDropdown('#second-priority');
+  clearDynamicDropdown('#third-priority');
+  for (const i of dropdownAll) {
+    i.disabled = true;
+  }
+  generateResButton.disabled = true;
+  finishResButton.disabled = true;
 }
 
 function clearDynamicDropdown(ID) {

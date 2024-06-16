@@ -72,6 +72,7 @@ const shpOptions = {
 // get step 1 buttons
 const startButton = document.querySelector('.select-point');
 const finishButton = document.querySelector('.finish-point');
+const returnStartButton = document.querySelector('.return-select-point');
 // get step 2 input boxes
 const step2Form = document.querySelector('.step-two-form');
 const resolutionBox = document.querySelector('.resolution');
@@ -192,6 +193,8 @@ function doSomethingWithEndpoints(newStart, newEnd, coastLine, map) {
   // enable step 2 input boxes
   resolutionBox.disabled = false;
   unitDrop.disabled = false;
+  generateResButton.disabled = false;
+  finishResButton.disabled = false;
 
   // handle setp 2 dropdown options
   firstDrop.disabled = false;
@@ -213,6 +216,9 @@ function doSomethingWithEndpoints(newStart, newEnd, coastLine, map) {
   const zoomSliced = turf.buffer(coastalSliced, 2);
   const [minLon, minLat, maxLon, maxLat] =turf.bbox(zoomSliced);
   map.flyToBounds([[minLat, minLon], [maxLat, maxLon]]);
+
+  // handle return button
+  returnToStart(map);
 
   // handle inputs from form
   generateResButton.addEventListener('click', () => {
@@ -787,6 +793,42 @@ function returnToGenerateRes(map) {
     }
   });
 }
+
+function returnToStart(map) {
+  returnStartButton.addEventListener('click', () => {
+    // enable the start buttons
+    startButton.disabled = false;
+    finishButton.disabled = false;
+    // clear the map
+    map.flyToBounds(map.zoomRefLayer.getBounds());
+    map.sliceLayer.clearLayers();
+    if (map.colorLayer !== null) {
+      map.colorLayer.clearLayers();
+    }
+    map.legend.remove();
+    // disable the res buttons
+    resolutionBox.value = '';
+    resolutionBox.disabled = true;
+    unitDrop.disabled = true;
+    firstDrop.value = '';
+    // clear dynamic dropdown
+    clearDynamicDropdown('#second-priority');
+    clearDynamicDropdown('#third-priority');
+    for (const i of dropdownAll) {
+      i.disabled = true;
+    }
+    generateResButton.disabled = true;
+    finishResButton.disabled = true;
+  });
+}
+
+function clearDynamicDropdown(ID) {
+  const DropBox = document.querySelector(ID);
+  if (DropBox.querySelectorAll('option') !== null) {
+    DropBox.innerHTML = '';
+  }
+}
+
 
 export {
   modelFuncs,

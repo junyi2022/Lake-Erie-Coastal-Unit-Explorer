@@ -86,6 +86,7 @@ const finishResButton = document.querySelector('.finish-resolution');
 const categoryBox = document.querySelector('.category');
 const generateGroupButton = document.querySelector('.generate-group');
 const finishGroupButton = document.querySelector('.finish-group');
+const returnGenerateGroupButton = document.querySelector('.return-generate-group');
 // get step 4 stuff
 const downloadButton = document.querySelector('.download-unit');
 const fileTypeSelect = document.querySelector('.file-type');
@@ -492,6 +493,9 @@ function handleGroupRes(map, resolutionCollection, firstProp, secondProp, thirdP
   finishGroupButton.addEventListener('click', () => {
     fileTypeSelect.disabled = false;
     downloadButton.disabled = false;
+    categoryBox.disabled = true;
+    generateGroupButton.disabled = true;
+    returnToGenerateGroup();
   });
 
   // download button handeler
@@ -736,6 +740,18 @@ function getResolutionBoxes(Collection, num) {
   }
   const allBoxesCollection = turf.featureCollection(allBoxes);
   return allBoxesCollection;
+}
+
+
+// collection of return manipulations
+
+function returnToGenerateGroup() {
+  returnGenerateGroupButton.addEventListener('click', () => {
+    categoryBox.disabled = false;
+    generateGroupButton.disabled = false;
+    fileTypeSelect.disabled = true;
+    downloadButton.disabled = true;
+  });
 }
 
 

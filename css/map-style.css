@@ -57,3 +57,27 @@ section.leaflet-control-layers-list:before {
     flex-direction: row;
     align-items: center;
 }
+
+/* back button style */
+
+.back-button {
+    border: 2px solid #ccc;
+    height: 30px;
+    width: 30px;
+    border-radius: 4px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* change cursor to hand when hover over the button */
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #f4f4f4;
+}
+
+.back-button:hover path {
+    fill: brown;
+    stroke: brown;
+}

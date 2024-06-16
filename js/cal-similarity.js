@@ -4,13 +4,14 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 import { findClosestData } from './model.js';
 import { legend1Style, legend3Style } from './map.js';
 import { handleDropdownDisplay, withSpinnerDo, displaySelectPointScoreOnRange, getParsed } from './logistics.js';
-import { modelName, colorScale, unitColorScale, getMinMaxFromFeatureArray, handleDownload } from './cal.js';
+import { modelName, colorScale, unitColorScale, getMinMaxFromFeatureArray, handleDownload, clearDynamicDropdown } from './cal.js';
 import { initializePoints, handleMarkerSnap, getFtResolution, munipulateResCollection } from './cal.js';
 
 // similar finder inputs
 // get step 1 buttons
 const startButtonSim = document.querySelector('.select-point-sim');
 const finishButtonSim = document.querySelector('.finish-point-sim');
+const returnStartButtonSim = document.querySelector('.return-select-point-sim');
 // get step 2 input boxes
 const step2FormSim = document.querySelector('.step-two-form-sim');
 const firstDropSim = document.querySelector('#first-priority-sim');
@@ -19,6 +20,7 @@ const thirdDropSim = document.querySelector('#third-priority-sim');
 const dropdownAllSim = document.getElementsByClassName('priority-sim'); // all dropdown boxes
 const generateResButtonSim = document.querySelector('.generate-resolution-sim');
 const finishResButtonSim = document.querySelector('.finish-resolution-sim');
+const returnGenerateResButtonSim = document.querySelector('.return-generate-resolution-sim');
 // get step 3 buttons
 const fromSliderSim = document.querySelector('#fromSlider');
 const toSliderSim = document.querySelector('#toSlider');
@@ -26,6 +28,7 @@ const fromInputSim = document.querySelector('#fromInput');
 const toInputSim = document.querySelector('#toInput');
 const generateGroupButtonSim = document.querySelector('.generate-group-sim');
 const finishGroupButtonSim = document.querySelector('.finish-group-sim');
+const returnGenerateGroupButtonSim = document.querySelector('.return-generate-group-sim');
 // get step 4 stuff
 const downloadButtonSim = document.querySelector('.download-unit-sim');
 const fileTypeSelectSim = document.querySelector('.file-type-sim');
@@ -107,6 +110,10 @@ function calResForSimilarity(newMid, coastLine, map2) {
   const midPointSelect = turf.point([newMid.lng, newMid.lat]);
   map2.pickPointLayer.addData(midPointSelect);
 
+  // enable step 2 buttons
+  generateResButtonSim.disabled = false;
+  finishResButtonSim.disabled = false;
+
   // handle setp 2 dropdown options
   firstDropSim.disabled = false;
   firstDropSim.addEventListener('change', () => {
@@ -120,6 +127,13 @@ function calResForSimilarity(newMid, coastLine, map2) {
     const secondDropSimChoice = secondDropSim.value;
     handleDropdownDisplay(thirdDropSim, [firstDropSimChoice, secondDropSimChoice]);
     thirdDropSim.disabled = false;
+  });
+
+  // handle return button
+  returnStartButtonSim.addEventListener('click', () => {
+    returnToSliderGroup();
+    returnToGenerateResSim(map2);
+    returnToStartSim(map2, coastLine);
   });
 
   // handle inputs from form
@@ -193,6 +207,8 @@ function simGroupRes(map2, resolutionCollection, firstProp, secondProp, thirdPro
   toSliderSim.disabled = false;
   fromInputSim.disabled = false;
   toInputSim.disabled = false;
+  generateGroupButtonSim.disabled = false;
+  finishGroupButtonSim.disabled = false;
 
   // disable step 2 buttons
   finishResButtonSim.disabled = true;
@@ -203,6 +219,12 @@ function simGroupRes(map2, resolutionCollection, firstProp, secondProp, thirdPro
 
   // add selected point's score to range bar
   displaySelectPointScoreOnRange(pointScore[0].finalValueNormal.toFixed(2));
+
+  // handle return to priority step
+  returnGenerateResButtonSim.addEventListener('click', () => {
+    returnToSliderGroup();
+    returnToGenerateResSim(map2);
+  });
 
   // handle range input
   generateGroupButtonSim.addEventListener('click', () => {
@@ -219,11 +241,18 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
     map2.finalSimLayer.clearLayers();
   }
 
+  // For some reasons, the selected point's score is not updated in a timely manner, so here get the score from the label on the slider.
+  // If use the pointScore[0].finalValueNormal, it will be the score of the last selected point and send the alert below twice and automatically fixed itself.
+  const divElement = document.getElementById('select-point-box-text');
+  const textContent = divElement.textContent;
+  const scoreValue = textContent.replace('Selected Point: ', '').trim();
+  const scoreValueNum = Number(scoreValue);
+
   // get range input values
   const [from, to] = getParsed(fromSliderSim, toSliderSim);
 
   // check if the range is valid
-  if (pointScore[0].finalValueNormal < from || pointScore[0].finalValueNormal > to) {
+  if (scoreValueNum < from || scoreValueNum > to) {
     alert('Please make sure the range includes the selected point\'s score.');
     return;
   }
@@ -285,6 +314,13 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
   finishGroupButtonSim.addEventListener('click', () => {
     fileTypeSelectSim.disabled = false;
     downloadButtonSim.disabled = false;
+    fromSliderSim.disabled = true;
+    toSliderSim.disabled = true;
+    fromInputSim.disabled = true;
+    toInputSim.disabled = true;
+    returnGenerateGroupButtonSim.addEventListener('click', () => {
+      returnToSliderGroup();
+    });
   });
 
   // download button handeler
@@ -325,6 +361,83 @@ function selectSimToGeojson(resolutionCollection, from, to, pointScore) {
   return [geojsonCollection, minSim, maxSim];
 }
 
+
+// Collection of return manipulation
+
+function returnToSliderGroup() {
+  fileTypeSelectSim.disabled = true;
+  downloadButtonSim.disabled = true;
+  fromSliderSim.disabled = false;
+  toSliderSim.disabled = false;
+  fromInputSim.disabled = false;
+  toInputSim.disabled = false;
+}
+
+function returnToGenerateResSim(map2) {
+  // enable dropdown boxes
+  generateResButtonSim.disabled = false;
+  finishResButtonSim.disabled = false;
+  for (const i of dropdownAllSim) {
+    i.disabled = false;
+  }
+  // disable slider buttons
+  fromSliderSim.value = 0.1;
+  toSliderSim.value = 0.4;
+  fromSliderSim.disabled = true;
+  toSliderSim.disabled = true;
+  fromInputSim.disabled = true;
+  toInputSim.disabled = true;
+  generateGroupButtonSim.disabled = true;
+  finishGroupButtonSim .disabled = true;
+  // map cleanup
+  map2.fitBounds(map2.zoomRefLayer.getBounds());
+  if (map2.finalSimLayer !== null) {
+    map2.finalSimLayer.clearLayers();
+  }
+  // remove similarity area legend
+  const legendContent = document.querySelector('.legend-content-sim');
+  if (legendContent.querySelector('.similarity-legend') !== null) {
+    const oldLegend = legendContent.querySelector('.similarity-legend');
+    legendContent.removeChild(oldLegend);
+  }
+  // remove marker on slider
+  const scoreMarker = document.querySelector('.select-point-box');
+  const scoreLabel = document.querySelector('.select-point-box-label');
+  scoreMarker.classList.add('hidden');
+  scoreLabel.style.removeProperty('display');
+  scoreLabel.classList.add('hidden');
+}
+
+function returnToStartSim(map2, coastLine) {
+  // enable step 1 buttons
+  startButtonSim.disabled = false;
+  finishButtonSim.disabled = false;
+  // disable step 2 buttons
+  generateResButtonSim.disabled = true;
+  finishResButtonSim.disabled = true;
+  firstDropSim.value = '';
+  // clear dynamic dropdown
+  clearDynamicDropdown('#second-priority-sim');
+  clearDynamicDropdown('#third-priority-sim');
+  for (const i of dropdownAllSim) {
+    i.disabled = true;
+  }
+  // map cleanup
+  map2.fitBounds(map2.zoomRefLayer.getBounds());
+  const currentPoint = map2.pickPointLayer.toGeoJSON();
+  console.log(currentPoint);
+  map2.pickPointLayer.clearLayers();
+  if (map2.colorLayer !== null) {
+    map2.colorLayer.clearLayers();
+  }
+  // change the selected point back to marker pin
+  // need to read point location from pickPointLayer
+  const updatedMarker = initializePoints(map2, currentPoint.features[0].geometry.coordinates);
+  updatedMarker.addEventListener('dragend', () => {
+    handleMarkerSnap(coastLine, updatedMarker, map2);
+  });
+  map2.legend.remove();
+}
 
 export {
   handleSimilarityCalculations,

@@ -72,6 +72,7 @@ const shpOptions = {
 // get step 1 buttons
 const startButton = document.querySelector('.select-point');
 const finishButton = document.querySelector('.finish-point');
+const returnStartButton = document.querySelector('.return-select-point');
 // get step 2 input boxes
 const step2Form = document.querySelector('.step-two-form');
 const resolutionBox = document.querySelector('.resolution');
@@ -82,10 +83,12 @@ const unitDrop = document.querySelector('.unit');
 const dropdownAll = document.getElementsByClassName('priority'); // all dropdown boxes
 const generateResButton = document.querySelector('.generate-resolution');
 const finishResButton = document.querySelector('.finish-resolution');
+const returnGenerateResButton = document.querySelector('.return-generate-resolution');
 // get step 3 stuff
 const categoryBox = document.querySelector('.category');
 const generateGroupButton = document.querySelector('.generate-group');
 const finishGroupButton = document.querySelector('.finish-group');
+const returnGenerateGroupButton = document.querySelector('.return-generate-group');
 // get step 4 stuff
 const downloadButton = document.querySelector('.download-unit');
 const fileTypeSelect = document.querySelector('.file-type');
@@ -190,6 +193,8 @@ function doSomethingWithEndpoints(newStart, newEnd, coastLine, map) {
   // enable step 2 input boxes
   resolutionBox.disabled = false;
   unitDrop.disabled = false;
+  generateResButton.disabled = false;
+  finishResButton.disabled = false;
 
   // handle setp 2 dropdown options
   firstDrop.disabled = false;
@@ -211,6 +216,13 @@ function doSomethingWithEndpoints(newStart, newEnd, coastLine, map) {
   const zoomSliced = turf.buffer(coastalSliced, 2);
   const [minLon, minLat, maxLon, maxLat] =turf.bbox(zoomSliced);
   map.flyToBounds([[minLat, minLon], [maxLat, maxLon]]);
+
+  // handle return button
+  returnStartButton.addEventListener('click', () => {
+    returnToGenerateGroup();
+    returnToGenerateRes(map);
+    returnToStart(map);
+  });
 
   // handle inputs from form
   generateResButton.addEventListener('click', () => {
@@ -364,6 +376,8 @@ function getFtResolution(line, num) { // num is ft
 function startGroupRes(map, resolutionCollection, firstProp, secondProp, thirdProp) {
   // enable step 3 box
   categoryBox.disabled = false;
+  generateGroupButton.disabled = false;
+  finishGroupButton.disabled = false;
   // prevent people from entering invalid number
   unitInputRange(categoryBox);
   // disable step 2 buttons
@@ -374,6 +388,12 @@ function startGroupRes(map, resolutionCollection, firstProp, secondProp, thirdPr
   for (const i of dropdownAll) {
     i.disabled = true;
   }
+
+  // handle return button
+  returnGenerateResButton.addEventListener('click', () => {
+    returnToGenerateGroup();
+    returnToGenerateRes(map);
+  });
 
   // handle inputs from form
   generateGroupButton.addEventListener('click', () => {
@@ -492,6 +512,11 @@ function handleGroupRes(map, resolutionCollection, firstProp, secondProp, thirdP
   finishGroupButton.addEventListener('click', () => {
     fileTypeSelect.disabled = false;
     downloadButton.disabled = false;
+    categoryBox.disabled = true;
+    generateGroupButton.disabled = true;
+    returnGenerateGroupButton.addEventListener('click', () => {
+      returnToGenerateGroup();
+    });
   });
 
   // download button handeler
@@ -739,6 +764,75 @@ function getResolutionBoxes(Collection, num) {
 }
 
 
+// collection of return manipulations
+
+function returnToGenerateGroup() {
+  categoryBox.disabled = false;
+  generateGroupButton.disabled = false;
+  fileTypeSelect.disabled = true;
+  downloadButton.disabled = true;
+}
+
+function returnToGenerateRes(map) {
+  // disable group unit buttons
+  categoryBox.value = '';
+  categoryBox.disabled = true;
+  generateGroupButton.disabled = true;
+  finishGroupButton.disabled = true;
+  // enable res buttons
+  resolutionBox.disabled = false;
+  unitDrop.disabled = false;
+  for (const i of dropdownAll) {
+    i.disabled = false;
+  }
+  generateResButton.disabled = false;
+  finishResButton.disabled = false;
+  // map cleanup
+  if (map.finalUnitLayer !== null) {
+    map.finalUnitLayer.clearLayers();
+  }
+  // remove unit legend
+  const legendContent = document.querySelector('.legend-content');
+  if (legendContent.querySelector('.unit-legend') !== null) {
+    const oldLegend = legendContent.querySelector('.unit-legend');
+    legendContent.removeChild(oldLegend);
+  }
+}
+
+function returnToStart(map) {
+  // enable the start buttons
+  startButton.disabled = false;
+  finishButton.disabled = false;
+  // clear the map
+  map.flyToBounds(map.zoomRefLayer.getBounds());
+  map.sliceLayer.clearLayers();
+  if (map.colorLayer !== null) {
+    map.colorLayer.clearLayers();
+  }
+  map.legend.remove();
+  // disable the res buttons
+  resolutionBox.value = '';
+  resolutionBox.disabled = true;
+  unitDrop.disabled = true;
+  firstDrop.value = '';
+  // clear dynamic dropdown
+  clearDynamicDropdown('#second-priority');
+  clearDynamicDropdown('#third-priority');
+  for (const i of dropdownAll) {
+    i.disabled = true;
+  }
+  generateResButton.disabled = true;
+  finishResButton.disabled = true;
+}
+
+function clearDynamicDropdown(ID) {
+  const DropBox = document.querySelector(ID);
+  if (DropBox.querySelectorAll('option') !== null) {
+    DropBox.innerHTML = '';
+  }
+}
+
+
 export {
   modelFuncs,
   modelProps,
@@ -756,6 +850,7 @@ export {
   getResolutionBoxes,
   getMinMaxFromFeatureArray,
   handleDownload,
+  clearDynamicDropdown,
 };
 
 

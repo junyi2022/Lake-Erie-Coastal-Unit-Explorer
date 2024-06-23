@@ -113,3 +113,22 @@ code {
     border-radius: 10px;
     margin-left: 15px;
 }
+
+/* logo part */
+
+.contact-list {
+    display: flex;
+    flex-direction: row;
+    margin: 10px 0 10px 0;
+}
+
+.contact-wrapper {
+    width: 200px;
+    padding-right: 35px;
+}
+
+hr {
+    border-width: 1px;
+    width: 100%;
+    margin: 20px 0 20px 0;
+}

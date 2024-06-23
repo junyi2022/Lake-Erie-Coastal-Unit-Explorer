@@ -22,6 +22,10 @@ const dataExplorerDiv = document.querySelector('#data-explorer-body');
 const strategyLibraryDiv = document.querySelector('#strategy-library-body');
 const documentationDiv = document.querySelector('#documentation-body');
 
+// get footer div
+const footer = document.querySelector('.footer');
+
+
 const menuAll = [unitGeneratorDiv, similarAreaDiv, strategyFilterDiv, dataExplorerDiv, strategyLibraryDiv, documentationDiv];
 
 let hasNotClickedSimilarAreaButton = true;
@@ -42,17 +46,27 @@ function handleMenuDisplay(select) {
   }
 }
 
+function handleFooter(select) {
+  if (select == documentationDiv) { // when working on SF add this || strategyFilterDiv
+    footer.style.display = 'none';
+  } else {
+    footer.style.display = 'block';
+  }
+}
+
 function handleMenuBar() {
   unitGeneratorButton.addEventListener('click', () => {
     const select = unitGeneratorDiv;
     menuBlock.style.left = 0;
     handleMenuDisplay(select);
+    handleFooter(select);
   });
 
   similarAreaButton.addEventListener('click', () => {
     const select = similarAreaDiv;
     menuBlock.style.left = '130px';
     handleMenuDisplay(select);
+    handleFooter(select);
     // initialize map here when display is not none, map cannot show up correctly if it is initially hidden
     // only need to initialize the map once
     if (hasNotClickedSimilarAreaButton) {
@@ -65,24 +79,28 @@ function handleMenuBar() {
     const select = strategyFilterDiv;
     menuBlock.style.left = '260px';
     handleMenuDisplay(select);
+    handleFooter(select);
   });
 
   dataExplorerButton.addEventListener('click', () => {
     const select = dataExplorerDiv;
     menuBlock.style.left = '390px';
     handleMenuDisplay(select);
+    handleFooter(select);
   });
 
   strategyLibraryButton.addEventListener('click', () => {
     const select = strategyLibraryDiv;
     menuBlock.style.left = '520px';
     handleMenuDisplay(select);
+    handleFooter(select);
   });
 
   documentationButton.addEventListener('click', () => {
     const select = documentationDiv;
     menuBlock.style.left = '650px';
     handleMenuDisplay(select);
+    handleFooter(select);
   });
 }
 

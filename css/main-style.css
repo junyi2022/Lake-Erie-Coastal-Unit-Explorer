@@ -12,6 +12,16 @@ p {
     line-height: 1.5;
 }
 
+.foot-font {
+    color: gray;
+}
+
+.foot-text {
+    font-size: 12px;
+    line-height: 1.2;
+    margin-top: 5px;
+}
+
 .step-notes {
     font-size: 12px;
     margin: 0;

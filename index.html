@@ -17,7 +17,6 @@
         <link rel="stylesheet" href="css/map-style.css">
         <link rel="stylesheet" href="css/toolbar-style.css">
         <link rel="stylesheet" href="css/decoration-style.css">
-
         <link rel="stylesheet" href="css/documentation-style.css">
 
         <!-- add favicon -->
@@ -424,6 +423,8 @@
                             <ul class="table-of-contents">
                                 <li><a href="#de-wetland-potential" onclick="smoothScroll('de-wetland-potential')">Wetland Potential</a></li>
                                 <li><a href="#de-wildlife-index" onclick="smoothScroll('de-wildlife-index')">Fish and Wildlife Index</a></li>
+                                <li><a href="#de-endangered-species" onclick="smoothScroll('de-endangered-species')">Endangered Species Occurrence</a></li>
+                                <li><a href="#de-invasive-species" onclick="smoothScroll('de-invasive-species')">Invasive Species Occurrence</a></li>
                             </ul>
                         </li>
 
@@ -501,7 +502,69 @@
                             <h5>Description from Data Owner:</h5> The Fish and Wildlife Index identifies areas on the landscape where species and their habitats are located, helping to understand areas where implementing nature-based solutions are likely to benefit federal- or state-designated species of concern. In continental U.S (CONUS), a Terrestrial and Aquatic Index are combined based principally on rarity-weighted richness. Importantly, in CONUS, the Aquatic Index includes both freshwater and marine species, but focuses almost exclusively on very shallow, nearshore areas.
                         </li>
                         <li>
-                            <h5>Usage:</h5> This data is used in the NFWF Habitat Protection Model as one of the selection priorities.
+                            <h5>Usage:</h5> This data is used in the Habitat Protection Model as one of the selection priorities.
+                        </li>
+                    </ul>
+
+                    <div class="de-data-title-group">
+                        <h4 id="de-endangered-species" class="section scrollspy">Endangered Species Occurrence</h4>
+                        <p class="mark"><strong>Format:</strong> Shapefile</p>
+                        <p class="mark"><strong>Date:</strong> 2024-06-01</p>
+                    </div>
+                    
+                    <ul>
+                        <li>
+                            <h5>Souce:</h5> The Global Biodiversity Information Facility (GBIF), <a href="https://www.gbif.org/" class="inline-link" target="_blank">https://www.gbif.org/</a>.
+                        </li>
+                        <li>
+                            <h5>The downloads used in this project:</h5> 
+                            <ol>
+                                <li><p><em>IUCN Global Red List Category - Critically Endangered (CR) & Endangered (EN):</em> GBIF.org (01 June 2024) GBIF Occurrence Download <a href="https://doi.org/10.15468/dl.sstbsa" class="inline-link" target="_blank">https://doi.org/10.15468/dl.sstbsa</a></p></li>
+                                <li><p><em>New York State Endangered Species:</em> GBIF.org (01 June 2024) GBIF Occurrence Download <a href="https://doi.org/10.15468/dl.p54gzc" class="inline-link" target="_blank">https://doi.org/10.15468/dl.p54gzc</a></p></li>
+                            </ol>
+                            
+                        </li>
+                        <li>
+                            <h5>Usage:</h5> This data is used in the Habitat Protection Model as one of the selection priorities.
+                        </li>
+                    </ul>
+
+                    <div class="de-data-title-group">
+                        <h4 id="de-invasive-species" class="section scrollspy">Invasive Species Occurrence</h4>
+                        <p class="mark"><strong>Format:</strong> Shapefile</p>
+                        <p class="mark"><strong>Date:</strong> 2024-05-31</p>
+                    </div>
+                    
+                    <ul>
+                        <li>
+                            <h5>Souce:</h5> The Global Biodiversity Information Facility (GBIF), <a href="https://www.gbif.org/" class="inline-link" target="_blank">https://www.gbif.org/</a>.
+                        </li>
+                        <li>
+                            <h5>The downloads used in this project:</h5> 
+                            <ol>
+                                <li><p><em>Phragmites adans:</em> GBIF.org (31 May 2024) GBIF Occurrence Download <a href="https://doi.org/10.15468/dl.36h8qz" class="inline-link" target="_blank">https://doi.org/10.15468/dl.36h8qz</a></p></li>
+                                <li><p><em>Neogobius melanostomus:</em> GBIF.org (31 May 2024) GBIF Occurrence Download <a href="https://doi.org/10.15468/dl.fvuaje" class="inline-link" target="_blank">https://doi.org/10.15468/dl.fvuaje</a></p></li>
+                                <li><p><em>Dreissena polymorpha:</em> GBIF.org (31 May 2024) GBIF Occurrence Download <a href="https://doi.org/10.15468/dl.kdyzux" class="inline-link" target="_blank">https://doi.org/10.15468/dl.kdyzux</a></p></li>
+                                <li><p><em>Lythrum salicaria:</em> GBIF.org (31 May 2024) GBIF Occurrence Download <a href="https://doi.org/10.15468/dl.hvsgze" class="inline-link" target="_blank">https://doi.org/10.15468/dl.hvsgze</a></p></li>
+                                <li><p><em>Cyprinus carpio:</em> GBIF.org (31 May 2024) GBIF Occurrence Download <a href="https://doi.org/10.15468/dl.75uqcg" class="inline-link" target="_blank">https://doi.org/10.15468/dl.75uqcg</a></p></li>
+                                <li><p><em>Myriophyllum spicatum:</em> GBIF.org (31 May 2024) GBIF Occurrence Download <a href="https://doi.org/10.15468/dl.94vshg" class="inline-link" target="_blank">https://doi.org/10.15468/dl.94vshg</a></p></li>
+                            </ol>
+                            
+                        </li>
+                        <li>
+                            <h5>Usage:</h5> This data is used in the Invasive Species Control Model as one of the selection priorities.
+                        </li>
+                        <li>
+                            <h5>Auxiliary species activity range sources:</h5>
+                            <ol>
+                                <li><p>Common Reed<em> Phragmites australis: </em><a href="https://plants.usda.gov/DocumentLibrary/plantguide/pdf/pg_phau7.pdf" class="inline-link" target="_blank">USDA Plant Guide for common reed</a>, <a href="https://nas.er.usgs.gov/queries/FactSheet.aspx?SpeciesID=2937" class="inline-link" target="_blank">USGS Nonindigenous Aquatic Species(NAS) Collection</a></p></li>
+                                <li><p>Round Goby<em> Neogobius melanostomus: </em><a href="https://www.fws.gov/sites/default/files/documents/Ecological-Risk-Screening-Summary-Round-Goby.pdf" class="inline-link" target="_blank">U.S. Fish & Wildlife Service Round Goby Ecological Risk Screening Summary</a>, <a href="https://nas.er.usgs.gov/queries/factsheet.aspx?SpeciesID=713" class="inline-link" target="_blank">USGS Nonindigenous Aquatic Species(NAS) Collection</a></p></li>
+                                <li><p>Zebra Mussel<em> Dreissena polymorpha: </em><a href="https://www.fws.gov/sites/default/files/documents/Ecological-Risk-Screening-Summary-Zebra-Mussel.pdf" class="inline-link" target="_blank">U.S. Fish & Wildlife Service Zebra Mussel Ecological Risk Screening Summary</a>, <a href="https://nas.er.usgs.gov/queries/FactSheet.aspx?speciesID=5" class="inline-link" target="_blank">USGS Nonindigenous Aquatic Species(NAS) Collection</a></p></li>
+                                <li><p>Purple Loosestrife<em> Lythrum salicaria: </em><a href="https://nyis.info/invasive_species/purple-loosestrife/" class="inline-link" target="_blank">New York Invasive Species Information</a>, <a href="https://nas.er.usgs.gov/queries/factsheet.aspx?SpeciesID=239" class="inline-link" target="_blank">USGS Nonindigenous Aquatic Species(NAS) Collection</a></p></li>
+                                <li><p>Common Carp<em> Cyprinus carpio: </em><a href="https://www.fws.gov/sites/default/files/documents/Ecological-Risk-Screening-Summary-Common-Carp.pdf" class="inline-link" target="_blank">U.S. Fish & Wildlife Service Common Carp Ecological Risk Screening Summary</a>, <a href="https://nas.er.usgs.gov/queries/factsheet.aspx?speciesID=4" class="inline-link" target="_blank">USGS Nonindigenous Aquatic Species(NAS) Collection</a></p></li>
+                                <li><p>Eurasian Watermilfoil<em> Myriophyllum spicatum: </em><a href="https://www.fws.gov/sites/default/files/documents/Ecological-Risk-Screening-Summary-Eurasian-Watermilfoil.pdf" class="inline-link" target="_blank">U.S. Fish & Wildlife Service Eurasian Watermilfoil Ecological Risk Screening Summary</a>, <a href="https://nas.er.usgs.gov/queries/FactSheet.aspx?SpeciesID=237" class="inline-link" target="_blank">USGS Nonindigenous Aquatic Species(NAS) Collection</a></p></li>
+                            </ol>
+                            
                         </li>
                     </ul>
 
@@ -849,7 +912,7 @@
                             </ul>
                         </li>
                         <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 4.</li>
-                        <li><h5>Warning:</h5> Because of the limitation of the original GIS layers, some GIS layers may not cover the whole coastline of Lake Erie. In that case, the final result of this tool may not be precise. See the "Criteria Models Explanation" below for details.</li>
+                        <li><h5>Note:</h5> Because of the limitation of the original GIS layers, some GIS layers may not cover the whole coastline of Lake Erie. In that case, the final result of this tool may not be precise. See the "Criteria Models Explanation" below for details.</li>
                     </ul>
     
                     <h4 id="divide-step3" class="section scrollspy">Step 4: Group into Final Units</h4>
@@ -944,7 +1007,7 @@
                             </ul>
                         </li>
                         <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 3.</li>
-                        <li><h5>Warning:</h5> Because of the limitation of the original GIS layers, some GIS layers may not cover the whole coastline of Lake Erie. In that case, the final result of this tool may not be precise. See the "Criteria Models Explanation" below for details.</li>
+                        <li><h5>Note:</h5> Because of the limitation of the original GIS layers, some GIS layers may not cover the whole coastline of Lake Erie. In that case, the final result of this tool may not be precise. See the "Criteria Models Explanation" below for details.</li>
                     </ul>
     
                     <h4 id="sf-divide-step3" class="section scrollspy">Step 3: Find similar area</h4>
@@ -1021,7 +1084,7 @@
                                 <li>Rescale: the actual sediment loss value of all the resolution will be projected to a scale of 0 to 1, where closer to 0 means less loss and closer to 1 means more loss.</li>
                             </ol>
                         </li>
-                        <li><h5>Warning:</h5>The sediment budget layer does not have values for the area near City of Buffalo. If the selected coastline includes those areas, the result may not be precise.</li>
+                        <li><h5>Note:</h5>The sediment budget layer does not have values for the area near City of Buffalo. If the selected coastline includes those areas, the result may not be precise.</li>
                     </ul>
     
                     <h3 id="sediment-gain" class="section scrollspy">Sediment Gain Model</h3>
@@ -1060,7 +1123,7 @@
                                 <li>Rescale: the actual sediment gain value of all the resolution will be projected to a scale of 0 to 1, where closer to 0 means less gain and closer to 1 means more loss.</li>
                             </ol>
                         </li>
-                        <li><h5>Warning:</h5>The sediment budget layer does not have values for the area near City of Buffalo. If the selected coastline includes those areas, the result may not be precise.</li>
+                        <li><h5>Note:</h5>The sediment budget layer does not have values for the area near City of Buffalo. If the selected coastline includes those areas, the result may not be precise.</li>
                     </ul>
 
                     <h3 id="erosion-potential" class="section scrollspy">Erosion Potential Model</h3>
@@ -1098,7 +1161,7 @@
                                 </li>
                             </ol>
                         </li>
-                        <li><h5>Warning:</h5>The sediment budget layer does not have values (retreat rate) for the area near City of Buffalo. Besides, the soil K factor also has many null values near City of Buffalo. If the selected coastline includes those areas, the result may not be precise.</li>
+                        <li><h5>Note:</h5>The sediment budget layer does not have values (retreat rate) for the area near City of Buffalo. Besides, the soil K factor also has many null values near City of Buffalo. If the selected coastline includes those areas, the result may not be precise.</li>
                     </ul>
 
                     <h3 id="invasive-species" class="section scrollspy">Invasive Species Control Model</h3>
@@ -1154,7 +1217,7 @@
                                 </li>
                                 <li>
                                     <P>Detailed methodology for calculating the Fish and Wildlife Index, including a complete list of species included in the analysis, input data sources, and geoprocessing steps, can be found in the following report: </P>
-                                    <p>Dobson, J.G., Johnson, I.P., Orlando, J.L., Lussier, B.C., and Byler, K.A. (2023) U.S. <lm>Great Lakes Coastal Resilience Assessment</lm> (Appendix A.3-5, F-G). UNC Asheville National Environmental Modeling and Analysis Center, Asheville, NC. Prepared for the National Fish and Wildlife Foundation. </p>
+                                    <p>Dobson, J.G., Johnson, I.P., Orlando, J.L., Lussier, B.C., and Byler, K.A. (2023) U.S. <em>Great Lakes Coastal Resilience Assessment</em> (Appendix A.3-5, F-G). UNC Asheville National Environmental Modeling and Analysis Center, Asheville, NC. Prepared for the National Fish and Wildlife Foundation. </p>
                                 </li>
                                 <li>
                                     <P>The diversity calculation of endangered species is based on each species' movability. Each occurrence's data will form a buffer area based on the species' activity range. Then each resolution will count the number of buffers that overlap with it and one species is only counted once. The diversity score of each resolution will be the number of species that exist in each resolution. This number will then be rescaled on a 0 to 1 range.</P>
@@ -1218,7 +1281,7 @@
                             <ol>
                                 <li>
                                     <P>Detailed methodology for calculating the Community Exposure Index, including a complete list of input data sources and geoprocessing steps can be found in the following report: </P>
-                                    <p>Dobson, J.G., Johnson, I.P., Orlando, J.L., Lussier, B.C., and Byler, K.A. (2023) U.S. <lm>Great Lakes Coastal Resilience Assessment</lm> (Appendix A.3-5, F-G). UNC Asheville National Environmental Modeling and Analysis Center, Asheville, NC. Prepared for the National Fish and Wildlife Foundation. </p>
+                                    <p>Dobson, J.G., Johnson, I.P., Orlando, J.L., Lussier, B.C., and Byler, K.A. (2023) U.S. <em>Great Lakes Coastal Resilience Assessment</em> (Appendix A.3-5, F-G). UNC Asheville National Environmental Modeling and Analysis Center, Asheville, NC. Prepared for the National Fish and Wildlife Foundation. </p>
                                 </li>
                             </ol>
                         </li>

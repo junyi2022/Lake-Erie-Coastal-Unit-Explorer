@@ -7,12 +7,12 @@ import { getResolutionBoxes } from './cal.js';
 import { sendimentBudget, shorelineType, soilErosion, fishWildlifePoints, wetlandPotentialPoints, communityExposurePoints, endangeredSpecies, invasiveSpecies } from './main.js';
 
 const invasiveMethod = [ // buffer unit is km
-  {'species': 'Neogobius melanostomus', 'buffer': 0.2},
-  {'species': 'Myriophyllum spicatum', 'buffer': 0.1},
-  {'species': 'Lythrum salicaria', 'buffer': 0.1},
+  {'species': 'Neogobius melanostomus', 'buffer': 0.3},
+  {'species': 'Myriophyllum spicatum', 'buffer': 0.2},
+  {'species': 'Lythrum salicaria', 'buffer': 0.2},
   {'species': 'Dreissena polymorpha', 'buffer': 1},
   {'species': 'Cyprinus carpio', 'buffer': 1.5},
-  {'species': 'Phragmites australis', 'buffer': 0.1},
+  {'species': 'Phragmites australis', 'buffer': 0.2},
 ];
 
 const endangeredMethod = [ // buffer unit is km

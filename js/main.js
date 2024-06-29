@@ -2,7 +2,7 @@
 
 import { initializeMap } from './map.js';
 import { handleMenuBar } from './control.js';
-
+import { withSpinnerDo } from './logistics.js';
 
 // read files
 // reference layers
@@ -54,8 +54,13 @@ const endangeredSpecies = await GBIFendangeredSpecies.json();
 const GBIFinvasiveSpecies = await fetch('data/GBIF-invasive.geojson');
 const invasiveSpecies = await GBIFinvasiveSpecies.json();
 
-const slope1m = await fetch('https://storage.googleapis.com/junyi-projects-public/Lake-Erie-Coastal-Units/slope1m200m.geojson');
-const slope = await slope1m.json();
+// const slope1m = await fetch('https://storage.googleapis.com/junyi-projects-public/Lake-Erie-Coastal-Units/slope1m200m.geojson');
+// const slope = await slope1m.json();
+withSpinnerDo(async () => {
+  const slope1m = await fetch('https://storage.googleapis.com/junyi-projects-public/Lake-Erie-Coastal-Units/slope1m200m.geojson');
+  const slope = await slope1m.json();
+  window.slope = slope;
+});
 
 // reference layers
 
@@ -75,7 +80,7 @@ window.wetlandPotentialPoints = wetlandPotentialPoints;
 window.communityExposurePoints = communityExposurePoints;
 window.endangeredSpecies = endangeredSpecies;
 window.invasiveSpecies = invasiveSpecies;
-window.slope = slope;
+// window.slope = slope;
 
 // map for unit generator
 // Other maps shouldn't be called here since they are not shown up at the beginning and have display = none

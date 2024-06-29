@@ -39,34 +39,28 @@ function handleMenuDisplay(select) {
     }
   }
   // different div has different display method
-  if (select == unitGeneratorDiv || select == similarAreaDiv) { // when working on SF add this || strategyFilterDiv
-    select.style.display = 'flex';
-  } else {
-    select.style.display = 'block';
-  }
+  // when working on SF add this || strategyFilterDiv
+  select == unitGeneratorDiv || select == similarAreaDiv ? select.style.display = 'flex' : select.style.display = 'block';
 }
 
 function handleFooter(select) {
-  if (select == documentationDiv) { // when working on SF add this || strategyFilterDiv
-    footer.style.display = 'none';
-  } else {
-    footer.style.display = 'block';
-  }
+  // when working on SF add this || strategyFilterDiv
+  select == documentationDiv ? footer.style.display = 'none' : footer.style.display = 'block';
+}
+
+function manipulateMenu(select, width) {
+  menuBlock.style.left = width;
+  handleMenuDisplay(select);
+  handleFooter(select);
 }
 
 function handleMenuBar() {
   unitGeneratorButton.addEventListener('click', () => {
-    const select = unitGeneratorDiv;
-    menuBlock.style.left = 0;
-    handleMenuDisplay(select);
-    handleFooter(select);
+    manipulateMenu(unitGeneratorDiv, 0);
   });
 
   similarAreaButton.addEventListener('click', () => {
-    const select = similarAreaDiv;
-    menuBlock.style.left = '130px';
-    handleMenuDisplay(select);
-    handleFooter(select);
+    manipulateMenu(similarAreaDiv, '130px');
     // initialize map here when display is not none, map cannot show up correctly if it is initially hidden
     // only need to initialize the map once
     if (hasNotClickedSimilarAreaButton) {
@@ -76,31 +70,19 @@ function handleMenuBar() {
   });
 
   strategyFilterButton.addEventListener('click', () => {
-    const select = strategyFilterDiv;
-    menuBlock.style.left = '260px';
-    handleMenuDisplay(select);
-    handleFooter(select);
+    manipulateMenu(strategyFilterDiv, '260px');
   });
 
   dataExplorerButton.addEventListener('click', () => {
-    const select = dataExplorerDiv;
-    menuBlock.style.left = '390px';
-    handleMenuDisplay(select);
-    handleFooter(select);
+    manipulateMenu(dataExplorerDiv, '390px');
   });
 
   strategyLibraryButton.addEventListener('click', () => {
-    const select = strategyLibraryDiv;
-    menuBlock.style.left = '520px';
-    handleMenuDisplay(select);
-    handleFooter(select);
+    manipulateMenu(strategyLibraryDiv, '520px');
   });
 
   documentationButton.addEventListener('click', () => {
-    const select = documentationDiv;
-    menuBlock.style.left = '650px';
-    handleMenuDisplay(select);
-    handleFooter(select);
+    manipulateMenu(documentationDiv, '650px');
   });
 }
 

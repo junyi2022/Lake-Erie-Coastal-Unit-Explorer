@@ -2,7 +2,7 @@
 
 import { initializeMap } from './map.js';
 import { handleMenuBar } from './control.js';
-import { withSpinnerDo, showSpinner, hideSpinner, } from './logistics.js';
+import { showSpinner, hideSpinner } from './logistics.js';
 
 
 async function readJSON(path) {
@@ -46,13 +46,16 @@ const endangeredSpecies = await readJSON('data/GBIF-endanger.geojson');
 
 const invasiveSpecies = await readJSON('data/GBIF-invasive.geojson');
 
-// const slope1m = await fetch('https://storage.googleapis.com/junyi-projects-public/Lake-Erie-Coastal-Units/slope1m200m.geojson');
-// const slope = await slope1m.json();
-withSpinnerDo(async () => {
+
+// slope data is too large and in google cloud, need to load it separately
+
+showSpinner();
+setTimeout(async () => {
   const slope1m = await fetch('https://storage.googleapis.com/junyi-projects-public/Lake-Erie-Coastal-Units/slope1m200m.geojson');
   const slope = await slope1m.json();
   window.slope = slope;
-});
+  hideSpinner();
+}, 0);
 
 // reference layers
 

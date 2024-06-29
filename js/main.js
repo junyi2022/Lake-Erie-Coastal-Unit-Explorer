@@ -2,57 +2,49 @@
 
 import { initializeMap } from './map.js';
 import { handleMenuBar } from './control.js';
-import { withSpinnerDo } from './logistics.js';
+import { withSpinnerDo, showSpinner, hideSpinner, } from './logistics.js';
+
+
+async function readJSON(path) {
+  const data = await fetch(path);
+  return await data.json();
+}
 
 // read files
 // reference layers
 
-const db = await fetch('data/data-boundary.json');
-const dataBoundary = await db.json();
+const dataBoundary = await readJSON('data/data-boundary.json');
 
-const census = await fetch('data/census-tract.json');
-const censusTracts = await census.json();
+const censusTracts = await readJSON('data/census-tract.json');
 
-const ct = await fetch('data/county.json');
-const county = await ct.json();
+const county = await readJSON('data/county.json');
 
-const HUC10 = await fetch('data/HUC10.geojson');
-const huc10 = await HUC10.json();
+const huc10 = await readJSON('data/HUC10.geojson');
 
-const HUC12 = await fetch('data/HUC12.json');
-const huc12 = await HUC12.json();
+const huc12 = await readJSON('data/HUC12.json');
 
 
 // working layers
 // because the analysis later (turf.intersect) only takes polygon, need to manipulate lines here before adding them
 
-const shore = await fetch('data/shoreline-base-to-bridge.geojson');
-const shorelineBase = await shore.json();
+const shorelineBase = await readJSON('data/shoreline-base-to-bridge.geojson');
 
-const sb = await fetch('data/sediment-budget-rrbh.geojson');
-const sendimentBudget = await sb.json();
+const sendimentBudget = await readJSON('data/sediment-budget-rrbh.geojson');
 
-const shoretype = await fetch('data/edge-clean.geojson');
-const shorelineTypeline = await shoretype.json();
+const shorelineTypeline = await readJSON('data/edge-clean.geojson');
 const shorelineType = turf.buffer(shorelineTypeline, 0.01);
 
-const soil = await fetch('data/soil-erosion-k.geojson');
-const soilErosion = await soil.json();
+const soilErosion = await readJSON('data/soil-erosion-k.geojson');
 
-const fishWildlife = await fetch('data/fish-wildlife-points800.json');
-const fishWildlifePoints = await fishWildlife.json();
+const fishWildlifePoints = await readJSON('data/fish-wildlife-points600.json');
 
-const wetlandPotential = await fetch('data/wetland-potential-points800.geojson');
-const wetlandPotentialPoints = await wetlandPotential.json();
+const wetlandPotentialPoints = await readJSON('data/wetland-potential-points600.geojson');
 
-const communityExposure = await fetch('data/community-exposure-points800.geojson');
-const communityExposurePoints = await communityExposure.json();
+const communityExposurePoints = await readJSON('data/community-exposure-points600.geojson');
 
-const GBIFendangeredSpecies = await fetch('data/GBIF-endanger.geojson');
-const endangeredSpecies = await GBIFendangeredSpecies.json();
+const endangeredSpecies = await readJSON('data/GBIF-endanger.geojson');
 
-const GBIFinvasiveSpecies = await fetch('data/GBIF-invasive.geojson');
-const invasiveSpecies = await GBIFinvasiveSpecies.json();
+const invasiveSpecies = await readJSON('data/GBIF-invasive.geojson');
 
 // const slope1m = await fetch('https://storage.googleapis.com/junyi-projects-public/Lake-Erie-Coastal-Units/slope1m200m.geojson');
 // const slope = await slope1m.json();

@@ -54,6 +54,9 @@ const endangeredSpecies = await GBIFendangeredSpecies.json();
 const GBIFinvasiveSpecies = await fetch('data/GBIF-invasive.geojson');
 const invasiveSpecies = await GBIFinvasiveSpecies.json();
 
+const slope1m = await fetch('https://storage.googleapis.com/junyi-projects-public/Lake-Erie-Coastal-Units/slope1m200m.geojson');
+const slope = await slope1m.json();
+
 // reference layers
 
 window.censusTracts = censusTracts;
@@ -72,6 +75,7 @@ window.wetlandPotentialPoints = wetlandPotentialPoints;
 window.communityExposurePoints = communityExposurePoints;
 window.endangeredSpecies = endangeredSpecies;
 window.invasiveSpecies = invasiveSpecies;
+window.slope = slope;
 
 // map for unit generator
 // Other maps shouldn't be called here since they are not shown up at the beginning and have display = none

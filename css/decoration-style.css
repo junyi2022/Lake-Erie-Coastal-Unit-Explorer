@@ -4,6 +4,15 @@
     display: none;
 }
 
+.loader-text {
+  width: max-content;
+  color: rgb(122, 129, 126);
+  position: absolute;
+  top: 42%;
+  left: 46%;
+  z-index: 9999;
+}
+
 .loader-background {
     width: 100%;
     height: calc(100vh - 1.5rem);

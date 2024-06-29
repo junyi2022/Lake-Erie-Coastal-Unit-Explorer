@@ -35,6 +35,7 @@ function handleDropdownDisplay(DropdownSelect, exclude=[]) {
 // handle loading spinner
 
 const spinner = document.getElementById('loader');
+const spinnerText = document.querySelector('.loader-text');
 
 
 function showSpinner() {
@@ -46,6 +47,10 @@ function hideSpinner() {
 }
 
 function withSpinnerDo(callback) {
+  // remove the load data text
+  if (spinnerText.style.display !== 'none') {
+    spinnerText.style.display = 'none';
+  }
   showSpinner();
   setTimeout(() => {
     callback();

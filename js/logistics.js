@@ -9,6 +9,7 @@ const dropdownOptions = [
   {'label': 'Habitat Protection', 'value': 'hp'},
   {'label': 'NOAA Wetland Protection/Restoration', 'value': 'wpr'},
   {'label': 'NFWF Community Exposure', 'value': 'sv'},
+  {'label': 'Physical Condition', 'value': 'pc'},
 ];
 
 function handleDropdownDisplay(DropdownSelect, exclude=[]) {

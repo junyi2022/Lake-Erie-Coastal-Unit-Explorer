@@ -106,7 +106,7 @@ function invasiveSpeciesModel(map, resolutionCollection) {
 // physical condition model
 function physicalConditionModel(map, resolutionCollection) {
   const slope = window.slope;
-  calDataFromLayer(map, slope, resolutionCollection, 0.1, calSedimentGainFromArray, 'physicalCondition', 1.5);
+  calDataFromLayer(map, slope, resolutionCollection, 0.05, calSlopeFromArray, 'physicalCondition', 3);
 }
 
 
@@ -235,7 +235,7 @@ function dataLoopToGetOverlapBoxPropArray(whichData, box) {
   for (const feature of whichData.features) {
     const intersection = turf.intersect(box, feature, {properties: box.properties}); // will be null if no overlap
     if (intersection != null) {
-      overlapArray.push(feature.properties);
+      overlapArray.push(feature);
     }
   }
   return overlapArray;
@@ -244,19 +244,19 @@ function dataLoopToGetOverlapBoxPropArray(whichData, box) {
 // cal from array of each coast box
 
 function calSedimentLossFromArray(propArray) {
-  const sedimentLossArray = propArray.map((item) => item.Coarse_Out + item.Bypass + item.Downdrift + item.Fines_Out + item.Littoral_C);
+  const sedimentLossArray = propArray.map((item) => item.properties.Coarse_Out + item.properties.Bypass + item.properties.Downdrift + item.properties.Fines_Out + item.properties.Littoral_C);
   const sedimentLoss = average(sedimentLossArray);
   return sedimentLoss;
 }
 
 function calSedimentGainFromArray(propArray) {
-  const sedimentGainArray = propArray.map((item) => item.Bluff_In + item.Bedload + item.GainDowndr + item.Littoral_1);
+  const sedimentGainArray = propArray.map((item) => item.properties.Bluff_In + item.properties.Bedload + item.properties.GainDowndr + item.properties.Littoral_1);
   const sedimentGain = average(sedimentGainArray);
   return sedimentGain;
 }
 
 function calRetreatRateFromArray(propArray) {
-  const retreatRateArray = propArray.map((item) => item.RetreatRat);
+  const retreatRateArray = propArray.map((item) => item.properties.RetreatRat);
   const retreatRate = average(retreatRateArray);
   return retreatRate;
 }
@@ -267,16 +267,42 @@ const findKeyByValue = (obj, value) => {
 
 function calShorelineTypeFromArray(propArray) {
   const shorelineTypeArray = propArray.map((item) => {
-    return +findKeyByValue(shorelineTypeScore, item.Shoreline1); // + convert values to numbers
+    return +findKeyByValue(shorelineTypeScore, item.properties.Shoreline1); // + convert values to numbers
   });
   const shorelineType = average(shorelineTypeArray);
   return shorelineType;
 }
 
 function calSoilErosionFromArray(propArray) {
-  const soilErosionArray = propArray.map((item) => item.Kfactor);
+  const soilErosionArray = propArray.map((item) => item.properties.Kfactor);
   const soilErosion = average(soilErosionArray);
   return soilErosion;
+}
+
+function calSlopeFromArray(propArray) {
+  // Initialize an object to hold arrays for each gridcode
+  const groupedFeatures = {};
+
+  propArray.map((feature) => {
+    const gridcode = feature.properties.gridcode;
+
+    // If the gridcode group doesn't exist, create an array for it
+    if (!groupedFeatures[gridcode]) {
+      groupedFeatures[gridcode] = [];
+    }
+
+    // Push the feature into the corresponding gridcode array
+    groupedFeatures[gridcode].push(turf.area(feature));
+  });
+
+  // calculate sum of each gridcode
+  Object.keys(groupedFeatures).map((key) => {
+    groupedFeatures[key] = groupedFeatures[key].reduce((a, b) => a + b);
+  });
+
+  // calculate weighted sum
+  const sum = Object.values(groupedFeatures).reduce((a, b) => a + b);
+  return Object.keys(groupedFeatures).map((key) => groupedFeatures[key] / sum * Math.pow(Number(key), 3)).reduce((a, b) => a + b);
 }
 
 // points calculation part
@@ -385,6 +411,7 @@ export {
   wetlandProtectionRestorationModel,
   socialVulnerabilityModel,
   invasiveSpeciesModel,
+  physicalConditionModel,
   average,
   findClosestData,
 };

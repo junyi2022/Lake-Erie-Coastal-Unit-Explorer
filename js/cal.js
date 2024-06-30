@@ -2,7 +2,7 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 
 import { average } from './model.js';
-import { sedimentLossModel, sedimentGainModel, erosionPotentialModel, habitatProtectionModel, wetlandProtectionRestorationModel, socialVulnerabilityModel, invasiveSpeciesModel } from './model.js';
+import { sedimentLossModel, sedimentGainModel, erosionPotentialModel, habitatProtectionModel, wetlandProtectionRestorationModel, socialVulnerabilityModel, invasiveSpeciesModel, physicalConditionModel } from './model.js';
 import { legend1Style, legend2Style } from './map.js';
 import { handleDropdownDisplay, withSpinnerDo, unitInputRange } from './logistics.js';
 
@@ -15,6 +15,7 @@ const modelFuncs = {
   'hp': habitatProtectionModel,
   'wpr': wetlandProtectionRestorationModel,
   'sv': socialVulnerabilityModel,
+  'pc': physicalConditionModel,
 };
 
 const modelProps = {
@@ -25,6 +26,7 @@ const modelProps = {
   'hp': 'normalhabitatProtection',
   'wpr': 'normalwetlandProtectionRestoration',
   'sv': 'normalsocialVulnerability',
+  'pc': 'normalphysicalCondition',
 };
 
 const modelName = {
@@ -35,6 +37,7 @@ const modelName = {
   'hp': 'Normalized Habitat Protection',
   'wpr': 'Normalized Wetland Protection/Restoration',
   'sv': 'Normalized Social Vulnerability',
+  'pc': 'Normalized Physical Condition',
 };
 
 // color scale for the resolution

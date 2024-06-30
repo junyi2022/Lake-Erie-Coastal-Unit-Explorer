@@ -34,6 +34,14 @@ const endangeredMethod = [ // buffer unit is km
   {'species': 'Lanius ludovicianus', 'buffer': 1},
 ];
 
+const shorelineTypeScore = {
+  0: ['Bedrock_(Resistant)_no_overburden', 'Artificial_Good_Quality_Well_Engineered'],
+  1: ['Bedrock_(Resistant)_with_glacial_overburden', 'Artificial_Moderate_Quality_Moderately_Engineered', 'Open_Shore_Wetlands'],
+  2: ['Bedrock_(Erosive)_no_overburden', 'Bedrock_(Erosive)_with_glacial_Overburden', 'Open_Shoreline_Wetlands', 'Composite_Low_Bank_/_Low_Plain'],
+  3: ['Artificial_Poor_Quality_Poorly_Engineered', 'Pocket_Beach', 'Artificial_Depositional_(e.g.,_jetty,_groin_fill)', 'Bedrock_(Resistant)_with_sand_overburden'],
+  4: ['Bedrock_(Erosion)_with_sand_overburden', 'Baymouth_–_Barrier_(fronting_wetlands_or_shallow_embayments,_estuaries)', 'Low_Bank', 'Natural_Depositional_(areas_with_active_supply/deposition)'],
+};
+
 // sediment loss model
 function sedimentLossModel(map, resolutionCollection) {
   // get different boxes for different data layers
@@ -93,6 +101,12 @@ function socialVulnerabilityModel(map, resolutionCollection) {
 function invasiveSpeciesModel(map, resolutionCollection) {
   const invasiveSpeciesBufferArray = speciesPointToBufferPolygon(invasiveSpecies, invasiveMethod);
   speciesDiversityFromPolygonArray(invasiveSpeciesBufferArray, resolutionCollection, 0.15, 'invasiveDiversity', 1);
+}
+
+// physical condition model
+function physicalConditionModel(map, resolutionCollection) {
+  const slope = window.slope;
+  calDataFromLayer(map, slope, resolutionCollection, 0.05, calSlopeFromArray, 'physicalCondition', 3);
 }
 
 
@@ -221,7 +235,7 @@ function dataLoopToGetOverlapBoxPropArray(whichData, box) {
   for (const feature of whichData.features) {
     const intersection = turf.intersect(box, feature, {properties: box.properties}); // will be null if no overlap
     if (intersection != null) {
-      overlapArray.push(feature.properties);
+      overlapArray.push(feature);
     }
   }
   return overlapArray;
@@ -230,81 +244,71 @@ function dataLoopToGetOverlapBoxPropArray(whichData, box) {
 // cal from array of each coast box
 
 function calSedimentLossFromArray(propArray) {
-  const sedimentLossArray = [];
-  for (const eachData of propArray) {
-    const sedimentLoss = eachData.Coarse_Out + eachData.Bypass + eachData.Downdrift + eachData.Fines_Out + eachData.Littoral_C;
-    sedimentLossArray.push(sedimentLoss);
-  }
+  const sedimentLossArray = propArray.map((item) => item.properties.Coarse_Out + item.properties.Bypass + item.properties.Downdrift + item.properties.Fines_Out + item.properties.Littoral_C);
   const sedimentLoss = average(sedimentLossArray);
   return sedimentLoss;
 }
 
 function calSedimentGainFromArray(propArray) {
-  const sedimentGainArray = [];
-  for (const eachData of propArray) {
-    const sedimentGain = eachData.Bluff_In + eachData.Bedload + eachData.GainDowndr + eachData.Littoral_1;
-    sedimentGainArray.push(sedimentGain);
-  }
+  const sedimentGainArray = propArray.map((item) => item.properties.Bluff_In + item.properties.Bedload + item.properties.GainDowndr + item.properties.Littoral_1);
   const sedimentGain = average(sedimentGainArray);
   return sedimentGain;
 }
 
 function calRetreatRateFromArray(propArray) {
-  const retreatRateArray = [];
-  for (const eachData of propArray) {
-    const retreatRate = eachData.RetreatRat;
-    retreatRateArray.push(retreatRate);
-  }
+  const retreatRateArray = propArray.map((item) => item.properties.RetreatRat);
   const retreatRate = average(retreatRateArray);
   return retreatRate;
 }
 
+const findKeyByValue = (obj, value) => {
+  return Object.keys(obj).find((key) => obj[key].includes(value)) || 5; // if not found, return 5
+};
+
 function calShorelineTypeFromArray(propArray) {
-  const shorelineTypeArray = [];
-  for (const eachData of propArray) {
-    // const shorelineType = eachData.Bluff_In + eachData.Bedload + eachData.GainDowndr + eachData.Littoral_1;
-    if (eachData.Shoreline1 == 'Bedrock_(Resistant)_no_overburden' || eachData.Shoreline1 == 'Artificial_Good_Quality_Well_Engineered') {
-      const shorelineType = 0;
-      shorelineTypeArray.push(shorelineType);
-    } else if (eachData.Shoreline1 == 'Bedrock_(Resistant)_with_glacial_overburden' || eachData.Shoreline1 == 'Artificial_Moderate_Quality_Moderately_Engineered' || eachData.Shoreline1 == 'Open_Shore_Wetlands') {
-      const shorelineType = 1;
-      shorelineTypeArray.push(shorelineType);
-    } else if (eachData.Shoreline1 == 'Bedrock_(Erosive)_no_overburden' || eachData.Shoreline1 == 'Bedrock_(Erosive)_with_glacial_Overburden' || eachData.Shoreline1 == 'Open_Shoreline_Wetlands' || eachData.Shoreline1 == 'Composite_Low_Bank_/_Low_Plain') {
-      const shorelineType = 2;
-      shorelineTypeArray.push(shorelineType);
-    } else if (eachData.Shoreline1 == 'Artificial_Poor_Quality_Poorly_Engineered' || eachData.Shoreline1 == 'Pocket_Beach' || eachData.Shoreline1 == 'Artificial_Depositional_(e.g.,_jetty,_groin_fill)' || eachData.Shoreline1 == 'Bedrock_(Resistant)_with_sand_overburden') {
-      const shorelineType = 3;
-      shorelineTypeArray.push(shorelineType);
-    } else if (eachData.Shoreline1 == 'Bedrock_(Erosion)_with_sand_overburden' || eachData.Shoreline1 == 'Baymouth_–_Barrier_(fronting_wetlands_or_shallow_embayments,_estuaries)' || eachData.Shoreline1 == 'Low_Bank' || eachData.Shoreline1 == 'Natural_Depositional_(areas_with_active_supply/deposition)') {
-      const shorelineType = 4;
-      shorelineTypeArray.push(shorelineType);
-    } else {
-      const shorelineType = 5;
-      shorelineTypeArray.push(shorelineType);
-    }
-  }
+  const shorelineTypeArray = propArray.map((item) => {
+    return +findKeyByValue(shorelineTypeScore, item.properties.Shoreline1); // + convert values to numbers
+  });
   const shorelineType = average(shorelineTypeArray);
   return shorelineType;
 }
 
 function calSoilErosionFromArray(propArray) {
-  const soilErosionArray = [];
-  for (const eachData of propArray) {
-    const soilErosion = eachData.Kfactor;
-    soilErosionArray.push(soilErosion);
-  }
+  const soilErosionArray = propArray.map((item) => item.properties.Kfactor);
   const soilErosion = average(soilErosionArray);
   return soilErosion;
+}
+
+function calSlopeFromArray(propArray) {
+  // Initialize an object to hold arrays for each gridcode
+  const groupedFeatures = {};
+
+  propArray.map((feature) => {
+    const gridcode = feature.properties.gridcode;
+
+    // If the gridcode group doesn't exist, create an array for it
+    if (!groupedFeatures[gridcode]) {
+      groupedFeatures[gridcode] = [];
+    }
+
+    // Push the feature into the corresponding gridcode array
+    groupedFeatures[gridcode].push(turf.area(feature));
+  });
+
+  // calculate sum of each gridcode
+  Object.keys(groupedFeatures).map((key) => {
+    groupedFeatures[key] = groupedFeatures[key].reduce((a, b) => a + b);
+  });
+
+  // calculate weighted sum
+  const sum = Object.values(groupedFeatures).reduce((a, b) => a + b);
+  return Object.keys(groupedFeatures).map((key) => groupedFeatures[key] / sum * Math.pow(Number(key), 3)).reduce((a, b) => a + b);
 }
 
 // points calculation part
 
 function calRasterIndex(pointsWithin, whatIndex) {
-  const rasterIndexArray = [];
-  for (const point of pointsWithin.features) {
-    const index = point.properties[whatIndex];
-    rasterIndexArray.push(index);
-  }
+  const rasterIndexArray = pointsWithin.features.map((point) => point.properties[whatIndex]);
   const indexAverage = average(rasterIndexArray);
   return indexAverage;
 }
@@ -313,31 +317,19 @@ function calRasterIndex(pointsWithin, whatIndex) {
 // const average = (array) => array.reduce((a, b) => a + b) / array.length;
 function average(array) {
   const sum = array.reduce((a, b) => a + b);
-  if (sum == 0) {
-    return 0;
-  } else {
-    return sum / array.length;
-  }
+  return sum == 0 ? 0 : sum / array.length;
 }
-// how reduce works
-// array = [1, 2, 3, 4, 5], 0
-// (0, 1) => 1
-// (1, 2) => 3
-// (3, 3) => 6
-// (6, 4) => 10
-// (10, 5) => 15
 
 // find closest polygon and get properties
 function findClosestData(whichData, coastline) {
   const coastlinecenter = turf.pointOnFeature(coastline);
   // need to loop through each shape to get center points because the turf function only take one shape each time
-  const centers = [];
 
-  for (const feature of whichData.features) {
+  const centers = whichData.features.map((feature) => {
     const featureCenter = turf.pointOnFeature(feature);
     featureCenter.properties = feature.properties; // add all feature properties to point properties (although we don't need it later)
-    centers.push(featureCenter);
-  }
+    return featureCenter;
+  });
 
   // find nearest center point and use that to get the park shape
   const dataNear = turf.nearestPoint(coastlinecenter, turf.featureCollection(centers)); // truf function take turf feature collection, not just simple array
@@ -419,6 +411,7 @@ export {
   wetlandProtectionRestorationModel,
   socialVulnerabilityModel,
   invasiveSpeciesModel,
+  physicalConditionModel,
   average,
   findClosestData,
 };

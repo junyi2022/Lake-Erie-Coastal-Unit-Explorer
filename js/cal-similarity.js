@@ -218,7 +218,7 @@ function simGroupRes(map2, resolutionCollection, firstProp, secondProp, thirdPro
   }
 
   // add selected point's score to range bar
-  displaySelectPointScoreOnRange(pointScore[0].finalValueNormal.toFixed(2));
+  displaySelectPointScoreOnRange(pointScore[0].properties.finalValueNormal.toFixed(2));
 
   // handle return to priority step
   returnGenerateResButtonSim.addEventListener('click', () => {

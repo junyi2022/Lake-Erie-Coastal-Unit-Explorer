@@ -106,7 +106,7 @@ function invasiveSpeciesModel(map, resolutionCollection) {
 // physical condition model
 function physicalConditionModel(map, resolutionCollection) {
   const slope = window.slope;
-  calDataFromLayer(map, slope, resolutionCollection, 0.05, calSlopeFromArray, 'physicalCondition', 3);
+  calDataFromLayer(map, slope, resolutionCollection, 0.02, calSlopeFromArray, 'physicalCondition', 0.4);
 }
 
 
@@ -134,7 +134,7 @@ function calDataFromLayer(map, whichData, resolutionCollection, num, dataNeedToC
     }
 
     // calculate data based on the rule of each model
-    const value = dataNeedToCal(propArray);
+    const value = dataNeedToCal(propArray, box);
 
     // add the cal result to coastline properties
     coastline.properties[pname] = value;
@@ -279,7 +279,7 @@ function calSoilErosionFromArray(propArray) {
   return soilErosion;
 }
 
-function calSlopeFromArray(propArray) {
+function calSlopeFromArray(propArray, box) {
   // Initialize an object to hold arrays for each gridcode
   const groupedFeatures = {};
 
@@ -301,8 +301,8 @@ function calSlopeFromArray(propArray) {
   });
 
   // calculate weighted sum
-  const sum = Object.values(groupedFeatures).reduce((a, b) => a + b);
-  return Object.keys(groupedFeatures).map((key) => groupedFeatures[key] / sum * Math.pow(Number(key), 3)).reduce((a, b) => a + b);
+  const sum = turf.area(box);
+  return Object.keys(groupedFeatures).map((key) => key * groupedFeatures[key] / sum).reduce((a, b) => a + b);
 }
 
 // points calculation part

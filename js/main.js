@@ -2,7 +2,6 @@
 
 import { initializeMap } from './map.js';
 import { handleMenuBar } from './control.js';
-import { showSpinner, hideSpinner } from './logistics.js';
 
 
 async function readJSON(path) {
@@ -46,16 +45,7 @@ const endangeredSpecies = await readJSON('data/GBIF-endanger.geojson');
 
 const invasiveSpecies = await readJSON('data/GBIF-invasive.geojson');
 
-
-// slope data is too large and in google cloud, need to load it separately
-
-// showSpinner();
-// setTimeout(async () => {
-//   const slope1m = await fetch('https://storage.googleapis.com/junyi-projects-public/Lake-Erie-Coastal-Units/slope1m200m.geojson');
-//   const slope = await slope1m.json();
-//   window.slope = slope;
-//   hideSpinner();
-// }, 0);
+const slope = await readJSON('data/5mslope-60m-no0.geojson');
 
 // reference layers
 
@@ -75,7 +65,7 @@ window.wetlandPotentialPoints = wetlandPotentialPoints;
 window.communityExposurePoints = communityExposurePoints;
 window.endangeredSpecies = endangeredSpecies;
 window.invasiveSpecies = invasiveSpecies;
-// window.slope = slope;
+window.slope = slope;
 
 // map for unit generator
 // Other maps shouldn't be called here since they are not shown up at the beginning and have display = none

@@ -844,7 +844,7 @@
                     <h4 id="general" class="section scrollspy">General</h4>
                     <ul>
                         <li>
-                            <h5>How to use the buttons in each step:</h5> At the initial state, all the input boxes and buttons are locked except the <code>Start/Reset</code> button in step one. To start generating the units, click the <code>Start/Reset</code> button. For all the other buttons, they should be clicked in sequence. That is to say, after finishing choosing or typing the inputs, click the <code>Generate/Reset</code> button to preview the result, and if the result looks good, click the <code>Next</code> button in each step to unlock the input boxes and buttons in the following step.
+                            <h5>How to use the buttons in each step:</h5> At the initial state, all the input boxes and buttons are locked except the <code>Start/Reset</code> button in step one. To start generating the units, click the <code>Start/Reset</code> button. For all the other buttons, they should be clicked in sequence. That is to say, after finishing choosing or typing the inputs, click the <code>(Re)Generate</code> button to preview the result, and if the result looks good, click the <code>Next</code> button in each step to unlock the input boxes and buttons in the following step. If you want to go back to a previous step, click the <code>Return to this step</code> button in the step which you want to go back to.
                         </li>
                         <li>
                             <h5>Vocabulary:</h5>
@@ -934,7 +934,7 @@
                             <h5>Method:</h5> 
                             <ol>
                                 <li>Pick the scoring criteria that you are interested in. In the dropdown box next to <code>First</code>, select the criterion that you care the most. The score for each resolution will be weighted based on the priority list you choose.</li>
-                                <li>After you fill in all the input boxes, click the <code>Generate/Reset</code> button to preview the result, which will display the score for each resolution in a color gradient. You can click the <code>Generate/Reset</code> for multiple times to change inputs (you can also change the resolution in step 2 at this point).</li>
+                                <li>After you fill in all the input boxes, click the <code>(Re)Generate</code> button to preview the result, which will display the score for each resolution in a color gradient. You can click the <code>(Re)Generate</code> for multiple times to change inputs (you can also change the resolution in step 2 at this point).</li>
                                 <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 4, which will unlock the input boxes in step 4.</li>
                             </ol>
                         </li>
@@ -944,7 +944,8 @@
                                 <li><code>Priority</code>: In this part, you will specify the criteria you want to use to determine the final units of your selected coastline. The score calculation for each criterion behind the scenes is linked to a certain calculation of GIS layers related to that criteria, called the "criteria model". See the "Criteria Models Explanation" below for details about each calculation.</li>
                             </ul>
                         </li>
-                        <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 4.</li>
+                        <li><h5>Important:</h5> Remember to click the <code>Next</code> button to move to step 4.</li>
+
                         <li><h5>Note:</h5> Because of the limitation of the original GIS layers, some GIS layers may not cover the whole coastline of Lake Erie. In that case, the final result of this tool may not be precise. See the "Criteria Models Explanation" below for details.</li>
                     </ul>
     
@@ -955,12 +956,12 @@
                             <h5>Method:</h5> 
                             <ol>
                                 <li>In the input box below the <code>Number of groups</code>, type the number of groups (as numbers) you want to have for the final result. Multiple final units may be in the same group. The group stands for the number of group types that you want to have for the final result. </li>
-                                <li>Next, click the <code>Generate/Reset</code> button to preview the result, which will display the final units generated from the number of groups you specified above by circling them in boxes. When hover over each box, a pop-up will show the group type of that unit, and when you click each box, a panel will display more detailed information about each unit. You can click the <code>Generate/Reset</code> for multiple times.</li>
+                                <li>Next, click the <code>(Re)Generate</code> button to preview the result, which will display the final units generated from the number of groups you specified above by circling them in boxes. When hover over each box, a pop-up will show the group type of that unit, and when you click each box, a panel will display more detailed information about each unit. You can click the <code>(Re)Generate</code> for multiple times.</li>
                                 <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 5, which will unlock the input boxes in step 5.</li>
                             </ol>
                         </li>
                         <li><h5>Input Description:</h5><code>Number of groups</code>: The number of unit types you want to have for the final units based on the score of the resolution. Resolutions with similar final scores will be grouped together to form the final unit. Each group may belong to multiple units. It is also possible that one or multiple group types are not connected to any units.</li>
-                        <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 5.</li>
+                        <li><h5>Important:</h5> Remember to click the <code>Next</code> button to move to step 5.</li>
                     </ul>
 
                     <h4 id="divide-step4" class="section scrollspy">Step 5: Download</h4>
@@ -975,6 +976,8 @@
                         </li>
                     </ul>
 
+                    <hr>
+                    
                     <h2 id="similarity-finder-explanation" class="section scrollspy">Similarity Finder Explanation</h2>
 
                     <h3 id="sf-purpose-goal" class="section scrollspy">Purpose and Goal</h3>
@@ -987,7 +990,7 @@
                     <h4 id="sf-general" class="section scrollspy">General</h4>
                     <ul>
                         <li>
-                            <h5>How to use the buttons in each step:</h5> At the initial state, all the input boxes and buttons are locked except the <code>Start/Reset</code> button in step one. To start finding similar areas, click the <code>Start/Reset</code> button. For all the other buttons, they should be clicked in sequence. That is to say, after finishing choosing or dragging the inputs, click the <code>Generate/Reset</code> button to preview the result, and if the result looks good, click the <code>Next</code> button in each step to unlock the input boxes and buttons in the following step.
+                            <h5>How to use the buttons in each step:</h5> At the initial state, all the input boxes and buttons are locked except the <code>Start/Reset</code> button in step one. To start finding similar areas, click the <code>Start/Reset</code> button. For all the other buttons, they should be clicked in sequence. That is to say, after finishing choosing or dragging the inputs, click the <code>(Re)Generate</code> button to preview the result, and if the result looks good, click the <code>Next</code> button in each step to unlock the input boxes and buttons in the following step.
                         </li>
                         <li>
                             <h5>Vocabulary:</h5>
@@ -998,7 +1001,7 @@
                                 </li>
                                 <li>
                                     <em><p>Similarity:</p></em>
-                                    <P>The similarity value displays an area's similarity to the selected point based on the selected priorities. It measures the abosulute difference of the final score, which means an area 0.1 above or below the selected point's final score will have the same similarity value.</P>
+                                    <P>The similarity value displays an area's similarity to the selected point based on the selected priorities. It measures the absolute difference of the final score, which means an area 0.1 above or below the selected point's final score will have the same similarity value.</P>
                                 </li>
                             </ul>
                         </li>
@@ -1029,7 +1032,7 @@
                             <h5>Method:</h5> 
                             <ol>
                                 <li>Pick the scoring criteria that you are interested in. In the dropdown box next to <code>First</code>, select the criterion that you care the most. The score for each 4000 ft chunk will be weighted based on the priority list you choose.</li>
-                                <li>After you fill in all the input boxes, click the <code>Generate/Reset</code> button to preview the result, which will display the score for each 4000 ft chunk in a color gradient. You can click the <code>Generate/Reset</code> for multiple times to change inputs.</li>
+                                <li>After you fill in all the input boxes, click the <code>(Re)Generate</code> button to preview the result, which will display the score for each 4000 ft chunk in a color gradient. You can click the <code>(Re)Generate</code> for multiple times to change inputs.</li>
                                 <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 3, which will unlock the input boxes in step 3 and display the final score of your selected area on the range.</li>
                             </ol>
                         </li>
@@ -1039,7 +1042,7 @@
                                 <li><code>Priority</code>: In this part, you will specify the criteria you want to use to determine the similarity between your selected point and the whole coastline. The score calculation for each criterion behind the scenes is linked to a certain calculation of GIS layers related to that criteria, called the "criteria model". See the "Criteria Models Explanation" below for details about each calculation.</li>
                             </ul>
                         </li>
-                        <li><h5>Important:</h5> Remember to click the <code>Start/Reset</code> button to initialize this tool and click the <code>Next</code> button to move to step 3.</li>
+                        <li><h5>Important:</h5> Remember to click the <code>Next</code> button to move to step 3.</li>
                         <li><h5>Note:</h5> Because of the limitation of the original GIS layers, some GIS layers may not cover the whole coastline of Lake Erie. In that case, the final result of this tool may not be precise. See the "Criteria Models Explanation" below for details.</li>
                     </ul>
     
@@ -1050,7 +1053,7 @@
                             <h5>Method:</h5> 
                             <ol>
                                 <li>In the range bar below the <code>Range of search</code>, specify the minimum and maximum values you want for the final similarity dataset. This range of search includes both boundary values, and the range should include the final score of your selected point.</li>
-                                <li>Next, click the <code>Generate/Reset</code> button to preview the result, which will highlight all the 4000 ft chunks that have a final score within your selected range. When hover over each chunk, a pop-up will show the similarity between this chunk and your selected point, and when you click each chunk, a panel will display more detailed information. You can click the <code>Generate/Reset</code> for multiple times.</li>
+                                <li>Next, click the <code>(Re)Generate</code> button to preview the result, which will highlight all the 4000 ft chunks that have a final score within your selected range. When hover over each chunk, a pop-up will show the similarity between this chunk and your selected point, and when you click each chunk, a panel will display more detailed information. You can click the <code>(Re)Generate</code> for multiple times.</li>
                                 <li>After you are satisfied with the preview result, click the <code>Next</code> button to move to step 4, which will unlock the input boxes in step 4.</li>
                             </ol>
                         </li>
@@ -1069,12 +1072,28 @@
                             </ol>
                         </li>
                     </ul>
+
+                    <hr>
     
                     <h2 id="model-explain" class="section scrollspy">Criteria Models Explanation</h2>
                     <h3 id="model-resolution" class="section scrollspy">General</h3>
                     <ul>
-                        <li><h5>What's the weight for each priority:</h5> First priority 50%, second priority 30%, third priority 20%.</li>
-                        <li><h5>How to assign value from GIS layer to each resolution:</h5> The resolution line will be offset for a certain distance (default is 200 meters) in both directions to create a bounding box. The values in each GIS layer will be assigned to the resolution if they overlap with the bounding box of the resolution line. If more than one value overlaps with the bounding box, the values will be averaged. If no value overlaps with the bounding box, the value for the resolution will be the value of the nearest GIS object.</li>
+                        <li>
+                            <h5>What's the weight for each priority:</h5> 
+                            <ul>
+                                <li>
+                                    <strong>If have 3 priorities: </strong>First priority 50%, second priority 30%, third priority 20%.
+                                </li>
+                                <li>
+                                    <strong>If have 2 priorities: </strong>First priority 60%, second priority 40%.
+                                </li>
+                                <li>
+                                    <strong>If have 1 priority: </strong>First priority 100%.
+                                </li>
+                                
+                            </ul>
+                        </li>
+                        <li><h5>How to assign value from GIS layer to each resolution:</h5> The resolution line will be offset for a certain distance (from 20 meters to 150 meters depending on the data type) in both directions to create a bounding box. The values in each GIS layer will be assigned to the resolution if they overlap with the bounding box of the resolution line. If more than one value overlaps with the bounding box, the values will be averaged. If no value overlaps with the bounding box, the value for the resolution will be the value of the nearest GIS object.</li>
                     </ul>
     
                     <h3 id="sediment-loss" class="section scrollspy">Sediment Loss Model</h3>

@@ -334,7 +334,7 @@ function findClosestData(whichData, coastline) {
   // find nearest center point and use that to get the park shape
   const dataNear = turf.nearestPoint(coastlinecenter, turf.featureCollection(centers)); // truf function take turf feature collection, not just simple array
 
-  const prop = [dataNear.properties];
+  const prop = [dataNear];
   return prop;
 }
 

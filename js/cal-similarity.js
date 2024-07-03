@@ -189,9 +189,9 @@ function handleSimCalculations(midPointSelect, step2Form, firstDrop, secondDrop,
 
   map2.pickPointLayer.bringToFront()
     .bindTooltip((l) => { // final unit box tooltip options
-      return `<p class="unit-tooltip"><strong>Final score: </strong>${pointScore[0].finalValueNormal.toFixed(2)}</p>`;
+      return `<p class="unit-tooltip"><strong>Final score: </strong>${pointScore[0].properties.finalValueNormal.toFixed(2)}</p>`;
     }).bindPopup((l) => { // final unit box popup options
-      return `<p class="unit-tooltip">Your selected point has a final score of <strong>${pointScore[0].finalValueNormal.toFixed(2)}</strong></p>`;
+      return `<p class="unit-tooltip">Your selected point has a final score of <strong>${pointScore[0].properties.finalValueNormal.toFixed(2)}</strong></p>`;
     });
 
   // process to the following step if user click next
@@ -242,7 +242,7 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
   }
 
   // For some reasons, the selected point's score is not updated in a timely manner, so here get the score from the label on the slider.
-  // If use the pointScore[0].finalValueNormal, it will be the score of the last selected point and send the alert below twice and automatically fixed itself.
+  // If use the pointScore[0].properties.finalValueNormal, it will be the score of the last selected point and send the alert below twice and automatically fixed itself.
   const divElement = document.getElementById('select-point-box-text');
   const textContent = divElement.textContent;
   const scoreValue = textContent.replace('Selected Point: ', '').trim();
@@ -344,7 +344,7 @@ function selectSimToGeojson(resolutionCollection, from, to, pointScore) {
   const [minFinal, maxFinal] = getMinMaxFromFeatureArray(groupArray, 'finalValueNormal');
   // here use power scale
   const scaleFunc = d3.scalePow([minFinal, maxFinal], [0, 1]).exponent(1);
-  const selectPointSimRefScore = scaleFunc(pointScore[0].finalValueNormal);
+  const selectPointSimRefScore = scaleFunc(pointScore[0].properties.finalValueNormal);
 
   for (let i = 0; i < groupArray.length; i++) {
     groupArray[i].properties.ID = i; // need to update the ID

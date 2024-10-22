@@ -6,9 +6,7 @@ import { censusTracts, dataBoundary, huc10, huc12, shorelineBase, county, sendim
 // get all the buttons
 const unitGeneratorButton = document.querySelector('.unit-generator-button');
 const similarAreaButton = document.querySelector('.find-similar-area');
-const strategyFilterButton = document.querySelector('.strategy-filter');
 const dataExplorerButton = document.querySelector('.data-explorer');
-const strategyLibraryButton = document.querySelector('.strategy-library');
 const documentationButton = document.querySelector('.documentation');
 
 const menuBlock = document.querySelector('.menu-block');
@@ -17,16 +15,14 @@ const menuBlock = document.querySelector('.menu-block');
 // get all divs
 const unitGeneratorDiv = document.querySelector('#unit-generator-body');
 const similarAreaDiv = document.querySelector('#find-similar-area-body');
-const strategyFilterDiv = document.querySelector('#strategy-filter-body');
 const dataExplorerDiv = document.querySelector('#data-explorer-body');
-const strategyLibraryDiv = document.querySelector('#strategy-library-body');
 const documentationDiv = document.querySelector('#documentation-body');
 
 // get footer div
 const footer = document.querySelector('.footer');
 
 
-const menuAll = [unitGeneratorDiv, similarAreaDiv, strategyFilterDiv, dataExplorerDiv, strategyLibraryDiv, documentationDiv];
+const menuAll = [unitGeneratorDiv, similarAreaDiv, dataExplorerDiv, documentationDiv];
 
 let hasNotClickedSimilarAreaButton = true;
 
@@ -39,12 +35,10 @@ function handleMenuDisplay(select) {
     }
   }
   // different div has different display method
-  // when working on SF add this || strategyFilterDiv
   select == unitGeneratorDiv || select == similarAreaDiv ? select.style.display = 'flex' : select.style.display = 'block';
 }
 
 function handleFooter(select) {
-  // when working on SF add this || strategyFilterDiv
   select == documentationDiv ? footer.style.display = 'none' : footer.style.display = 'block';
 }
 
@@ -69,20 +63,12 @@ function handleMenuBar() {
     }
   });
 
-  strategyFilterButton.addEventListener('click', () => {
-    manipulateMenu(strategyFilterDiv, '260px');
-  });
-
   dataExplorerButton.addEventListener('click', () => {
-    manipulateMenu(dataExplorerDiv, '390px');
-  });
-
-  strategyLibraryButton.addEventListener('click', () => {
-    manipulateMenu(strategyLibraryDiv, '520px');
+    manipulateMenu(dataExplorerDiv, '260px');
   });
 
   documentationButton.addEventListener('click', () => {
-    manipulateMenu(documentationDiv, '650px');
+    manipulateMenu(documentationDiv, '390px');
   });
 }
 

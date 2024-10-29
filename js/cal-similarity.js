@@ -59,6 +59,13 @@ const shpOptionsSim = {
   },
 };
 
+// marker icon
+const flagIcon = L.icon({
+  iconUrl: 'img/FlagMarker.png',
+  iconSize: [30, 45], // size of the icon
+  iconAnchor: [15, 45], // point of the icon which will correspond to marker's location
+  popupAnchor: [0, -35], // point from which the popup should open relative to the iconAnchor
+});
 
 // map.js will cal this function for similarity finder
 function handleSimilarityCalculations(mid, map2, shorelineBase) {
@@ -78,7 +85,7 @@ function handleSimilarityMapSelection(map2, mid, coastLine) {
   map2.pickPointLayer.clearLayers();
 
   // draggable markers part
-  const midMarker = initializePoints(map2, mid);
+  const midMarker = initializePoints(map2, mid, flagIcon);
 
   midMarker.addEventListener('dragend', () => {
     handleMarkerSnap(coastLine, midMarker, map2);

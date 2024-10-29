@@ -59,6 +59,13 @@ const shpOptionsSim = {
   },
 };
 
+// marker icon
+const flagIcon = L.icon({
+  iconUrl: 'img/FlagMarker.png',
+  iconSize: [30, 45], // size of the icon
+  iconAnchor: [15, 45], // point of the icon which will correspond to marker's location
+  popupAnchor: [0, -35], // point from which the popup should open relative to the iconAnchor
+});
 
 // map.js will cal this function for similarity finder
 function handleSimilarityCalculations(mid, map2, shorelineBase) {
@@ -78,7 +85,7 @@ function handleSimilarityMapSelection(map2, mid, coastLine) {
   map2.pickPointLayer.clearLayers();
 
   // draggable markers part
-  const midMarker = initializePoints(map2, mid);
+  const midMarker = initializePoints(map2, mid, flagIcon);
 
   midMarker.addEventListener('dragend', () => {
     handleMarkerSnap(coastLine, midMarker, map2);
@@ -268,10 +275,10 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
   const firstPropName = modelName[firstDropSim.value];
   if (secondDropSim.value == 'ns') {
     map2.finalSimLayer = L.geoJSON(simGeojson, rangeColorStyle).bindTooltip((l) => { // final unit box tooltip options
-      return `<p class="unit-tooltip"><strong>Similarity:</strong> ${(1 - l.feature.properties.similarity).toFixed(2)}</p>`;
+      return `<p class="unit-tooltip"><strong>Difference:</strong> ${(l.feature.properties.similarity).toFixed(2)}</p>`;
     }).bindPopup((l) => { // final unit box popup options
       return `<h3 class="unit-pop-title">ID: ${l.feature.properties.ID + 1}</h3>
-              <p class="unit-finalscore"><strong>Similarity:</strong> ${(1 - l.feature.properties.similarity).toFixed(2)}</p>
+              <p class="unit-finalscore"><strong>Difference:</strong> ${(l.feature.properties.similarity).toFixed(2)}</p>
               <p class="unit-finalscore"><strong>Final Score:</strong> ${l.feature.properties.finalValueNormal.toFixed(2)}</p>
               <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
       `;
@@ -281,10 +288,10 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
   } else if (thirdDropSim.value == 'ns') {
     const secondPropName = modelName[secondDropSim.value];
     map2.finalSimLayer = L.geoJSON(simGeojson, rangeColorStyle).bindTooltip((l) => { // final unit box tooltip options
-      return `<p class="unit-tooltip"><strong>Similarity:</strong> ${(1 - l.feature.properties.similarity).toFixed(2)}</p>`;
+      return `<p class="unit-tooltip"><strong>Difference:</strong> ${(l.feature.properties.similarity).toFixed(2)}</p>`;
     }).bindPopup((l) => { // final unit box popup options
       return `<h3 class="unit-pop-title">ID: ${l.feature.properties.ID + 1}</h3>
-              <p class="unit-finalscore"><strong>Similarity:</strong> ${(1 - l.feature.properties.similarity).toFixed(2)}</p>
+              <p class="unit-finalscore"><strong>Difference:</strong> ${(l.feature.properties.similarity).toFixed(2)}</p>
               <p class="unit-finalscore"><strong>Final Score:</strong> ${l.feature.properties.finalValueNormal.toFixed(2)}</p>
               <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
               <p class="unit-second-priority"><strong>${secondPropName}:</strong> ${l.feature.properties[secondProp].toFixed(2)}</p>
@@ -296,10 +303,10 @@ function handleGroupResSim(map2, resolutionCollection, firstProp, secondProp, th
     const secondPropName = modelName[secondDropSim.value];
     const thirdPropName = modelName[thirdDropSim.value];
     map2.finalSimLayer = L.geoJSON(simGeojson, rangeColorStyle).bindTooltip((l) => { // final unit box tooltip options
-      return `<p class="unit-tooltip"><strong>Similarity:</strong> ${(1 - l.feature.properties.similarity).toFixed(2)}</p>`;
+      return `<p class="unit-tooltip"><strong>Difference:</strong> ${(l.feature.properties.similarity).toFixed(2)}</p>`;
     }).bindPopup((l) => { // final unit box popup options
       return `<h3 class="unit-pop-title">ID: ${l.feature.properties.ID + 1}</h3>
-              <p class="unit-finalscore"><strong>Similarity:</strong> ${(1 - l.feature.properties.similarity).toFixed(2)}</p>
+              <p class="unit-finalscore"><strong>Difference:</strong> ${(l.feature.properties.similarity).toFixed(2)}</p>
               <p class="unit-finalscore"><strong>Final Score:</strong> ${l.feature.properties.finalValueNormal.toFixed(2)}</p>
               <p class="unit-first-priority"><strong>${firstPropName}:</strong> ${l.feature.properties[firstProp].toFixed(2)}</p>
               <p class="unit-second-priority"><strong>${secondPropName}:</strong> ${l.feature.properties[secondProp].toFixed(2)}</p>
@@ -349,7 +356,12 @@ function selectSimToGeojson(resolutionCollection, from, to, pointScore) {
   for (let i = 0; i < groupArray.length; i++) {
     groupArray[i].properties.ID = i; // need to update the ID
     groupArray[i].properties.simRefScore = scaleFunc(groupArray[i].properties.finalValueNormal);
-    groupArray[i].properties.similarity = Math.abs(groupArray[i].properties.simRefScore - selectPointSimRefScore);
+    // similarity is the absolute difference between the selected point's score and the current score
+    if (groupArray[i].properties.simRefScore !== selectPointSimRefScore) {
+      groupArray[i].properties.similarity = Math.abs(groupArray[i].properties.simRefScore - selectPointSimRefScore);
+    } else {
+      groupArray[i].properties.similarity = 1;
+    }
   }
 
   // prepare similarity range for color later

@@ -50,7 +50,7 @@ const unitColorScale = d3.interpolateRgbBasis(['rgb(140, 152, 255)', 'rgb(154, 2
 window.unitColorScale = unitColorScale;
 
 // marker icon
-const markerIcon = L.icon({
+const scissorIcon = L.icon({
   iconUrl: 'img/ScissorsMarker.png',
   iconSize: [30, 45], // size of the icon
   iconAnchor: [15, 45], // point of the icon which will correspond to marker's location
@@ -125,8 +125,8 @@ function handleMapSelection(map, start, end, coastLine) {
   }
 
   // draggable markers part
-  const startMarker = initializePoints(map, start);
-  const endMarker = initializePoints(map, end);
+  const startMarker = initializePoints(map, start, scissorIcon);
+  const endMarker = initializePoints(map, end, scissorIcon);
 
   startMarker.addEventListener('dragend', () => {
     handleMarkerSnap(coastLine, startMarker);
@@ -151,10 +151,10 @@ function handleMapSelection(map, start, end, coastLine) {
 // step 1 supporting functions
 
 // add start and end marker to the end of the shoreline
-function initializePoints(map, point) {
+function initializePoints(map, point, icon) {
   const pointMarker = L.marker([point[1], point[0]], {
     draggable: true,
-    icon: markerIcon,
+    icon: icon,
   }).addTo(map.markerLayer);
   return pointMarker;
 }
@@ -842,7 +842,6 @@ export {
   modelName,
   colorScale,
   unitColorScale,
-  markerIcon,
   shpOptions,
   initializePoints,
   reinitializePoints,

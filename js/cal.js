@@ -78,11 +78,9 @@ const finishButton = document.querySelector('.finish-point');
 const returnStartButton = document.querySelector('.return-select-point');
 // get step 2 input boxes
 const step2Form = document.querySelector('.step-two-form');
-const resolutionBox = document.querySelector('.resolution');
 const firstDrop = document.querySelector('#first-priority');
 const secondDrop = document.querySelector('#second-priority');
 const thirdDrop = document.querySelector('#third-priority');
-const unitDrop = document.querySelector('.unit');
 const dropdownAll = document.getElementsByClassName('priority'); // all dropdown boxes
 const generateResButton = document.querySelector('.generate-resolution');
 const finishResButton = document.querySelector('.finish-resolution');
@@ -194,8 +192,6 @@ function doSomethingWithEndpoints(newStart, newEnd, coastLine, map) {
   map.sliceLayer.addData(coastalSliced);
 
   // enable step 2 input boxes
-  resolutionBox.disabled = false;
-  unitDrop.disabled = false;
   generateResButton.disabled = false;
   finishResButton.disabled = false;
 
@@ -230,7 +226,7 @@ function doSomethingWithEndpoints(newStart, newEnd, coastLine, map) {
   // handle inputs from form
   generateResButton.addEventListener('click', () => {
     withSpinnerDo(() => {
-      handleCalculations(step2Form, firstDrop, secondDrop, thirdDrop, map, coastalSliced);
+      handleCalculations(step2Form, firstDrop, secondDrop, thirdDrop, map, coastalSliced, coastLine);
     });
   });
 }
@@ -239,7 +235,7 @@ function doSomethingWithEndpoints(newStart, newEnd, coastLine, map) {
 // step for resolution calculation part
 
 // actual res calculations
-function handleCalculations(step2Form, firstDrop, secondDrop, thirdDrop, map, coastalSliced) {
+function handleCalculations(step2Form, firstDrop, secondDrop, thirdDrop, map, coastalSliced, coastLine) {
   if (map.colorLayer !== null) {
     map.colorLayer.clearLayers();
   }
@@ -250,7 +246,7 @@ function handleCalculations(step2Form, firstDrop, secondDrop, thirdDrop, map, co
     return; // this just means stop
   }
 
-  const resolutionCollection = getResolution(coastalSliced); // feature collection of a lot of linestrings
+  const resolutionCollection = getResolution(coastalSliced, coastLine); // feature collection of a lot of linestrings
 
   console.log(resolutionCollection);
 
@@ -348,18 +344,16 @@ function getMinMaxFromFeatureArray(featureArray, prop) {
 
 // divide the slice into certain length
 // need to change units first because the default lineChunk unit is km
-function getResolution(coastalSliced) {
-  // read all the inputting values
-  const resolution = resolutionBox.value;
-  const unitType = unitDrop.value;
-  if (unitType == 'ft') {
-    const resolutionCal = resolution * 0.0003048; // ft to km
-    const resolutionCollection = turf.lineChunk(coastalSliced, resolutionCal); // unit here is km
-    return resolutionCollection;
-  } if (unitType == 'm') {
-    const resolutionCal = resolution / 1000; // m to km
-    const resolutionCollection = turf.lineChunk(coastalSliced, resolutionCal); // unit here is km
-    return resolutionCollection;
+function getResolution(coastalSliced, coastLine) {
+  const coastalLength = turf.length(coastLine); // unit in km
+  const selectLength = turf.length(coastalSliced); // unit in km
+  if (selectLength > coastalLength / 2) {
+    return getFtResolution(coastalSliced, 5000);
+  } else if (selectLength > coastalLength / 8) {
+    return getFtResolution(coastalSliced, 2640); // 0.5 mile
+  } else {
+    const num = Math.trunc(selectLength / 0.0003048 / 20)
+    return getFtResolution(coastalSliced, num);
   }
 }
 
@@ -386,8 +380,7 @@ function startGroupRes(map, resolutionCollection, firstProp, secondProp, thirdPr
   // disable step 2 buttons
   finishResButton.disabled = true;
   generateResButton.disabled = true;
-  resolutionBox.disabled = true;
-  unitDrop.disabled = true;
+
   for (const i of dropdownAll) {
     i.disabled = true;
   }
@@ -783,8 +776,6 @@ function returnToGenerateRes(map) {
   generateGroupButton.disabled = true;
   finishGroupButton.disabled = true;
   // enable res buttons
-  resolutionBox.disabled = false;
-  unitDrop.disabled = false;
   for (const i of dropdownAll) {
     i.disabled = false;
   }
@@ -813,10 +804,7 @@ function returnToStart(map) {
     map.colorLayer.clearLayers();
   }
   map.legend.remove();
-  // disable the res buttons
-  resolutionBox.value = '';
-  resolutionBox.disabled = true;
-  unitDrop.disabled = true;
+
   firstDrop.value = '';
   // clear dynamic dropdown
   clearDynamicDropdown('#second-priority');

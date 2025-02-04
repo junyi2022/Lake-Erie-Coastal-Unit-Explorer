@@ -2,14 +2,14 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 
 import { average } from './model.js';
-import { sedimentLossModel, sedimentGainModel, erosionPotentialModel, habitatProtectionModel, wetlandProtectionRestorationModel, socialVulnerabilityModel, invasiveSpeciesModel, physicalConditionModel } from './model.js';
+import { sedimentNetLossModel, sedimentNetGainModel, erosionPotentialModel, habitatProtectionModel, wetlandProtectionRestorationModel, socialVulnerabilityModel, invasiveSpeciesModel, physicalConditionModel } from './model.js';
 import { legend1Style, legend2Style } from './map.js';
 import { handleDropdownDisplay, withSpinnerDo, unitInputRange } from './logistics.js';
 
 // list all the dropdown's avaliable models and associated properties
 const modelFuncs = {
-  'sl': sedimentLossModel,
-  'sg': sedimentGainModel,
+  'sl': sedimentNetLossModel,
+  'sg': sedimentNetGainModel,
   'ep': erosionPotentialModel,
   'is': invasiveSpeciesModel,
   'hp': habitatProtectionModel,
@@ -19,8 +19,8 @@ const modelFuncs = {
 };
 
 const modelProps = {
-  'sl': 'normalsedimentLoss',
-  'sg': 'normalsedimentGain',
+  'sl': 'normalsedimentNetLoss',
+  'sg': 'normalsedimentNetGain',
   'ep': 'normalerosionPotential',
   'is': 'normalinvasiveDiversity',
   'hp': 'normalhabitatProtection',
@@ -30,8 +30,8 @@ const modelProps = {
 };
 
 const modelName = {
-  'sl': 'Normalized Sediment Loss',
-  'sg': 'Normalized Sediment Gain',
+  'sl': 'Normalized Sediment Net Loss',
+  'sg': 'Normalized Sediment Net Gain',
   'ep': 'Normalized Erosion Potential',
   'is': 'Normalized Invasive Species Control',
   'hp': 'Normalized Habitat Protection',

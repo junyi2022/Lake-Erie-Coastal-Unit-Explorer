@@ -42,18 +42,15 @@ const shorelineTypeScore = {
   4: ['Bedrock_(Erosion)_with_sand_overburden', 'Baymouth_–_Barrier_(fronting_wetlands_or_shallow_embayments,_estuaries)', 'Low_Bank', 'Natural_Depositional_(areas_with_active_supply/deposition)'],
 };
 
-// sediment loss model
-function sedimentLossModel(map, resolutionCollection) {
-  // get different boxes for different data layers
-  // add sediment loss data to each coastline from sediment budget layer
-  calDataFromLayer(map, sendimentBudget, resolutionCollection, 0.1, calSedimentLossFromArray, 'sedimentLoss', 1.5);
+
+// sediment net loss model
+function sedimentNetLossModel(map, resolutionCollection) {
+  calDataFromLayer(map, sendimentBudget, resolutionCollection, 0.1, calSedimentNetLossFromArray, 'sedimentNetLoss', 1.5);
 }
 
-// sediment gain model
-function sedimentGainModel(map, resolutionCollection) {
-  // get different boxes for different data layers
-  // add sediment loss data to each coastline from sediment budget layer
-  calDataFromLayer(map, sendimentBudget, resolutionCollection, 0.1, calSedimentGainFromArray, 'sedimentGain', 1.5);
+// sediment net gain model
+function sedimentNetGainModel(map, resolutionCollection) {
+  calDataFromLayer(map, sendimentBudget, resolutionCollection, 0.1, calSedimentNetGainFromArray, 'sedimentNetGain', 1.5);
 }
 
 // erosion potential model
@@ -255,6 +252,18 @@ function calSedimentGainFromArray(propArray) {
   return sedimentGain;
 }
 
+function calSedimentNetLossFromArray(propArray) {
+  const loss = calSedimentLossFromArray(propArray);
+  const gain = calSedimentGainFromArray(propArray);
+  return loss - gain;
+}
+
+function calSedimentNetGainFromArray(propArray) {
+  const loss = calSedimentLossFromArray(propArray);
+  const gain = calSedimentGainFromArray(propArray);
+  return gain - loss;
+}
+
 function calRetreatRateFromArray(propArray) {
   const retreatRateArray = propArray.map((item) => item.properties.RetreatRat);
   const retreatRate = average(retreatRateArray);
@@ -404,8 +413,8 @@ function speciesDiversityFromPolygonArray(speciesBuffer, resolutionCollection, n
 }
 
 export {
-  sedimentLossModel,
-  sedimentGainModel,
+  sedimentNetLossModel,
+  sedimentNetGainModel,
   erosionPotentialModel,
   habitatProtectionModel,
   wetlandProtectionRestorationModel,

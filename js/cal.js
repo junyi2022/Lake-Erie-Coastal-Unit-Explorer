@@ -352,7 +352,7 @@ function getResolution(coastalSliced, coastLine) {
   } else if (selectLength > coastalLength / 8) {
     return getFtResolution(coastalSliced, 2640); // 0.5 mile
   } else {
-    const num = Math.trunc(selectLength / 0.0003048 / 20)
+    const num = Math.trunc(selectLength / 0.0003048 / 20); // have 20 segments
     return getFtResolution(coastalSliced, num);
   }
 }

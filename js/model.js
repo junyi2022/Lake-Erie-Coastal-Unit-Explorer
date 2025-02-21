@@ -45,7 +45,7 @@ const shorelineTypeScore = {
 
 // sediment net loss model
 function sedimentNetLossModel(map, resolutionCollection) {
-  calDataFromLayer(map, sendimentBudget, resolutionCollection, 0.1, calSedimentNetLossFromArray, 'sedimentNetLoss', 1.5);
+  calDataFromLayer(map, sendimentBudget, resolutionCollection, 0.05, calSedimentNetLossFromArray, 'sedimentNetLoss', 1.5);
 }
 
 // sediment net gain model

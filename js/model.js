@@ -45,7 +45,7 @@ const shorelineTypeScore = {
 
 // sediment net loss model
 function sedimentNetLossModel(map, resolutionCollection) {
-  calDataFromLayer(map, sendimentBudget, resolutionCollection, 0.1, calSedimentNetLossFromArray, 'sedimentNetLoss', 1.5);
+  calDataFromLayer(map, sendimentBudget, resolutionCollection, 0.05, calSedimentNetLossFromArray, 'sedimentNetLoss', 1.5);
 }
 
 // sediment net gain model
@@ -103,7 +103,11 @@ function invasiveSpeciesModel(map, resolutionCollection) {
 // physical condition model
 function physicalConditionModel(map, resolutionCollection) {
   const slope = window.slope;
-  calDataFromLayer(map, slope, resolutionCollection, 0.02, calSlopeFromArray, 'physicalCondition', 0.4);
+  // calDataFromLayer(map, slope, resolutionCollection, 0.01, calSlopeFromArray, 'physicalCondition', 0.4);
+  // test use average slope
+  // calDataFromPoints(map, slope, resolutionCollection, 0.01, calRasterIndex, 'grid_code', 'physicalCondition', 1);
+  // test use median slope
+  calDataFromPoints(map, slope, resolutionCollection, 0.01, calRasterMedIndex, 'grid_code', 'physicalCondition', 1);
 }
 
 
@@ -288,31 +292,32 @@ function calSoilErosionFromArray(propArray) {
   return soilErosion;
 }
 
-function calSlopeFromArray(propArray, box) {
-  // Initialize an object to hold arrays for each gridcode
-  const groupedFeatures = {};
+// function calSlopeFromArray(propArray, box) {
+//   // Initialize an object to hold arrays for each gridcode
+//   const groupedFeatures = {};
 
-  propArray.map((feature) => {
-    const gridcode = feature.properties.gridcode;
+//   propArray.map((feature) => {
+//     const gridcode = feature.properties.gridcode;
 
-    // If the gridcode group doesn't exist, create an array for it
-    if (!groupedFeatures[gridcode]) {
-      groupedFeatures[gridcode] = [];
-    }
+//     // If the gridcode group doesn't exist, create an array for it
+//     if (!groupedFeatures[gridcode]) {
+//       groupedFeatures[gridcode] = [];
+//     }
 
-    // Push the feature into the corresponding gridcode array
-    groupedFeatures[gridcode].push(turf.area(feature));
-  });
+//     // Push the feature into the corresponding gridcode array
+//     groupedFeatures[gridcode].push(turf.area(feature));
+//   });
 
-  // calculate sum of each gridcode
-  Object.keys(groupedFeatures).map((key) => {
-    groupedFeatures[key] = groupedFeatures[key].reduce((a, b) => a + b);
-  });
+//   // calculate sum of each gridcode
+//   Object.keys(groupedFeatures).map((key) => {
+//     groupedFeatures[key] = groupedFeatures[key].reduce((a, b) => a + b);
+//   });
 
-  // calculate weighted sum
-  const sum = turf.area(box);
-  return Object.keys(groupedFeatures).map((key) => key * groupedFeatures[key] / sum).reduce((a, b) => a + b);
-}
+//   // calculate weighted sum
+//   const sum = turf.area(box);
+//   return Object.keys(groupedFeatures).map((key) => key * groupedFeatures[key] / sum).reduce((a, b) => a + b);
+// }
+
 
 // points calculation part
 
@@ -322,11 +327,24 @@ function calRasterIndex(pointsWithin, whatIndex) {
   return indexAverage;
 }
 
+function calRasterMedIndex(pointsWithin, whatIndex) {
+  const rasterIndexArray = pointsWithin.features.map((point) => point.properties[whatIndex]);
+  const indexAverage = median(rasterIndexArray);
+  return indexAverage;
+}
+
 // calculate average from array of numbers
 // const average = (array) => array.reduce((a, b) => a + b) / array.length;
 function average(array) {
   const sum = array.reduce((a, b) => a + b);
   return sum == 0 ? 0 : sum / array.length;
+}
+
+// calculate median from array of numbers
+function median(array) {
+  array.sort((a, b) => a - b); // Sort numbers in ascending order
+  const mid = array.length / 2;
+  return mid % 1 ? array[mid - 0.5] : (array[mid - 1] + array[mid]) / 2;
 }
 
 // find closest polygon and get properties

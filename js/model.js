@@ -45,7 +45,7 @@ const shorelineTypeScore = {
 
 // sediment net loss model
 function sedimentNetLossModel(map, resolutionCollection) {
-  calDataFromLayer(map, sendimentBudget, resolutionCollection, 0.05, calSedimentNetLossFromArray, 'sedimentNetLoss', 1.5);
+  calCloestDataFromLayer(map, sendimentBudget, resolutionCollection, calSedimentNetLossFromArray, 'sedimentNetLoss', 1.5);
 }
 
 // sediment net gain model
@@ -136,6 +136,45 @@ function calDataFromLayer(map, whichData, resolutionCollection, num, dataNeedToC
 
     // calculate data based on the rule of each model
     const value = dataNeedToCal(propArray, box);
+
+    // add the cal result to coastline properties
+    coastline.properties[pname] = value;
+  }
+
+  // need to normalize the values
+  // this is becuase the data from different models are in different scale, need normalized value of each model to calculate the final score
+
+  // get an array of all the values of the coastline piece of this model calculation
+  const propertiesValueArray = resolutionCollection.features.map((f) => f.properties[pname]); // map will return an array of all the properties[pname]
+
+  // calculate the min max of the values
+  const min = Math.min(...propertiesValueArray); // ...flatten the array because min/max doesn't take array
+  const max = Math.max(...propertiesValueArray);
+
+  // use a D3 scale to normalize this data
+  // see avaliable scale here: https://d3js.org/d3-scale
+  // scale descriptions: https://observablehq.com/@d3/continuous-scales
+  // here use power scale
+  // scale factor is the thing to control the shape of the reprojection
+  const scaleFunc = d3.scalePow([min, max], [0, 1]).exponent(scaleFactor); // need to map to 0 to 1 because the later color scale only take numbers between 0 and 1
+  // add the normalized value to each coastline properties
+  for (const coastline of resolutionCollection.features) {
+    const normalResult = scaleFunc(coastline.properties[pname]);
+    const newPropName = 'normal'+ pname;
+    coastline.properties[newPropName] = normalResult;
+  }
+}
+
+// function for add data using closest data
+function calCloestDataFromLayer(map, whichData, resolutionCollection, dataNeedToCal, pname, scaleFactor) { // dataNeedToCal is the function for what thing to cal, depending on the data here; pname is the properties name to add to the coastline chunk properties
+  // input value to coastline through overlap of boxes and data layer
+  // loop through each coast line
+  for (const coastline of resolutionCollection.features) {
+    // get all the values that are connected to the box as an array
+    const propArray = findClosestData(whichData, coastline);
+
+    // calculate data based on the rule of each model
+    const value = dataNeedToCal(propArray);
 
     // add the cal result to coastline properties
     coastline.properties[pname] = value;

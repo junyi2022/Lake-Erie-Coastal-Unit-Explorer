@@ -284,13 +284,13 @@ function dataLoopToGetOverlapBoxPropArray(whichData, box) {
 // cal from array of each coast box
 
 function calSedimentLossFromArray(propArray) {
-  const sedimentLossArray = propArray.map((item) => item.properties.Coarse_Out + item.properties.Bypass + item.properties.Downdrift + item.properties.Fines_Out + item.properties.Littoral_C);
+  const sedimentLossArray = propArray.map((item) => item.properties.Coarse_Out + item.properties.Bypass + item.properties.Downdrift + item.properties.Fines_Out + item.properties.Littoral_1);
   const sedimentLoss = average(sedimentLossArray);
   return sedimentLoss;
 }
 
 function calSedimentGainFromArray(propArray) {
-  const sedimentGainArray = propArray.map((item) => item.properties.Bluff_In + item.properties.Bedload + item.properties.GainDowndr + item.properties.Littoral_1);
+  const sedimentGainArray = propArray.map((item) => item.properties.Bluff_In + item.properties.Bedload + item.properties.GainDowndr + item.properties.Littoral_C);
   const sedimentGain = average(sedimentGainArray);
   return sedimentGain;
 }

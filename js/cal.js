@@ -2,14 +2,14 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 
 import { average } from './model.js';
-import { sedimentNetLossModel, sedimentNetGainModel, erosionPotentialModel, habitatProtectionModel, wetlandProtectionRestorationModel, socialVulnerabilityModel, invasiveSpeciesModel, physicalConditionModel } from './model.js';
+import { sedimentNetLossModel, sedimentRetreatRateModel, erosionPotentialModel, habitatProtectionModel, wetlandProtectionRestorationModel, socialVulnerabilityModel, invasiveSpeciesModel, physicalConditionModel } from './model.js';
 import { legend1Style, legend2Style } from './map.js';
 import { handleDropdownDisplay, withSpinnerDo, unitInputRange } from './logistics.js';
 
 // list all the dropdown's avaliable models and associated properties
 const modelFuncs = {
   'sl': sedimentNetLossModel,
-  'sg': sedimentNetGainModel,
+  'srr': sedimentRetreatRateModel,
   'ep': erosionPotentialModel,
   'is': invasiveSpeciesModel,
   'hp': habitatProtectionModel,
@@ -20,7 +20,7 @@ const modelFuncs = {
 
 const modelProps = {
   'sl': 'normalsedimentNetLoss',
-  'sg': 'normalsedimentNetGain',
+  'srr': 'normalsedimentRetreatRate',
   'ep': 'normalerosionPotential',
   'is': 'normalinvasiveDiversity',
   'hp': 'normalhabitatProtection',
@@ -31,7 +31,7 @@ const modelProps = {
 
 const modelName = {
   'sl': 'Normalized Sediment Net Loss',
-  'sg': 'Normalized Sediment Net Gain',
+  'srr': 'Normalized Sediment Retreat Rate',
   'ep': 'Normalized Erosion Potential',
   'is': 'Normalized Invasive Species Control',
   'hp': 'Normalized Habitat Protection',
@@ -348,7 +348,7 @@ function getResolution(coastalSliced, coastLine) {
   const coastalLength = turf.length(coastLine); // unit in km
   const selectLength = turf.length(coastalSliced); // unit in km
   if (selectLength > coastalLength / 2) {
-    return getFtResolution(coastalSliced, 5000); // exports use 65ft for coastal types
+    return getFtResolution(coastalSliced, 5000); // should be 5000ft, exports change to 65ft for coastal types
   } else if (selectLength > coastalLength / 8) {
     return getFtResolution(coastalSliced, 2640); // 0.5 mile
   } else {

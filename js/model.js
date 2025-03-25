@@ -48,6 +48,11 @@ function sedimentNetLossModel(map, resolutionCollection) {
   calCloestDataFromLayer(map, sendimentBudget, resolutionCollection, calSedimentNetLossFromArray, 'sedimentNetLoss', 1.5);
 }
 
+// sediment retreat rate model
+function sedimentRetreatRateModel(map, resolutionCollection) {
+  calCloestDataFromLayer(map, sendimentBudget, resolutionCollection, calRetreatRateFromArray, 'sedimentRetreatRate', 1.5);
+}
+
 // sediment net gain model
 function sedimentNetGainModel(map, resolutionCollection) {
   calDataFromLayer(map, sendimentBudget, resolutionCollection, 0.1, calSedimentNetGainFromArray, 'sedimentNetGain', 1.5);
@@ -471,6 +476,7 @@ function speciesDiversityFromPolygonArray(speciesBuffer, resolutionCollection, n
 
 export {
   sedimentNetLossModel,
+  sedimentRetreatRateModel,
   sedimentNetGainModel,
   erosionPotentialModel,
   habitatProtectionModel,

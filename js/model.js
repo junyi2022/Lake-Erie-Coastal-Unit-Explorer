@@ -112,7 +112,7 @@ function physicalConditionModel(map, resolutionCollection) {
   // test use average slope
   // calDataFromPoints(map, slope, resolutionCollection, 0.01, calRasterIndex, 'grid_code', 'physicalCondition', 1);
   // test use median slope
-  calDataFromPoints(map, slope, resolutionCollection, 0.01, calRasterMedIndex, 'grid_code', 'physicalCondition', 1);
+  calDataFromPoints(map, slope, resolutionCollection, 0.05, calRasterMedIndex, 'grid_code', 'physicalCondition', 1);
 }
 
 

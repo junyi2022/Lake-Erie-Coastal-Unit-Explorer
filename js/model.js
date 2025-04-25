@@ -109,10 +109,10 @@ function invasiveSpeciesModel(map, resolutionCollection) {
 function physicalConditionModel(map, resolutionCollection) {
   const slope = window.slope;
   // calDataFromLayer(map, slope, resolutionCollection, 0.01, calSlopeFromArray, 'physicalCondition', 0.4);
-  // test use average slope
-  // calDataFromPoints(map, slope, resolutionCollection, 0.01, calRasterIndex, 'grid_code', 'physicalCondition', 1);
-  // test use median slope
-  calDataFromPoints(map, slope, resolutionCollection, 0.05, calRasterMedIndex, 'grid_code', 'physicalCondition', 1);
+  // test slope
+  // calDataFromPoints(map, slope, resolutionCollection, 0.005, calRasterIndex, 'grid_code', 'physicalCondition', 1);
+  // test bluff height
+  calCloestDataFromLayer(map, sendimentBudget, resolutionCollection, calBluffHeightFromArray, 'physicalCondition', 1.5);
 }
 
 
@@ -228,8 +228,8 @@ function calDataFromPoints(map, whichData, resolutionCollection, num, dataNeedTo
     // if the coastline piece is very small, it may not have points within. So need to specify other function to handle that situation
     if (pointsWithin.features.length == 0) {
       // add data by finding closet data
-      const coastlinecenter = turf.pointOnFeature(coastline);
-      pointsWithin = turf.nearestPoint(coastlinecenter, whichData);
+      // const coastlinecenter = turf.pointOnFeature(coastline);
+      pointsWithin = turf.featureCollection([turf.nearestPointToLine(whichData, coastline)]); // following calculation of points need feature collection, turf feature collection expect array
     }
 
     // calculate data based on the rule of each model
@@ -318,6 +318,12 @@ function calRetreatRateFromArray(propArray) {
   return retreatRate;
 }
 
+function calBluffHeightFromArray(propArray) {
+  const bluffHeightArray = propArray.map((item) => item.properties.TolBluffHe);
+  const bluffHeight = average(bluffHeightArray);
+  return bluffHeight;
+}
+
 const findKeyByValue = (obj, value) => {
   return Object.keys(obj).find((key) => obj[key].includes(value)) || 5; // if not found, return 5
 };
@@ -366,9 +372,14 @@ function calSoilErosionFromArray(propArray) {
 // points calculation part
 
 function calRasterIndex(pointsWithin, whatIndex) {
-  const rasterIndexArray = pointsWithin.features.map((point) => point.properties[whatIndex]);
-  const indexAverage = average(rasterIndexArray);
-  return indexAverage;
+  if (pointsWithin.features.length == 1) {
+    return pointsWithin.features[0].properties[whatIndex];
+  } else {
+    const rasterIndexArray = pointsWithin.features.map((point) => point.properties[whatIndex]);
+    const indexAverage = average(rasterIndexArray);
+    return indexAverage;
+  }
+  
 }
 
 function calRasterMedIndex(pointsWithin, whatIndex) {

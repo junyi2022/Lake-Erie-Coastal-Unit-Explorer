@@ -45,7 +45,7 @@ const endangeredSpecies = await readJSON('data/GBIF-endanger.geojson');
 
 const invasiveSpecies = await readJSON('data/GBIF-invasive.geojson');
 
-const slope = await readJSON('data/5mSlope20mBufferPT.geojson');
+const slope = await readJSON('data/5mslope-60m-noWater.geojson');
 
 // reference layers
 

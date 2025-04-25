@@ -348,7 +348,7 @@ function getResolution(coastalSliced, coastLine) {
   const coastalLength = turf.length(coastLine); // unit in km
   const selectLength = turf.length(coastalSliced); // unit in km
   if (selectLength > coastalLength / 2) {
-    return getFtResolution(coastalSliced, 5000); // should be 5000ft, exports change to 65ft for coastal types
+    return getFtResolution(coastalSliced, 1000); // should be 5000ft, exports change to 65ft for coastal types
   } else if (selectLength > coastalLength / 8) {
     return getFtResolution(coastalSliced, 2640); // 0.5 mile
   } else {
